@@ -2,7 +2,7 @@ package fr.ebiz.nurdiales.trainingJava.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,8 +38,8 @@ public class BasicConnector {
 		conn.close();
 	}
 
-	public static ResultSet executeQuery(String q) throws SQLException {
-		return INSTANCE.conn.createStatement().executeQuery(q);
+	public static PreparedStatement prepareStatement(String q) throws SQLException {
+		return INSTANCE.conn.prepareStatement(q);
 	}
 
 	public Map<Integer, Integer> getMap() {
@@ -49,8 +49,8 @@ public class BasicConnector {
 	public LinkedList<Company> getCompanies() {
 		return companies;
 	}
-	
-	public void incrMap(int key, int value){
+
+	public void incrMap(int key, int value) {
 		map.replace(key, map.get(key) + value);
 	}
 }
