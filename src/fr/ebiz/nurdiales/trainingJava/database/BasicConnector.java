@@ -15,8 +15,7 @@ public class BasicConnector {
 	private Connection conn = null;
 	private Map<Integer, Integer> map = new HashMap<>();
 	private LinkedList<Company> companies = new LinkedList<Company>();
-	private static final String url = "jdbc:mysql://localhost:3306/computer-database-db", username = "admincdb",
-			password = "qwerty1234", DATABASE_DRIVER = "com.mysql.jdbc.Driver";
+	private static final String url = "jdbc:mysql://localhost:3306/computer-database-db", DATABASE_DRIVER = "com.mysql.jdbc.Driver";
 
 	private BasicConnector() {
 	}
@@ -27,7 +26,7 @@ public class BasicConnector {
 		return INSTANCE;
 	}
 
-	public static void connectToDB() throws ClassNotFoundException, SQLException {
+	public static void connectToDB(String username, String password) throws ClassNotFoundException, SQLException {
 		System.out.println("Connecting database...");
 		Class.forName(DATABASE_DRIVER);
 		INSTANCE.conn = DriverManager.getConnection(url, username, password);
