@@ -6,7 +6,6 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import javax.sound.midi.Synthesizer;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
