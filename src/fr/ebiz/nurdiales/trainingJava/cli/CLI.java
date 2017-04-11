@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import javax.sound.midi.Synthesizer;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
@@ -18,8 +19,7 @@ public class CLI {
 	private static final String EXIT = "exit", ALLCOMPUTERS = "computers", ALLCOMPANIES = "companies",
 			DELETE = "delete", DETAILS = "details", UPDATE = "update", NEW = "new", ID = "id",
 			ID_COMPANY = "company_id", NAME = "name", DATE_OF_DISCONTINUED = "date_of_discontinued",
-			DATE_OF_INTRODUCED = "dateOfIntroduced", SEPARATOR = " ", AAAA = "AAAA", MM = "MM", JJ = "JJ",
-			SEPARATOR2 = "=", SEPARATORDATE = "-";
+			DATE_OF_INTRODUCED = "date_of_introduced", SEPARATOR = " ", DATE_FORMA = "AAAA-MM-JJ", SEPARATOR2 = "=";
 
 	public static void main(String[] args) {
 		String username = null;
@@ -36,7 +36,6 @@ public class CLI {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
 		try {
 			BasicConnector.connectToDB(username, password);
 			while (!wantExit) {
@@ -47,16 +46,20 @@ public class CLI {
 				case EXIT:
 					wantExit = true;
 					break;
-				case ALLCOMPUTERS:
-					computerDAO.requestAllComputers();
+				case ALLCOMPUTERS: {
+					PageCLI p = new PageCLI();
+					p.printComputers(sc);
+				}
 					// List<Computer> computers = bc.requestAllComputers();
 					// for(Computer c : computers)
 					// {
 					// System.out.println(c);
 					// }
 					break;
-				case ALLCOMPANIES:
-					CompanyDAO.requestAllCompnies();
+				case ALLCOMPANIES: {
+					PageCLI p = new PageCLI();
+					p.printCompagnies(sc);
+				}
 					break;
 				case DETAILS:
 					switch (l[1].split(SEPARATOR2)[0]) {
@@ -81,20 +84,7 @@ public class CLI {
 				}
 					break;
 				case UPDATE: {
-					Computer computer = new Computer();
-					for (int i = 1; i < l.length; ++i) {
-						parseForComputer(l[i], computer);
-					}
-					if (computer.getId() != 0) {
-						computer = computerDAO.getComputerById(computer.getId());
-						for (int i = 1; i < l.length; ++i) {
-							parseForComputer(l[i], computer);
-						}
-						computerDAO.update(computer);
-					} else {
-						System.out.println("Error, missing id.");
-					}
-
+					updateComputer(sc, computerDAO);
 				}
 					break;
 				case DELETE:
@@ -182,13 +172,13 @@ public class CLI {
 			System.out.print("Name : ");
 			computer.setName(sc.nextLine());
 		}
-		System.out.print("Date of Introduced (" + AAAA + SEPARATORDATE + MM + SEPARATORDATE + JJ + ") : ");
+		System.out.print("Date of Introduced (" + DATE_FORMA + ") : ");
 		try {
 			computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
 		} catch (IllegalArgumentException e) {
 			computer.setDateOfIntroduced(null);
 		}
-		System.out.print("Date of Discontinued (" + AAAA + SEPARATORDATE + MM + SEPARATORDATE + JJ + ") : ");
+		System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
 		try {
 			computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
 		} catch (IllegalArgumentException e) {
@@ -203,6 +193,45 @@ public class CLI {
 		computerDAO.Add(computer);
 	}
 
+	private static void updateComputer(Scanner sc, ComputerDAO computerDAO) throws SQLException {
+		Computer computer = new Computer(0, "", null, null, null);
+		boolean isInteger = true;
+		String s;
+		while (computer.getId() == 0) {
+			System.out.print("Id : ");
+			s = sc.nextLine();
+			try {
+				computer = computerDAO.getComputerById(Integer.parseInt(s));
+			} catch (IllegalArgumentException e) {
+				isInteger = false;
+			}
+		}
+		if (isInteger) {
+			System.out.print("Name : ");
+			s = sc.nextLine();
+			if (s.equals(""))
+				;
+			else
+				computer.setName(s);
+			System.out.print("Date of Introduced (" + DATE_FORMA + ") : ");
+			try {
+				computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
+			} catch (IllegalArgumentException e) {
+			}
+			System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
+			try {
+				computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
+			} catch (IllegalArgumentException e) {
+			}
+			System.out.print("Id of Company : ");
+			try {
+				computer.setManufacturer(CompanyDAO.getCompanyById(Integer.parseInt(sc.nextLine())));
+			} catch (Exception e) {
+			}
+			computerDAO.update(computer);
+		}
+	}
+
 	public static void printChoices() {
 		System.out.println("What do you want doing ?");
 		System.out.println();
@@ -212,10 +241,7 @@ public class CLI {
 		// System.out.println("Show computer details : " + DETAILS + SEPARATOR +
 		// NAME + SEPARATOR2 + "nameOfComputer");
 		System.out.println("Create a computer : " + NEW);
-		System.out.println("Update a computer : " + UPDATE + SEPARATOR + ID + SEPARATOR2 + "idOfComputer" + SEPARATOR
-				+ NAME + SEPARATOR2 + "nameOfComputer" + SEPARATOR + DATE_OF_INTRODUCED + SEPARATOR2 + AAAA
-				+ SEPARATORDATE + MM + SEPARATORDATE + JJ + SEPARATOR + DATE_OF_DISCONTINUED + SEPARATOR2 + AAAA
-				+ SEPARATORDATE + MM + SEPARATORDATE + JJ + SEPARATOR + ID_COMPANY + SEPARATOR2 + ID);
+		System.out.println("Update a computer : " + UPDATE);
 		System.out.println("Delete a computer : " + DELETE + SEPARATOR + ID + SEPARATOR2 + ID);
 		System.out.println("Exit and close connexion : " + EXIT);
 
