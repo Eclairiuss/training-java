@@ -16,6 +16,9 @@ public class Computer {
 		this.manufacturer = manufacturer;
 	}
 
+	public Computer() {
+	}
+
 	public int getId() {
 		return id;
 	}
