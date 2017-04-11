@@ -7,7 +7,7 @@ public class Computer {
 	private String name; // seul obligatoire
 	private Date dateOfIntroduced, dateOfDiscontinued;
 	private Company manufacturer;
-	
+
 	public Computer(int id, String name, Date dateOfIntroduced, Date dateOfDiscontinued, Company manufacturer) {
 		this.id = id;
 		this.name = name;
