@@ -11,7 +11,7 @@ import fr.ebiz.nurdiales.trainingJava.model.Company;
 
 public class CompanyDAO {
 	private static final BasicConnector bc = BasicConnector.getInstance();
-	private static final String ALL_COMPANIES_REQUEST_BETWEEN = "SELECT * FROM company WHERE id > ? AND id < ?";
+	private static final String ALL_COMPANIES_REQUEST_BETWEEN = "SELECT * FROM company LIMIT ? OFFSET ?";
 	private static final String COMPANY_BY_ID_REQUEST = "SELECT * FROM company WHERE id=?";
 
 	public static Company getCompanyById(int id) throws SQLException {
@@ -36,11 +36,11 @@ public class CompanyDAO {
 		return null;
 	}
 
-	public static List<Company> requestAllCompanies(int id1, int id2) throws SQLException {
+	public static List<Company> requestAllCompanies(int page, int pageSize) throws SQLException {
 		List<Company> list = new ArrayList<>();
 		PreparedStatement ps = BasicConnector.prepareStatement(ALL_COMPANIES_REQUEST_BETWEEN);
-		ps.setInt(1, id1);
-		ps.setInt(2, id2);
+		ps.setInt(1, pageSize);
+		ps.setInt(2, pageSize*page);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
 			list.add(new Company(rs.getInt("id"), rs.getString("name")));
