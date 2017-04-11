@@ -22,7 +22,7 @@ public class PageCLI {
 	}
 
 	private void previousPage() {
-		page = (page < 0) ? 0 : page - 1;
+		page = (page == 0) ? 0 : page - 1;
 	}
 
 	public void printCompagnies(Scanner sc) throws SQLException {
@@ -30,7 +30,7 @@ public class PageCLI {
 		while (!exitWanted) {
 			System.out.println("Page " + page + " : ");
 			{
-				List<Company> cl = CompanyDAO.requestAllCompanies((SIZE_PAGE * page), (SIZE_PAGE * (page + 1)) + 1);
+				List<Company> cl = CompanyDAO.requestAllCompanies(page, SIZE_PAGE);
 				for (Company c : cl) {
 					System.out.println(c);
 				}
@@ -45,7 +45,7 @@ public class PageCLI {
 			System.out.println("Page " + page + " : ");
 
 			{
-				List<Computer> cl = ComputerDAO.requestAllComputers((SIZE_PAGE * page), (SIZE_PAGE * (page + 1)) + 1);
+				List<Computer> cl = ComputerDAO.requestAllComputers(page, SIZE_PAGE);
 				for (Computer c : cl) {
 					System.out.println(c);
 				}

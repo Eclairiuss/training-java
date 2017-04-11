@@ -10,18 +10,19 @@ import fr.ebiz.nurdiales.trainingJava.database.BasicConnector;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 
 public class ComputerDAO {
-	private static final String ALL_COMPUTERS_REQUEST_BETWEEN = "SELECT * FROM computer WHERE id > ? AND id < ?",
+	private static final String 
+	ALL_COMPUTERS_REQUEST_BETWEEN = "SELECT * FROM computer LIMIT ? OFFSET ?",
 			COMPUTER_BY_ID = "SELECT * FROM computer WHERE id=?",
 			COMPUTER_BY_COMPANY = "SELECT * FROM computer WHERE company_id=?",
 			INSERT_COMPUTER = "INSERT INTO computer (name,introduced,discontinued,company_id) values (?,?,?,?)",
 			UPDATE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?; ",
 			DELETE_COMPUTER = "DELETE FROM computer WHERE id=?";
 
-	public static List<Computer> requestAllComputers(int min, int max) throws SQLException {
+	public static List<Computer> requestAllComputers(int page, int pageSize) throws SQLException {
 		List<Computer> retour = new ArrayList<Computer>();
 		PreparedStatement ps = BasicConnector.prepareStatement(ALL_COMPUTERS_REQUEST_BETWEEN);
-		ps.setInt(1, min);
-		ps.setInt(2, max);
+		ps.setInt(1, pageSize);
+		ps.setInt(2, pageSize*page);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
 			retour.add(new Computer(rs.getInt("id"), rs.getString("name"), rs.getDate("introduced"),

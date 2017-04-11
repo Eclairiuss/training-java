@@ -50,7 +50,7 @@ public class BasicConnector {
 		return companies;
 	}
 
-	public void incrMap(int key, int value) {
-		map.replace(key, map.get(key) + value);
+	public void incrMap(int key) {
+		map.replace(key, map.get(key) + 1);
 	}
 }
