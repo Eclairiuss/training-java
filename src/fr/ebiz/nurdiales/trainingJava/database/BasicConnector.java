@@ -15,7 +15,8 @@ public class BasicConnector {
 	private Connection conn = null;
 	private Map<Integer, Integer> map = new HashMap<>();
 	private LinkedList<Company> companies = new LinkedList<Company>();
-	private static final String url = "jdbc:mysql://localhost:3306/computer-database-db", DATABASE_DRIVER = "com.mysql.jdbc.Driver";
+	private static final String url = "jdbc:mysql://localhost:3306/computer-database-db",
+			DATABASE_DRIVER = "com.mysql.jdbc.Driver";
 
 	private BasicConnector() {
 	}
