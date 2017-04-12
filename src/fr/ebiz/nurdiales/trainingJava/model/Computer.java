@@ -2,7 +2,12 @@ package fr.ebiz.nurdiales.trainingJava.model;
 
 import java.sql.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Computer {
+	private static final Date neverBefore = Date.valueOf("1970-01-01");
+	private static Logger logger;
 	private int id;
 	private String name; // seul obligatoire
 	private Date dateOfIntroduced, dateOfDiscontinued;
@@ -40,7 +45,10 @@ public class Computer {
 	}
 
 	public void setDateOfIntroduced(Date dateOfIntroduced) {
-		this.dateOfIntroduced = dateOfIntroduced;
+		if (dateOfIntroduced != null)
+			this.dateOfIntroduced = dateOfIntroduced.before(neverBefore) ? this.dateOfIntroduced : dateOfIntroduced;
+		else
+			this.dateOfIntroduced = null;
 	}
 
 	public Date getDateOfDiscontinued() {
@@ -48,7 +56,11 @@ public class Computer {
 	}
 
 	public void setDateOfDiscontinued(Date dateOfDiscontinued) {
-		this.dateOfDiscontinued = dateOfDiscontinued;
+		if (dateOfDiscontinued != null)
+			this.dateOfDiscontinued = dateOfDiscontinued.before(neverBefore) ? this.dateOfDiscontinued
+					: dateOfDiscontinued;
+		else
+			this.dateOfDiscontinued = null;
 	}
 
 	public Company getManufacturer() {
@@ -63,5 +75,16 @@ public class Computer {
 	public String toString() {
 		return "Computer [id=" + id + ", name=" + name + ", dateOfIntroduced=" + dateOfIntroduced
 				+ ", dateOfDiscontinued=" + dateOfDiscontinued + ", manufacturer=" + manufacturer + "]";
+	}
+
+	public static void initLogger() {
+		logger = LoggerFactory.getLogger(Computer.class);
+	}
+
+	public boolean checkDates() {
+		if ((dateOfIntroduced != null) && (dateOfDiscontinued != null))
+			if (dateOfIntroduced.before(dateOfDiscontinued))
+				return true;
+		return false;
 	}
 }

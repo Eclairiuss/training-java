@@ -1,6 +1,10 @@
 package fr.ebiz.nurdiales.trainingJava.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Company {
+	private static Logger logger;
 	private int id;
 	private String name;
 
@@ -28,5 +32,9 @@ public class Company {
 	@Override
 	public String toString() {
 		return "Company [id=" + id + ", name=" + name + "]";
+	}
+
+	public static void initLogger() {
+		logger = LoggerFactory.getLogger(Company.class);
 	}
 }
