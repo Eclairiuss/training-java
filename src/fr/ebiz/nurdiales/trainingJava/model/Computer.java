@@ -83,8 +83,8 @@ public class Computer {
 
 	public boolean checkDates() {
 		if ((dateOfIntroduced != null) && (dateOfDiscontinued != null))
-			if (dateOfIntroduced.before(dateOfDiscontinued))
-				return true;
-		return false;
+			if (dateOfIntroduced.after(dateOfDiscontinued))
+				return false;
+		return true;
 	}
 }
