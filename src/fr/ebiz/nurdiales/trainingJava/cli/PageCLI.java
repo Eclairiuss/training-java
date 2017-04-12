@@ -1,5 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
@@ -12,6 +13,12 @@ import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
 public class PageCLI {
 	private static int SIZE_PAGE = 10;
 	private int page;
+	private int idComputer;
+	private int idCompany;
+	private String nameComputer;
+	private String nameCompany;
+	private Date introduced;
+	private Date discontinued;
 
 	public PageCLI() {
 		page = 0;
@@ -71,5 +78,69 @@ public class PageCLI {
 		default:
 			return printChoicesAndGet(sc);
 		}
+	}
+
+	public static int getSizePage() {
+		return SIZE_PAGE;
+	}
+
+	public static void setSizePage(int sizePage) {
+		SIZE_PAGE = sizePage < 1 ? 1 : sizePage;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page < 0 ? 0 : page;
+	}
+
+	public int getIdComputer() {
+		return idComputer;
+	}
+
+	public void setIdComputer(int idComputer) {
+		this.idComputer = idComputer < 0 ? 0 : idComputer;
+	}
+
+	public int getIdCompany() {
+		return idCompany;
+	}
+
+	public void setIdCompany(int idCompany) {
+		this.idCompany = idCompany < 0 ? 0 : idCompany;
+	}
+
+	public String getNameComputer() {
+		return nameComputer;
+	}
+
+	public void setNameComputer(String nameComputer) {
+		this.nameComputer = nameComputer;
+	}
+
+	public String getNameCompany() {
+		return nameCompany;
+	}
+
+	public void setNameCompany(String nameCompany) {
+		this.nameCompany = nameCompany;
+	}
+
+	public Date getIntroduced() {
+		return introduced;
+	}
+
+	public void setIntroduced(Date introduced) {
+		this.introduced = introduced;
+	}
+
+	public Date getDiscontinued() {
+		return discontinued;
+	}
+	
+	public void setDiscontinued(Date discontinued) {
+		this.discontinued = discontinued;
 	}
 }

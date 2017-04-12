@@ -13,6 +13,8 @@ public class CompanyDAO {
 	private static final BasicConnector bc = BasicConnector.getInstance();
 	private static final String ALL_COMPANIES_REQUEST = "SELECT * FROM company";
 	private static final String ALL_COMPANIES_REQUEST_BETWEEN = "SELECT * FROM company LIMIT ? OFFSET ?";
+	private static final String COMPANIES_BY_NAME = "SELECT * FROM company WHERE name LIKE '%?%'";
+	private static final String COMPANIES_BY_NAME_BETWEEN = "SELECT * FROM company WHERE name LIKE '%?%' LIMIT ? OFFSET ?";
 	private static final String COMPANY_BY_ID_REQUEST = "SELECT * FROM company WHERE id=?";
 
 	public static Company getCompanyById(int id) throws SQLException {
@@ -46,15 +48,43 @@ public class CompanyDAO {
 		}
 		return list;
 	}
-	
+
 	public static List<Company> requestAllCompanies(int page, int pageSize) throws SQLException {
 		List<Company> list = new ArrayList<>();
 		PreparedStatement ps = BasicConnector.prepareStatement(ALL_COMPANIES_REQUEST_BETWEEN);
 		ps.setInt(1, pageSize);
-		ps.setInt(2, pageSize*page);
+		ps.setInt(2, pageSize * page);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
 			list.add(new Company(rs.getInt("id"), rs.getString("name")));
+		}
+		return list;
+	}
+
+	public static List<Company> requestAllCompaniesByName(String name) throws SQLException {
+		List<Company> list = new ArrayList<>();
+		if (!name.contains("'")) {
+			PreparedStatement ps = BasicConnector.prepareStatement(COMPANIES_BY_NAME);
+			ps.setString(1, name);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				list.add(new Company(rs.getInt("id"), rs.getString("name")));
+			}
+		}
+		return list;
+	}
+
+	public static List<Company> requestAllCompaniesByName(String name, int page, int pageSize) throws SQLException {
+		List<Company> list = new ArrayList<>();
+		if (!name.contains("'")) {
+			PreparedStatement ps = BasicConnector.prepareStatement(COMPANIES_BY_NAME_BETWEEN);
+			ps.setString(1, name);
+			ps.setInt(2, pageSize);
+			ps.setInt(3, pageSize * page);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				list.add(new Company(rs.getInt("id"), rs.getString("name")));
+			}
 		}
 		return list;
 	}
