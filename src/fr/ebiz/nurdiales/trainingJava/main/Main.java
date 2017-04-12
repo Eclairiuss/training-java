@@ -12,6 +12,7 @@ public class Main {
 		}
 		LoggerManager.initLoggers();
 		CLI.mainCLI();
+		//test
 	}
 
 }
