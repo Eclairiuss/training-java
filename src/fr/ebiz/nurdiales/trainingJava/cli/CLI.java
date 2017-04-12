@@ -1,13 +1,16 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-import java.io.Console;
-import java.io.IOException;
+//import java.io.Console;
+//import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+//import javax.swing.JOptionPane;
+//import javax.swing.JPasswordField;
 
 import fr.ebiz.nurdiales.trainingJava.database.BasicConnector;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
@@ -15,28 +18,33 @@ import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
 import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
 
 public class CLI {
+	private static Logger logger;
 	private static final String EXIT = "exit", ALLCOMPUTERS = "computers", ALLCOMPANIES = "companies",
 			DELETE = "delete", DETAILS = "details", UPDATE = "update", NEW = "new", ID = "id",
 			ID_COMPANY = "company_id", NAME = "name", DATE_OF_DISCONTINUED = "date_of_discontinued",
 			DATE_OF_INTRODUCED = "date_of_introduced", SEPARATOR = " ", DATE_FORMA = "AAAA-MM-JJ", SEPARATOR2 = "=";
 
-	public static void main(String[] args) {
-		String username = null;
-		String password = null;
-		BasicConnector bc = BasicConnector.getInstance();
-		ComputerDAO computerDAO = new ComputerDAO();
+	public static void mainCLI() {
+		// String username = null;
+		// String password = null;
 		Scanner sc = new Scanner(System.in);
 		boolean wantExit = false;
-		System.out.print("Username : ");
-		username = sc.nextLine();
+
+		// System.out.print("Username : ");
+		// username = sc.nextLine();
+		// try {
+		// password = readPwd();
+		// } catch (IOException e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// }
+
 		try {
-			password = readPwd();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			BasicConnector.connectToDB(username, password);
+			logger.debug("Try connection to DB");
+			// BasicConnector.connectToDB(username, password);
+			BasicConnector.connectToDB("admincdb", "qwerty1234");
+			logger.debug("Succes connection to DB");
+
 			while (!wantExit) {
 				printChoices();
 				String line = sc.nextLine();
@@ -57,14 +65,14 @@ public class CLI {
 					break;
 				case ALLCOMPANIES: {
 					PageCLI p = new PageCLI();
-					p.printCompagnies(sc);
+					p.printCompanies(sc);
 				}
 					break;
 				case DETAILS:
 					switch (l[1].split(SEPARATOR2)[0]) {
 					case ID:
 						try {
-							Computer computer = computerDAO
+							Computer computer = ComputerDAO
 									.getComputerById(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
 							System.out.println(computer);
 						} catch (Exception e) {
@@ -79,18 +87,18 @@ public class CLI {
 					}
 					break;
 				case NEW: {
-					newComputer(sc, computerDAO);
+					newComputer(sc);
 				}
 					break;
 				case UPDATE: {
-					updateComputer(sc, computerDAO);
+					updateComputer(sc);
 				}
 					break;
 				case DELETE:
 					String l2 = l[1].toLowerCase();
 					switch (l2.split(SEPARATOR2)[0]) {
 					case ID:
-						computerDAO.delete(Integer.parseInt(l2.split("=")[1]));
+						ComputerDAO.delete(Integer.parseInt(l2.split("=")[1]));
 						break;
 					// case NAME:
 					// // nameOfComputer:
@@ -106,7 +114,7 @@ public class CLI {
 				}
 			}
 			sc.close();
-			bc.disconnectToDB();
+			BasicConnector.disconnectToDB();
 		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -151,21 +159,23 @@ public class CLI {
 		return Date.valueOf(s);
 	}
 
-	private static String readPwd() throws IOException {
-		String message = "Enter password";
-		String passwd = null;
-		Console c = System.console();
-		if (c == null) { // IN ECLIPSE IDE
-			JPasswordField pf = new JPasswordField();
-			passwd = JOptionPane.showConfirmDialog(null, pf, message, JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION ? new String(pf.getPassword()) : null;
-			return passwd;
-		} else {
-			return new String(c.readPassword("Password: "));
-		}
-	}
+	// private static String readPwd() throws IOException {
+	// String message = "Enter password";
+	// String passwd = null;
+	// Console c = System.console();
+	// if (c == null) { // IN ECLIPSE IDE
+	// JPasswordField pf = new JPasswordField();
+	// passwd = JOptionPane.showConfirmDialog(null, pf, message,
+	// JOptionPane.OK_CANCEL_OPTION,
+	// JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION ? new
+	// String(pf.getPassword()) : null;
+	// return passwd;
+	// } else {
+	// return new String(c.readPassword("Password: "));
+	// }
+	// }
 
-	private static void newComputer(Scanner sc, ComputerDAO computerDAO) throws SQLException {
+	private static void newComputer(Scanner sc) throws SQLException {
 		Computer computer = new Computer(0, "", null, null, null);
 		while (computer.getName().equals("")) {
 			System.out.print("Name : ");
@@ -189,10 +199,11 @@ public class CLI {
 		} catch (Exception e) {
 			computer.setManufacturer(null);
 		}
-		computerDAO.Add(computer);
+		logger.debug(computer.toString());
+		ComputerDAO.Add(computer);
 	}
 
-	private static void updateComputer(Scanner sc, ComputerDAO computerDAO) throws SQLException {
+	private static void updateComputer(Scanner sc) throws SQLException {
 		Computer computer = new Computer(0, "", null, null, null);
 		boolean isInteger = true;
 		String s;
@@ -200,7 +211,7 @@ public class CLI {
 			System.out.print("Id : ");
 			s = sc.nextLine();
 			try {
-				computer = computerDAO.getComputerById(Integer.parseInt(s));
+				computer = ComputerDAO.getComputerById(Integer.parseInt(s));
 			} catch (IllegalArgumentException e) {
 				isInteger = false;
 			}
@@ -227,7 +238,7 @@ public class CLI {
 				computer.setManufacturer(CompanyDAO.getCompanyById(Integer.parseInt(sc.nextLine())));
 			} catch (Exception e) {
 			}
-			computerDAO.update(computer);
+			ComputerDAO.update(computer);
 		}
 	}
 
@@ -244,5 +255,9 @@ public class CLI {
 		System.out.println("Delete a computer : " + DELETE + SEPARATOR + ID + SEPARATOR2 + ID);
 		System.out.println("Exit and close connexion : " + EXIT);
 
+	}
+
+	public static void initLogger() {
+		logger = LoggerFactory.getLogger(CLI.class);
 	}
 }

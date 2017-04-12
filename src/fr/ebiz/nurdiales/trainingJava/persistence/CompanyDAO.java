@@ -6,36 +6,41 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.ebiz.nurdiales.trainingJava.cli.CLI;
 import fr.ebiz.nurdiales.trainingJava.database.BasicConnector;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
 
 public class CompanyDAO {
-	private static final BasicConnector bc = BasicConnector.getInstance();
+	// private static final BasicConnector bc = BasicConnector.getInstance();
 	private static final String ALL_COMPANIES_REQUEST = "SELECT * FROM company";
 	private static final String ALL_COMPANIES_REQUEST_BETWEEN = "SELECT * FROM company LIMIT ? OFFSET ?";
 	private static final String COMPANIES_BY_NAME = "SELECT * FROM company WHERE name LIKE '%?%'";
 	private static final String COMPANIES_BY_NAME_BETWEEN = "SELECT * FROM company WHERE name LIKE '%?%' LIMIT ? OFFSET ?";
 	private static final String COMPANY_BY_ID_REQUEST = "SELECT * FROM company WHERE id=?";
+	private static Logger logger;
 
 	public static Company getCompanyById(int id) throws SQLException {
-		if (bc.getMap().isEmpty() || !bc.getMap().containsKey(id)) {
-			PreparedStatement ps = BasicConnector.prepareStatement(COMPANY_BY_ID_REQUEST);
-			ps.setInt(1, id);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				Company c = new Company(rs.getInt("id"), rs.getString("name"));
-				bc.getMap().put(id, 1);
-				bc.getCompanies().add(c);
-				return c;
-			}
-		} else {
-			for (Company c : bc.getCompanies()) {
-				if (id == c.getId()) {
-					bc.getMap().replace(id, bc.getMap().get(id) + 1);
-					return c;
-				}
-			}
+		// if (bc.getMap().isEmpty() || !bc.getMap().containsKey(id)) {
+		PreparedStatement ps = BasicConnector.prepareStatement(COMPANY_BY_ID_REQUEST);
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()) {
+			Company c = new Company(rs.getInt("id"), rs.getString("name"));
+			// bc.getMap().put(id, 1);
+			// bc.getCompanies().add(c);
+			return c;
 		}
+		// } else {
+		// for (Company c : bc.getCompanies()) {
+		// if (id == c.getId()) {
+		// bc.getMap().replace(id, bc.getMap().get(id) + 1);
+		// return c;
+		// }
+		// }
+		// }
 		return null;
 	}
 
@@ -87,5 +92,9 @@ public class CompanyDAO {
 			}
 		}
 		return list;
+	}
+
+	public static void initLogger(){
+		logger = LoggerFactory.getLogger(CompanyDAO.class);
 	}
 }
