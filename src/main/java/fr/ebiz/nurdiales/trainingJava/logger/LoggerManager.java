@@ -9,12 +9,10 @@ import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
 import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
 
 public class LoggerManager {
-	public static void initLoggers(){
+	public static void initLoggers() {
 		CLI.initLogger();
 		PageCLI.initLogger();
 		BasicConnector.initLogger();
-		Company.initLogger();
-		Computer.initLogger();
 		CompanyDAO.initLogger();
 		ComputerDAO.initLogger();
 	}

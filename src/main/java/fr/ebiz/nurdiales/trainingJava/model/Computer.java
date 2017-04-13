@@ -7,18 +7,19 @@ import org.slf4j.LoggerFactory;
 
 public class Computer {
 	private static final Date neverBefore = Date.valueOf("1970-01-01");
-	private static Logger logger;
-	private int id;
-	private String name; // seul obligatoire
-	private Date dateOfIntroduced, dateOfDiscontinued;
-	private Company manufacturer;
 
-	public Computer(int id, String name, Date dateOfIntroduced, Date dateOfDiscontinued, Company manufacturer) {
+	private int id;
+	private String name;
+	private Date introduced;
+	private Date discontinued;
+	private Company company;
+
+	public Computer(int id, String name, Date introduced, Date discontinued, Company company) {
 		this.id = id;
 		this.name = name;
-		this.dateOfIntroduced = dateOfIntroduced;
-		this.dateOfDiscontinued = dateOfDiscontinued;
-		this.manufacturer = manufacturer;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.company = company;
 	}
 
 	public Computer() {
@@ -41,51 +42,39 @@ public class Computer {
 	}
 
 	public Date getDateOfIntroduced() {
-		return dateOfIntroduced;
+		return introduced;
 	}
 
-	public void setDateOfIntroduced(Date dateOfIntroduced) {
-		if (dateOfIntroduced != null) {
-			this.dateOfIntroduced = dateOfIntroduced.before(neverBefore) ? this.dateOfIntroduced : dateOfIntroduced;
-			logger.debug("DateOfIntroduced is Before the timestamp 1");
-		} else
-			this.dateOfIntroduced = null;
+	public void setDateOfIntroduced(Date introduced) {
+		this.introduced = (introduced != null) ? (introduced.before(neverBefore) ? this.introduced : introduced) : null;
 	}
 
 	public Date getDateOfDiscontinued() {
-		return dateOfDiscontinued;
+		return discontinued;
 	}
 
-	public void setDateOfDiscontinued(Date dateOfDiscontinued) {
-		if (dateOfDiscontinued != null)
-			this.dateOfDiscontinued = dateOfDiscontinued.before(neverBefore) ? this.dateOfDiscontinued
-					: dateOfDiscontinued;
-		else
-			this.dateOfDiscontinued = null;
+	public void setDateOfDiscontinued(Date discontinued) {
+		this.discontinued = (discontinued != null)
+				? (discontinued.before(neverBefore) ? this.discontinued : discontinued) : null;
 	}
 
-	public Company getManufacturer() {
-		return manufacturer;
+	public Company getCompany() {
+		return company;
 	}
 
-	public void setManufacturer(Company manufacturer) {
-		this.manufacturer = manufacturer;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	@Override
 	public String toString() {
-		return "Computer [id=" + id + ", name=" + name + ", dateOfIntroduced=" + dateOfIntroduced
-				+ ", dateOfDiscontinued=" + dateOfDiscontinued + ", manufacturer=" + manufacturer + "]";
-	}
-
-	public static void initLogger() {
-		logger = LoggerFactory.getLogger(Computer.class);
+		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
+				+ ", company=" + company + "]";
 	}
 
 	public boolean checkDates() {
-		if ((dateOfIntroduced != null) && (dateOfDiscontinued != null))
-			if (dateOfIntroduced.after(dateOfDiscontinued))
-				return false;
+		if (introduced != null && discontinued != null && introduced.after(discontinued))
+			return false;
 		return true;
 	}
 }

@@ -1,17 +1,10 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-//import java.io.Console;
-//import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Scanner;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//import javax.swing.JOptionPane;
-//import javax.swing.JPasswordField;
-
 import fr.ebiz.nurdiales.trainingJava.database.BasicConnector;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
@@ -25,26 +18,12 @@ public class CLI {
 			DATE_OF_INTRODUCED = "date_of_introduced", SEPARATOR = " ", DATE_FORMA = "AAAA-MM-JJ", SEPARATOR2 = "=";
 
 	public static void mainCLI() {
-		// String username = null;
-		// String password = null;
 		Scanner sc = new Scanner(System.in);
 		boolean wantExit = false;
-
-		// System.out.print("Username : ");
-		// username = sc.nextLine();
-		// try {
-		// password = readPwd();
-		// } catch (IOException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
-
 		try {
 			logger.debug("Try connection to DB");
-			// BasicConnector.connectToDB(username, password);
 			BasicConnector.connectToDB("admincdb", "qwerty1234");
 			logger.debug("Succes connection to DB");
-
 			while (!wantExit) {
 				printChoices();
 				String line = sc.nextLine();
@@ -57,11 +36,6 @@ public class CLI {
 					PageCLI p = new PageCLI();
 					p.printComputers(sc);
 				}
-					// List<Computer> computers = bc.requestAllComputers();
-					// for(Computer c : computers)
-					// {
-					// System.out.println(c);
-					// }
 					break;
 				case ALLCOMPANIES: {
 					PageCLI p = new PageCLI();
@@ -79,9 +53,6 @@ public class CLI {
 							e.printStackTrace();
 						}
 						break;
-					// case NAME:
-					// // nameOfComputer:
-					// break;
 					default:
 						break;
 					}
@@ -100,22 +71,16 @@ public class CLI {
 					case ID:
 						ComputerDAO.delete(Integer.parseInt(l2.split("=")[1]));
 						break;
-					// case NAME:
-					// // nameOfComputer:
-					// // TODO
-					// break;
 					default:
 						break;
 					}
 					break;
-
 				default:
 					break;
 				}
 			}
 			BasicConnector.disconnectToDB();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		sc.close();
@@ -158,22 +123,6 @@ public class CLI {
 	public static Date stringToDate(String s) {
 		return Date.valueOf(s);
 	}
-
-	// private static String readPwd() throws IOException {
-	// String message = "Enter password";
-	// String passwd = null;
-	// Console c = System.console();
-	// if (c == null) { // IN ECLIPSE IDE
-	// JPasswordField pf = new JPasswordField();
-	// passwd = JOptionPane.showConfirmDialog(null, pf, message,
-	// JOptionPane.OK_CANCEL_OPTION,
-	// JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION ? new
-	// String(pf.getPassword()) : null;
-	// return passwd;
-	// } else {
-	// return new String(c.readPassword("Password: "));
-	// }
-	// }
 
 	private static void newComputer(Scanner sc) throws SQLException {
 		Computer computer = new Computer(0, "", null, null, null);
@@ -250,13 +199,10 @@ public class CLI {
 		System.out.println("List of computers : " + ALLCOMPUTERS);
 		System.out.println("List of companies : " + ALLCOMPANIES);
 		System.out.println("Show computer details : " + DETAILS + SEPARATOR + ID + SEPARATOR2 + ID);
-		// System.out.println("Show computer details : " + DETAILS + SEPARATOR +
-		// NAME + SEPARATOR2 + "nameOfComputer");
 		System.out.println("Create a computer : " + NEW);
 		System.out.println("Update a computer : " + UPDATE);
 		System.out.println("Delete a computer : " + DELETE + SEPARATOR + ID + SEPARATOR2 + ID);
 		System.out.println("Exit and close connexion : " + EXIT);
-
 	}
 
 	public static void initLogger() {

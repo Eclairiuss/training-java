@@ -111,20 +111,6 @@ public class PageCLI {
 					setNameCompany(tmp);
 			}
 				return false;
-			// case "id": {
-			// System.out.print("Id : ");
-			// String tmp = sc.nextLine();r
-			// try {
-			// int id = tmp.equals("") ? 0 : Integer.parseInt(tmp);
-			// if (isPageComputers)
-			// setIdComputer(id);
-			// else
-			// setIdCompany(id);
-			// } catch (IllegalArgumentException e) {
-			// System.out.println("Not an Id");
-			// }
-			// }
-			// return false;
 			case "companyid":
 				if (isPageComputers) {
 					{
