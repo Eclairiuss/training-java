@@ -1,6 +1,5 @@
 package fr.ebiz.nurdiales.trainingJava.persistence;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +9,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.nurdiales.trainingJava.cli.CLI;
 import fr.ebiz.nurdiales.trainingJava.database.BasicConnector;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
@@ -46,7 +44,7 @@ public class ComputerDAO {
 
 	public static List<Computer> requestAllComputersByCompanyName(String name, int page, int pageSize)
 			throws SQLException {
-		List<Computer> retour = new ArrayList<>();
+		List<Computer> retour = new ArrayList<Computer>();
 		{
 			List<Company> companies = CompanyDAO.requestAllCompaniesByName(name);
 			StringBuffer idCompanies = new StringBuffer();
@@ -124,7 +122,7 @@ public class ComputerDAO {
 
 	public static List<Computer> requestAllComputersByCompanyNameAndName(String companyName, String name, int page,
 			int pageSize) throws SQLException {
-		List<Computer> retour = new ArrayList<>();
+		List<Computer> retour = new ArrayList<Computer>();
 		if (!name.contains("'"))
 			;
 		{
@@ -156,7 +154,7 @@ public class ComputerDAO {
 
 	public static List<Computer> saladeTomateOignon(String companyName, int companyId, String name, int page,
 			int pageSize) throws SQLException {
-		List<Computer> retour = new ArrayList<>();
+		List<Computer> retour = new ArrayList<Computer>();
 		if (!name.contains("'")) {
 			if (companyId == 0)
 				return requestAllComputersByCompanyNameAndName(companyName, name, page, pageSize);
@@ -168,8 +166,7 @@ public class ComputerDAO {
 	public static int Add(Computer c) throws SQLException {
 		PreparedStatement ps = BasicConnector.prepareStatement(INSERT_COMPUTER);
 		ps.setString(1, c.getName());
-		Date d1 = c.getDateOfIntroduced();
-		Date d2 = c.getDateOfDiscontinued();
+		;
 		if (c.checkDates()) {
 			ps.setDate(2, c.getDateOfIntroduced());
 			ps.setDate(3, c.getDateOfDiscontinued());

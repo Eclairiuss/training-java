@@ -10,8 +10,9 @@ import org.slf4j.LoggerFactory;
 
 public class BasicConnector {
 
-	private static BasicConnector INSTANCE = new BasicConnector();
-	private static Logger logger;
+	private static final BasicConnector INSTANCE = new BasicConnector();
+	private static Logger logger = LoggerFactory.getLogger(BasicConnector.class);
+	private static final String username = "admincdb", password = "qwerty1234";
 
 	private Connection conn = null;
 
@@ -22,14 +23,22 @@ public class BasicConnector {
 			DATABASE_DRIVER = "com.mysql.jdbc.Driver";
 
 	private BasicConnector() {
+		initLogger();
+		connectToDB(username, password);
 	}
 
-	public static void connectToDB(String username, String password) throws ClassNotFoundException, SQLException {
-		logger.debug("Init driver");
-		Class.forName(DATABASE_DRIVER);
-		logger.debug("Succes driver ?");
-		INSTANCE.conn = DriverManager.getConnection(url, username, password);
-		logger.debug("Succes connection");
+	public static void connectToDB(String username, String password) {
+		logger.debug("Init driver ");
+		try {
+			Class.forName(DATABASE_DRIVER);
+			logger.debug("Succes driver ?");
+			INSTANCE.conn = DriverManager.getConnection(url, username, password);
+			logger.debug("Succes connection");
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+			logger.debug("Error Connection");
+		}
+
 	}
 
 	public static void disconnectToDB() throws SQLException {

@@ -114,7 +114,7 @@ public class CLI {
 				}
 			}
 			BasicConnector.disconnectToDB();
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

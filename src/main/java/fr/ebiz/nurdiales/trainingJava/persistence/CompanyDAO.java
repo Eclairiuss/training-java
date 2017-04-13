@@ -9,7 +9,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.nurdiales.trainingJava.cli.CLI;
 import fr.ebiz.nurdiales.trainingJava.database.BasicConnector;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
 
@@ -45,7 +44,7 @@ public class CompanyDAO {
 	}
 
 	public static List<Company> requestAllCompanies() throws SQLException {
-		List<Company> list = new ArrayList<>();
+		List<Company> list = new ArrayList<Company>();
 		PreparedStatement ps = BasicConnector.prepareStatement(ALL_COMPANIES_REQUEST);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
@@ -55,7 +54,7 @@ public class CompanyDAO {
 	}
 
 	public static List<Company> requestAllCompanies(int page, int pageSize) throws SQLException {
-		List<Company> list = new ArrayList<>();
+		List<Company> list = new ArrayList<Company>();
 		PreparedStatement ps = BasicConnector.prepareStatement(ALL_COMPANIES_REQUEST_BETWEEN);
 		ps.setInt(1, pageSize);
 		ps.setInt(2, pageSize * page);
@@ -67,7 +66,7 @@ public class CompanyDAO {
 	}
 
 	public static List<Company> requestAllCompaniesByName(String name) throws SQLException {
-		List<Company> list = new ArrayList<>();
+		List<Company> list = new ArrayList<Company>();
 		if (!name.contains("'")) {
 			PreparedStatement ps = BasicConnector.prepareStatement(COMPANIES_BY_NAME);
 			ps.setString(1, name);
@@ -80,7 +79,7 @@ public class CompanyDAO {
 	}
 
 	public static List<Company> requestAllCompaniesByName(String name, int page, int pageSize) throws SQLException {
-		List<Company> list = new ArrayList<>();
+		List<Company> list = new ArrayList<Company>();
 		if (!name.contains("'")) {
 			PreparedStatement ps = BasicConnector.prepareStatement(COMPANIES_BY_NAME_BETWEEN);
 			ps.setString(1, name);
