@@ -5,24 +5,24 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
 import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
 
-public class PageCLI {
-	private static int SIZE_PAGE = 10;
-	private static Logger logger;
-	private int page;
-	private int idComputer;
-	private int idCompany;
-	private String nameComputer;
-	private String nameCompany;
-	private Date introduced;
-	private Date discontinued;
+public abstract class PageCLI {
+	protected int SIZE_PAGE = 10;
+	// private static Logger logger;
+	protected int page;
+	protected int idComputer;
+	protected int idCompany;
+	protected String nameComputer;
+	protected String nameCompany;
+	protected Date introduced;
+	protected Date discontinued;
 
 	private void nextPage() {
 		page += 1;
@@ -32,67 +32,20 @@ public class PageCLI {
 		page = (page == 0) ? 0 : page - 1;
 	}
 
-	// affichage avec page pour les compagnies
-	public void printCompanies(Scanner sc) throws SQLException {
-		logger.debug("start of printCompanies");
-		boolean exitWanted = false;
-		while (!exitWanted) {
-			System.out.println("Page " + page + " : ");
-			{
-				List<Company> cl;
-				if (nameCompany == null)
-					cl = CompanyDAO.requestAllCompanies(page, SIZE_PAGE);
-				else
-					cl = CompanyDAO.requestAllCompaniesByName(nameCompany, page, SIZE_PAGE);
-				for (Company c : cl) {
-					System.out.println(c);
-				}
-				exitWanted = printChoicesAndGet(sc, false);
-			}
-		}
-		logger.debug("end of printCompanies");
-	}
-
 	// affichage avec page pour les ordinateurs
-	public void printComputers(Scanner sc) throws SQLException {
-		logger.debug("start of printComputers");
-		boolean exitWanted = false;
-		while (!exitWanted) {
-			System.out.println("Page " + page + " : ");
-			{
-				List<Computer> cl;
-				if (nameCompany == null && idCompany == 0 && nameComputer == null)
-					cl = ComputerDAO.requestAllComputers(page, SIZE_PAGE);
-				else if (nameCompany == null && nameComputer == null)
-					cl = ComputerDAO.requestAllComputersByCompanyID(idCompany, page, SIZE_PAGE);
-				else if (idCompany == 0 && nameComputer == null)
-					cl = ComputerDAO.requestAllComputersByCompanyName(nameCompany, page, SIZE_PAGE);
-				else if (idCompany == 0 && nameCompany == null)
-					cl = ComputerDAO.requestAllComputersByName(nameComputer, page, SIZE_PAGE);
-				else
-					cl = ComputerDAO.requestAllComputers(page, SIZE_PAGE); // TODO
-				for (Computer c : cl) {
-					System.out.println(c);
-				}
+	abstract public void printEntities(Scanner sc) throws SQLException;
 
-				exitWanted = printChoicesAndGet(sc, true);
-			}
-		}
-		logger.debug("end of printComputers");
-	}
+	abstract protected boolean companyName(Scanner sc);
 
-	private boolean printChoicesAndGet(Scanner sc, boolean isPageComputers) {
+	abstract protected boolean companyId(Scanner sc);
+
+	abstract protected String menuPage(Scanner sc);
+
+	abstract protected void setName(String name);
+
+	protected boolean printChoicesAndGet(Scanner sc, boolean isPageComputers) {
 		while (true) {
-			System.out.println("Next Page : r");
-			System.out.println("Previous Page : l");
-			System.out.println("Search by name : name");
-			// System.out.println("Search by id : id");
-			if (isPageComputers) {
-				System.out.println("Search by companyId : companyid");
-				System.out.println("Search by companyName : companyname");
-			}
-			System.out.println("Exit : exit");
-			switch (sc.nextLine()) {
+			switch (menuPage(sc)) {
 			case "exit":
 				return true;
 			case "l":
@@ -105,28 +58,11 @@ public class PageCLI {
 				System.out.print("Name : ");
 				String tmp = sc.nextLine();
 				tmp = tmp.equals("") ? null : tmp;
-				if (isPageComputers)
-					setNameComputer(tmp);
-				else
-					setNameCompany(tmp);
+				setName(tmp);
 			}
 				return false;
-			// case "id": {
-			// System.out.print("Id : ");
-			// String tmp = sc.nextLine();
-			// try {
-			// int id = tmp.equals("") ? 0 : Integer.parseInt(tmp);
-			// if (isPageComputers)
-			// setIdComputer(id);
-			// else
-			// setIdCompany(id);
-			// } catch (IllegalArgumentException e) {
-			// System.out.println("Not an Id");
-			// }
-			// }
-			// return false;
 			case "companyid":
-				if (isPageComputers) {
+				if (companyId(sc)) {
 					{
 						System.out.print("Company Id : ");
 						String tmp = sc.nextLine();
@@ -141,15 +77,8 @@ public class PageCLI {
 				}
 				break;
 			case "companyname":
-				if (isPageComputers) {
-					{
-						System.out.print("Company Name : ");
-						String tmp = sc.nextLine();
-						tmp = tmp.equals("") ? null : tmp;
-						setNameCompany(tmp);
-					}
+				if (companyName(sc))
 					return false;
-				}
 				break;
 			default:
 				break;
@@ -157,11 +86,11 @@ public class PageCLI {
 		}
 	}
 
-	public static int getSizePage() {
+	public int getSizePage() {
 		return SIZE_PAGE;
 	}
 
-	public static void setSizePage(int sizePage) {
+	public void setSizePage(int sizePage) {
 		SIZE_PAGE = sizePage < 1 ? 1 : sizePage;
 	}
 
@@ -221,7 +150,7 @@ public class PageCLI {
 		this.discontinued = discontinued;
 	}
 
-	public static void initLogger() {
-		logger = LoggerFactory.getLogger(PageCLI.class);
-	}
+	// public static void initLogger() {
+	// logger = LoggerFactory.getLogger(PageCLI.class);
+	// }
 }
