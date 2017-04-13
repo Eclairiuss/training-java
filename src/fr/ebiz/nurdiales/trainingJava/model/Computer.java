@@ -45,9 +45,10 @@ public class Computer {
 	}
 
 	public void setDateOfIntroduced(Date dateOfIntroduced) {
-		if (dateOfIntroduced != null)
+		if (dateOfIntroduced != null) {
 			this.dateOfIntroduced = dateOfIntroduced.before(neverBefore) ? this.dateOfIntroduced : dateOfIntroduced;
-		else
+			logger.debug("DateOfIntroduced is Before the timestamp 1");
+		} else
 			this.dateOfIntroduced = null;
 	}
 

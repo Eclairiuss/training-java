@@ -113,12 +113,12 @@ public class CLI {
 					break;
 				}
 			}
-			sc.close();
 			BasicConnector.disconnectToDB();
 		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		sc.close();
 	}
 
 	public static boolean parseForComputer(String s, Computer c) {
@@ -185,13 +185,13 @@ public class CLI {
 		try {
 			computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
 		} catch (IllegalArgumentException e) {
-			computer.setDateOfIntroduced(null);
+			logger.debug("Date of Introduced is invalid");
 		}
 		System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
 		try {
 			computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
 		} catch (IllegalArgumentException e) {
-			computer.setDateOfDiscontinued(null);
+			logger.debug("Date of Introduced is invalid");
 		}
 		System.out.print("Id of Company : ");
 		try {
@@ -227,11 +227,13 @@ public class CLI {
 			try {
 				computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
 			} catch (IllegalArgumentException e) {
+				logger.debug("Date of Introduced is invalid");
 			}
 			System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
 			try {
 				computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
 			} catch (IllegalArgumentException e) {
+				logger.debug("Date of Introduced is invalid");
 			}
 			System.out.print("Id of Company : ");
 			try {
