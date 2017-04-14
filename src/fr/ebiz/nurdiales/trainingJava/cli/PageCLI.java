@@ -1,17 +1,10 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
 import java.sql.Date;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.Scanner;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
-import fr.ebiz.nurdiales.trainingJava.model.Company;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
-import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 
 public abstract class PageCLI {
 	protected int SIZE_PAGE = 10;
@@ -33,7 +26,7 @@ public abstract class PageCLI {
 	}
 
 	// affichage avec page pour les ordinateurs
-	abstract public void printEntities(Scanner sc) throws SQLException;
+	abstract public void printEntities(Scanner sc) throws ComputerDAOException, CompanyDAOException;
 
 	abstract protected boolean companyName(Scanner sc);
 
