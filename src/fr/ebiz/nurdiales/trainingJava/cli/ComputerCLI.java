@@ -11,7 +11,7 @@ import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 
 public class ComputerCLI extends PageCLI {
-    private static Logger logger = LoggerFactory.getLogger(PageCLI.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
     ComputerManager computerManager;
 
     public ComputerCLI() {
@@ -22,7 +22,7 @@ public class ComputerCLI extends PageCLI {
     }
 
     public void printEntities(Scanner sc) throws ComputerDAOException {
-        logger.debug("start of printComputers");
+        LOGGER.debug("start of printComputers");
         boolean exitWanted = false;
         while (!exitWanted) {
             System.out.println("Page " + page + " : ");
@@ -43,7 +43,7 @@ public class ComputerCLI extends PageCLI {
             }
             exitWanted = printChoicesAndGet(sc, true);
         }
-        logger.debug("end of printComputers");
+        LOGGER.debug("end of printComputers");
     }
 
     @Override

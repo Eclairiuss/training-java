@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class JDBCSingleton {
-    private static final Logger logger = LoggerFactory.getLogger(JDBCSingleton.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JDBCSingleton.class);
     private String DB_URL;
     private String DB_DRIVER;
     private String DB_USERNAME;
@@ -27,14 +27,14 @@ public class JDBCSingleton {
     }
 
     private Connection connectToDB() {
-        logger.debug("Init driver ");
+        LOGGER.debug("Init driver ");
         try {
             Class.forName(DB_DRIVER);
-            logger.debug("Succes driver ?");
+            LOGGER.debug("Succes driver ?");
             return DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            logger.debug("Error Connection");
+            LOGGER.debug("Error Connection");
         }
         return null;
     }
@@ -48,13 +48,13 @@ public class JDBCSingleton {
     }
 
     public void disconnectToDB() throws SQLException {
-        logger.debug("Try close connection");
+        LOGGER.debug("Try close connection");
         DB_CONNECTION.close();
-        logger.debug("Connection closed");
+        LOGGER.debug("Connection closed");
     }
 
     public PreparedStatement prepareStatement(String q) throws SQLException {
-        logger.debug("PrepareStatement asked");
+        LOGGER.debug("PrepareStatement asked");
         return DB_CONNECTION.prepareStatement(q);
     }
 }
