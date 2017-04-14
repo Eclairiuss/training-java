@@ -12,6 +12,8 @@ public class ComputerCLI extends PageCLI {
 
 	public ComputerCLI() {
 		super();
+		page = 0;
+		SIZE_PAGE = 10;
 		computerManager = new ComputerManager();
 	}
 

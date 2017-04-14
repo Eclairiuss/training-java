@@ -7,9 +7,11 @@ import java.util.Scanner;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
-import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
+import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 
 public class CLI {
 	// private static Logger logger = LoggerFactory.getLogger(CLI.class);
@@ -20,15 +22,17 @@ public class CLI {
 
 	private static Scanner sc;
 	private static PageCLI p;
-	private static ComputerDAO computerDAO;
-	
-	public static void mainCLI() {
-		
+	private static ComputerManager computerManager;
+	private static CompanyManager companyManager;
+
+	public void mainCLI() throws ComputerDAOException, CompanyDAOException {
+
 		JDBCSingleton connection = JDBCSingleton.getInstance();
-		
+
 		sc = new Scanner(System.in);
-		computerDAO = new ComputerDAO();
-		
+		computerManager = new ComputerManager();
+		companyManager = new CompanyManager();
+
 		boolean wantContinue = true;
 		try {
 			while (wantContinue) {
@@ -51,7 +55,8 @@ public class CLI {
 					switch (l[1].split(SEPARATOR2)[0]) {
 					case ID:
 						try {
-							Computer computer = computerDAO.getComputerById(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
+							Computer computer = computerManager
+									.getComputerById(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
 							System.out.println(computer);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -70,14 +75,7 @@ public class CLI {
 				}
 					break;
 				case DELETE:
-					String l2 = l[1].toLowerCase();
-					switch (l2.split(SEPARATOR2)[0]) {
-					case ID:
-						computerDAO.delete(Integer.parseInt(l2.split("=")[1]));
-						break;
-					default:
-						break;
-					}
+					deleteComputer(sc);
 					break;
 				default:
 					break;
@@ -88,6 +86,16 @@ public class CLI {
 			e.printStackTrace();
 		}
 		sc.close();
+	}
+
+	private void deleteComputer(Scanner sc2) {
+		System.out.print("ID of computer to delete : ");
+		String l = sc.nextLine();
+		try {
+			computerManager.delete(Integer.parseInt(l));
+		} catch (ComputerDAOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static boolean parseForComputer(String s, Computer c) {
@@ -104,8 +112,8 @@ public class CLI {
 			break;
 		case ID_COMPANY:
 			try {
-				c.setCompany(CompanyDAO.companyById(Integer.parseInt(splited[1])));
-			} catch (NumberFormatException | SQLException e) {
+				c.setCompany(companyManager.companyById(Integer.parseInt(splited[1])));
+			} catch (NumberFormatException | CompanyDAOException e) {
 				c.setCompany(null);
 				e.printStackTrace();
 			}
@@ -128,7 +136,7 @@ public class CLI {
 		return Date.valueOf(s);
 	}
 
-	private static void newComputer(Scanner sc) throws SQLException {
+	private void newComputer(Scanner sc) throws SQLException, ComputerDAOException {
 		Computer computer = new Computer(0, "", null, null, null);
 		while (computer.getName().equals("")) {
 			System.out.print("Name : ");
@@ -149,15 +157,15 @@ public class CLI {
 		}
 		System.out.print("Id of Company : ");
 		try {
-			computer.setCompany(CompanyDAO.companyById(Integer.parseInt(sc.nextLine())));
+			computer.setCompany(companyManager.companyById(Integer.parseInt(sc.nextLine())));
 		} catch (Exception e) {
 			computer.setCompany(null);
 		}
 		// logger.debug(computer.toString());
-		computerDAO.Add(computer);
+		computerManager.add(computer);
 	}
 
-	private static void updateComputer(Scanner sc) throws SQLException {
+	private void updateComputer(Scanner sc) throws SQLException, ComputerDAOException {
 		Computer computer = new Computer(0, "", null, null, null);
 		boolean isInteger = true;
 		String s;
@@ -165,7 +173,7 @@ public class CLI {
 			System.out.print("Id : ");
 			s = sc.nextLine();
 			try {
-				computer = computerDAO.getComputerById(Integer.parseInt(s));
+				computer = computerManager.getComputerById(Integer.parseInt(s));
 			} catch (IllegalArgumentException e) {
 				isInteger = false;
 			}
@@ -191,10 +199,10 @@ public class CLI {
 			}
 			System.out.print("Id of Company : ");
 			try {
-				computer.setCompany(CompanyDAO.companyById(Integer.parseInt(sc.nextLine())));
+				computer.setCompany(companyManager.companyById(Integer.parseInt(sc.nextLine())));
 			} catch (Exception e) {
 			}
-			computerDAO.update(computer);
+			computerManager.update(computer);
 		}
 	}
 
@@ -206,9 +214,9 @@ public class CLI {
 		System.out.println("Show computer details : " + DETAILS + SEPARATOR + ID + SEPARATOR2 + ID);
 		System.out.println("Create a computer : " + NEW);
 		System.out.println("Update a computer : " + UPDATE);
-		System.out.println("Delete a computer : " + DELETE + SEPARATOR + ID + SEPARATOR2 + ID);
+		System.out.println("Delete a computer : " + DELETE);
 		System.out.println("Exit and close connexion : " + EXIT);
-		
+
 		return sc.nextLine();
 	}
 }

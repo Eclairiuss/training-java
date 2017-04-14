@@ -1,6 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.main;
 
 import fr.ebiz.nurdiales.trainingJava.cli.CLI;
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 
 public class Main {
 	public static void main(String[] args) {
@@ -8,6 +10,11 @@ public class Main {
 			if (args[0].equals("-debug"))
 				System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
 		}
-		CLI.mainCLI();
+		try {
+			(new CLI()).mainCLI();
+		} catch (ComputerDAOException | CompanyDAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
