@@ -23,14 +23,26 @@ public class ComputerDAO {
 	private static final String ALL = SELECT + LIMIT_OFFSET;
 	private static final String BY_COMPANY_NAME = SELECT + "WHERE ? " + LIMIT_OFFSET;
 	private static final String BY_COMPANY_ID = SELECT + "WHERE " + COMPUTER_COMPANY + "+=? " + LIMIT_OFFSET;
-	private static final String BY_COMPANY_NAME_AND_NAME = SELECT + "WHERE (?) AND + " + COMPUTER_NAME + LIKE+ LIMIT_OFFSET;
-	private static final String BY_COMPANY_ID_AND_NAME = SELECT + "WHERE + " + COMPUTER_COMPANY + "=? AND "	+ COMPUTER_NAME + LIKE + LIMIT_OFFSET;
+	private static final String BY_COMPANY_NAME_AND_NAME = SELECT + "WHERE (?) AND + " + COMPUTER_NAME + LIKE
+			+ LIMIT_OFFSET;
+	private static final String BY_COMPANY_ID_AND_NAME = SELECT + "WHERE + " + COMPUTER_COMPANY + "=? AND "
+			+ COMPUTER_NAME + LIKE + LIMIT_OFFSET;
 	private static final String BY_NAME = SELECT + "WHERE " + COMPUTER_NAME + LIKE + LIMIT_OFFSET;
 	private static final String BY_ID = SELECT + "WHERE " + COMPUTER_ID + "=?";
-	private static final String INSERT_COMPUTER = "INSERT INTO " + COMPUTER_TABLE + "(" + COMPUTER_NAME + "," + COMPUTER_INTRODUCED + "," + COMPUTER_DISCONTINUED + "," + COMPUTER_COMPANY + ") values (?,?,?,?)";
-	private static final String UPDATE_COMPUTER = "UPDATE " + COMPUTER_TABLE + "SET " + COMPUTER_NAME + "=?, " + COMPUTER_INTRODUCED + "=?, " + COMPUTER_DISCONTINUED + "=?, " + COMPUTER_COMPANY + "=? WHERE "+ COMPUTER_ID + "=? ";
+	private static final String INSERT_COMPUTER = "INSERT INTO " + COMPUTER_TABLE + "(" + COMPUTER_NAME + ","
+			+ COMPUTER_INTRODUCED + "," + COMPUTER_DISCONTINUED + "," + COMPUTER_COMPANY + ") values (?,?,?,?)";
+	private static final String UPDATE_COMPUTER = "UPDATE " + COMPUTER_TABLE + "SET " + COMPUTER_NAME + "=?, "
+			+ COMPUTER_INTRODUCED + "=?, " + COMPUTER_DISCONTINUED + "=?, " + COMPUTER_COMPANY + "=? WHERE "
+			+ COMPUTER_ID + "=? ";
 	private static final String DELETE_COMPUTER = "DELETE FROM " + COMPUTER_TABLE + "WHERE id=?";
-	// private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	// private static Logger logger =
+	// LoggerFactory.getLogger(ComputerDAO.class);
+
+	private CompanyDAO companyDAO;
+
+	public ComputerDAO() {
+		companyDAO = new CompanyDAO();
+	}
 
 	public List<Computer> requestAllComputers(int page, int pageSize) throws SQLException {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
@@ -42,7 +54,7 @@ public class ComputerDAO {
 		while (rs.next()) {
 			retour.add(
 					new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME), rs.getDate(COMPUTER_INTRODUCED),
-							rs.getDate(COMPUTER_DISCONTINUED), CompanyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
+							rs.getDate(COMPUTER_DISCONTINUED), companyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
 		}
 		return retour;
 	}
@@ -51,7 +63,7 @@ public class ComputerDAO {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
 		List<Computer> retour = new ArrayList<Computer>();
 		{
-			List<Company> companies = CompanyDAO.allCompaniesByName(name);
+			List<Company> companies = companyDAO.allCompaniesByName(name);
 			StringBuffer idCompanies = new StringBuffer();
 			boolean notFirst = false;
 			for (Company company : companies) {
@@ -71,7 +83,7 @@ public class ComputerDAO {
 			while (rs.next()) {
 				retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
 						rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-						CompanyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
+						companyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
 			}
 		}
 		return retour;
@@ -88,7 +100,7 @@ public class ComputerDAO {
 		while (rs.next()) {
 			retour.add(
 					new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME), rs.getDate(COMPUTER_INTRODUCED),
-							rs.getDate(COMPUTER_DISCONTINUED), CompanyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
+							rs.getDate(COMPUTER_DISCONTINUED), companyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
 		}
 		return retour;
 	}
@@ -105,7 +117,7 @@ public class ComputerDAO {
 			while (rs.next()) {
 				retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
 						rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-						CompanyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
+						companyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
 			}
 		}
 		return retour;
@@ -125,7 +137,7 @@ public class ComputerDAO {
 			while (rs.next()) {
 				retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
 						rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-						CompanyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
+						companyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
 			}
 		}
 		return retour;
@@ -138,7 +150,7 @@ public class ComputerDAO {
 		if (!name.contains("'"))
 			;
 		{
-			List<Company> companies = CompanyDAO.allCompaniesByName(companyName);
+			List<Company> companies = companyDAO.allCompaniesByName(companyName);
 			StringBuffer idCompanies = new StringBuffer();
 			boolean notFirst = false;
 			for (Company company : companies) {
@@ -159,7 +171,7 @@ public class ComputerDAO {
 			while (rs.next()) {
 				retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
 						rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-						CompanyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
+						companyDAO.companyById(rs.getInt(COMPUTER_COMPANY))));
 			}
 		}
 		return retour;
@@ -176,7 +188,7 @@ public class ComputerDAO {
 		return retour;
 	}
 
-	public int Add(Computer c) throws SQLException {
+	public int add(Computer c) throws SQLException {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
 		PreparedStatement ps = connection.prepareStatement(INSERT_COMPUTER);
 		ps.setString(1, c.getName());
@@ -231,7 +243,7 @@ public class ComputerDAO {
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		return new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME), rs.getDate(COMPUTER_INTRODUCED),
-				rs.getDate(COMPUTER_DISCONTINUED), CompanyDAO.companyById(rs.getInt(COMPUTER_COMPANY)));
+				rs.getDate(COMPUTER_DISCONTINUED), companyDAO.companyById(rs.getInt(COMPUTER_COMPANY)));
 
 	}
 }

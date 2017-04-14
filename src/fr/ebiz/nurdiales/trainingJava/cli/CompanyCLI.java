@@ -1,14 +1,19 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
-import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
+import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 
 public class CompanyCLI extends PageCLI {
-	public void printEntities(Scanner sc) throws SQLException {
+	private CompanyManager companyManager;
+	
+	public CompanyCLI() {
+		companyManager = new CompanyManager();
+	}
+	public void printEntities(Scanner sc) throws CompanyDAOException {
 		// logger.debug("start of printCompanies");
 		boolean exitWanted = false;
 		while (!exitWanted) {
@@ -16,9 +21,9 @@ public class CompanyCLI extends PageCLI {
 			{
 				List<Company> cl;
 				if (nameCompany == null)
-					cl = CompanyDAO.allCompanies(page, SIZE_PAGE);
+					cl = companyManager.allCompanies(page, SIZE_PAGE);
 				else
-					cl = CompanyDAO.allCompaniesByName(nameCompany, page, SIZE_PAGE);
+					cl = companyManager.allCompaniesByName(nameCompany, page, SIZE_PAGE);
 				for (Company c : cl) {
 					System.out.println(c);
 				}

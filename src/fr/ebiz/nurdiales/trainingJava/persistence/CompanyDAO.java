@@ -24,7 +24,7 @@ public class CompanyDAO {
 	private static final String COMPANY_BY_ID_REQUEST = SELECT + "WHERE " + COMPANY_ID + " =? ";
 	// private static final Logger logger = LoggerFactory.getLogger(CompanyDAO);
 
-	public static Company companyById(int id) throws SQLException {
+	public Company companyById(int id) throws SQLException {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
 		PreparedStatement ps = connection.prepareStatement(COMPANY_BY_ID_REQUEST);
 		ps.setInt(1, id);
@@ -36,7 +36,7 @@ public class CompanyDAO {
 		return null;
 	}
 
-	public static List<Company> allCompanies() throws SQLException {
+	public List<Company> allCompanies() throws SQLException {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
 		List<Company> list = new ArrayList<Company>();
 		PreparedStatement ps = connection.prepareStatement(ALL_COMPANIES_REQUEST);
@@ -47,7 +47,7 @@ public class CompanyDAO {
 		return list;
 	}
 
-	public static List<Company> allCompanies(int page, int pageSize) throws SQLException {
+	public List<Company> allCompanies(int page, int pageSize) throws SQLException {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
 		List<Company> list = new ArrayList<Company>();
 		PreparedStatement ps = connection.prepareStatement(ALL_COMPANIES_REQUEST_BETWEEN);
@@ -60,7 +60,7 @@ public class CompanyDAO {
 		return list;
 	}
 
-	public static List<Company> allCompaniesByName(String name) throws SQLException {
+	public List<Company> allCompaniesByName(String name) throws SQLException {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
 		List<Company> list = new ArrayList<Company>();
 		if (!name.contains("'")) {
@@ -74,7 +74,7 @@ public class CompanyDAO {
 		return list;
 	}
 
-	public static List<Company> allCompaniesByName(String name, int page, int pageSize) throws SQLException {
+	public List<Company> allCompaniesByName(String name, int page, int pageSize) throws SQLException {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
 		List<Company> list = new ArrayList<Company>();
 		if (!name.contains("'")) {

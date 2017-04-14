@@ -1,21 +1,21 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 
 public class ComputerCLI extends PageCLI {
-	ComputerDAO computerDAO;
+	ComputerManager computerManager;
 
 	public ComputerCLI() {
 		super();
-		computerDAO = new ComputerDAO();
+		computerManager = new ComputerManager();
 	}
 
-	public void printEntities(Scanner sc) throws SQLException {
+	public void printEntities(Scanner sc) throws ComputerDAOException {
 		// logger.debug("start of printComputers");
 		boolean exitWanted = false;
 		while (!exitWanted) {
@@ -23,15 +23,15 @@ public class ComputerCLI extends PageCLI {
 			{
 				List<Computer> cl;
 				if (nameCompany == null && idCompany == 0 && nameComputer == null)
-					cl = computerDAO.requestAllComputers(page, SIZE_PAGE);
+					cl = computerManager.requestAllComputers(page, SIZE_PAGE);
 				else if (nameCompany == null && nameComputer == null)
-					cl = computerDAO.requestAllComputersByCompanyID(idCompany, page, SIZE_PAGE);
+					cl = computerManager.requestAllComputersByCompanyID(idCompany, page, SIZE_PAGE);
 				else if (idCompany == 0 && nameComputer == null)
-					cl = computerDAO.requestAllComputersByCompanyName(nameCompany, page, SIZE_PAGE);
+					cl = computerManager.requestAllComputersByCompanyName(nameCompany, page, SIZE_PAGE);
 				else if (idCompany == 0 && nameCompany == null)
-					cl = computerDAO.requestAllComputersByName(nameComputer, page, SIZE_PAGE);
+					cl = computerManager.requestAllComputersByName(nameComputer, page, SIZE_PAGE);
 				else
-					cl = computerDAO.requestAllComputers(page, SIZE_PAGE); // TODO
+					cl = computerManager.requestAllComputers(page, SIZE_PAGE); // TODO
 				for (Computer c : cl) {
 					System.out.println(c);
 				}
