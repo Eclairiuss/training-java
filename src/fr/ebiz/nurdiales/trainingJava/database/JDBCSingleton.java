@@ -11,48 +11,69 @@ import org.slf4j.LoggerFactory;
 public class JDBCSingleton {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCSingleton.class);
     private String DB_URL;
-    private String DB_DRIVER;
     private String DB_USERNAME;
     private String DB_PASSWORD;
 
     private Connection DB_CONNECTION;
 
+    /**
+     * Constructor.
+     */
     public JDBCSingleton() {
-        DB_URL = "jdbc:mysql://localhost:3306/computer-database-db";
-        DB_DRIVER = "com.mysql.jdbc.Driver";
+        DB_URL = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         DB_USERNAME = "admincdb";
         DB_PASSWORD = "qwerty1234";
 
         DB_CONNECTION = connectToDB();
     }
 
+    /**
+     * Method for connect the singleton and the program to DB.
+     * @return Return the connection to the DB.
+     */
     private Connection connectToDB() {
         LOGGER.debug("Init driver ");
         try {
-            Class.forName(DB_DRIVER);
             LOGGER.debug("Succes driver ?");
             return DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             LOGGER.debug("Error Connection");
         }
         return null;
     }
 
+    /**
+     * @author eclairiuss
+     */
     private static class JDBCSingletonManagerHolder {
         private static final JDBCSingleton INSTANCE = new JDBCSingleton();
     }
 
+    /**
+     * Return the singleton from the handler.
+     * @return return the Singleton.
+     */
     public static JDBCSingleton getInstance() {
         return JDBCSingletonManagerHolder.INSTANCE;
     }
 
+    /**
+     * Disconnect the Singleton from the database.
+     * @throws SQLException Exception of sql request.
+     */
     public void disconnectToDB() throws SQLException {
         LOGGER.debug("Try close connection");
         DB_CONNECTION.close();
         LOGGER.debug("Connection closed");
     }
 
+    /**
+     * Make a prepared statement from the sql request q string.
+     * @param q request sql to put into preparedStatement.
+     * @return preparedStatement with q sql request.
+     * @throws SQLException Exception of sql request.
+     */
     public PreparedStatement prepareStatement(String q) throws SQLException {
         LOGGER.debug("PrepareStatement asked");
         return DB_CONNECTION.prepareStatement(q);
