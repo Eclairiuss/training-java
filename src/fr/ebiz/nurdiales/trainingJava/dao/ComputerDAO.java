@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.persistence;
+package main.java.fr.ebiz.nurdiales.trainingJava.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,11 +9,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
+import main.java.fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
+import main.java.fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import main.java.fr.ebiz.nurdiales.trainingJava.model.Company;
+import main.java.fr.ebiz.nurdiales.trainingJava.model.Computer;
+import main.java.fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 
 public class ComputerDAO {
     private static final String COMPUTER_TABLE = "computer";
@@ -42,14 +42,25 @@ public class ComputerDAO {
             + COMPUTER_INTRODUCED + "=?, " + COMPUTER_DISCONTINUED + "=?, " + COMPUTER_COMPANY + "=? WHERE "
             + COMPUTER_ID + "=? ";
     private static final String DELETE_COMPUTER = " DELETE FROM " + COMPUTER_TABLE + " WHERE id=?";
-    private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
     private CompanyManager companyManager;
 
+    /**
+     * Constructor of ComputerDAO, create a companyManager.
+     */
     public ComputerDAO() {
         companyManager = new CompanyManager();
     }
 
+    /**
+     * Method to find all computer, (but get just part).
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
     public List<Computer> requestAllComputers(int page, int pageSize) throws SQLException, CompanyDAOException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Computer> retour = new ArrayList<Computer>();
@@ -65,12 +76,22 @@ public class ComputerDAO {
         return retour;
     }
 
-    public List<Computer> requestAllComputersByCompanyName(String name, int page, int pageSize)
+    /**
+     * Method to find all computer, (but get just part), who have a special
+     * company.
+     * @param companyName String who must be contain by composent's company.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get by company name.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
+    public List<Computer> requestAllComputersByCompanyName(String companyName, int page, int pageSize)
             throws SQLException, CompanyDAOException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Computer> retour = new ArrayList<Computer>();
 
-        List<Company> companies = companyManager.allCompaniesByName(name);
+        List<Company> companies = companyManager.allCompaniesByName(companyName);
         System.out.println(companies);
         StringBuffer idCompanies = new StringBuffer();
         boolean notFirst = false;
@@ -99,6 +120,16 @@ public class ComputerDAO {
         return retour;
     }
 
+    /**
+     * Method to find all computer, (but get just part), who have a special
+     * company.
+     * @param idCompany Id of the company of the computers searched.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get by company id.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
     public List<Computer> requestAllComputersByCompanyID(int idCompany, int page, int pageSize)
             throws SQLException, CompanyDAOException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
@@ -116,6 +147,15 @@ public class ComputerDAO {
         return retour;
     }
 
+    /**
+     * Method to find all computer, (but get just part), who have special name.
+     * @param name String who must be contain by the entities searched name.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get by computer name.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
     public List<Computer> requestAllComputersByName(String name, int page, int pageSize)
             throws SQLException, CompanyDAOException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
@@ -135,6 +175,15 @@ public class ComputerDAO {
         return retour;
     }
 
+    /**
+     * @param idCompany Id of the company to found. And get all num.
+     * @param name String who must be contain by the entities searched.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
     public List<Computer> requestAllComputersByCompanyIDAndName(int idCompany, String name, int page, int pageSize)
             throws SQLException, CompanyDAOException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
@@ -155,6 +204,17 @@ public class ComputerDAO {
         return retour;
     }
 
+    /**
+     * Methode to get all computers by name, or by, companyName, or by company
+     * id in the page's page sized with pageSize.
+     * @param name String who must be contain by the entities searched name.
+     * @param companyName String who must be contain by composent's company.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
     public List<Computer> requestAllComputersByCompanyNameAndName(String companyName, String name, int page,
             int pageSize) throws SQLException, CompanyDAOException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
@@ -187,6 +247,18 @@ public class ComputerDAO {
         return retour;
     }
 
+    /**
+     * Methode to get all computers by name, or by, companyName, or by company
+     * id in the page's page sized with pageSize.
+     * @param companyName String who must be contain by composent's company.
+     * @param companyId Id who must be equal to composent's company id.
+     * @param name String who must be contain by the entities searched name.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
     public List<Computer> saladeTomateOignon(String companyName, int companyId, String name, int page, int pageSize)
             throws SQLException, CompanyDAOException {
         List<Computer> retour = new ArrayList<Computer>();
@@ -199,6 +271,16 @@ public class ComputerDAO {
         return retour;
     }
 
+    /**
+     * Methode to add a new computer in the database.
+     * @param c Computer to add in the database, id don't need because the
+     *            database generate it.
+     * @return Executes the SQL statement in this PreparedStatement object,
+     *         which must be an SQL Data Manipulation Language (DML) statement,
+     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
+     *         returns nothing, such as a DDL statement.
+     * @throws SQLException Error in SQL.
+     */
     public int add(Computer c) throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         PreparedStatement ps = connection.prepareStatement(INSERT_COMPUTER);
@@ -219,6 +301,15 @@ public class ComputerDAO {
         return ps.executeUpdate();
     }
 
+    /**
+     * Methode to delete a computer in the database by his id.
+     * @param id Id of the computer to delete.
+     * @return Executes the SQL statement in this PreparedStatement object,
+     *         which must be an SQL Data Manipulation Language (DML) statement,
+     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
+     *         returns nothing, such as a DDL statement.
+     * @throws SQLException Error in SQL.
+     */
     public int delete(int id) throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         PreparedStatement ps = connection.prepareStatement(DELETE_COMPUTER);
@@ -226,6 +317,15 @@ public class ComputerDAO {
         return ps.executeUpdate();
     }
 
+    /**
+     * Method to update a computer in the database.
+     * @param c Computer to update in the database, the id of c must be in DB.
+     * @return Executes the SQL statement in this PreparedStatement object,
+     *         which must be an SQL Data Manipulation Language (DML) statement,
+     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
+     *         returns nothing, such as a DDL statement.
+     * @throws SQLException Error in SQL.
+     */
     public int update(Computer c) throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         PreparedStatement ps = connection.prepareStatement(UPDATE_COMPUTER);
@@ -246,6 +346,13 @@ public class ComputerDAO {
         return ps.executeUpdate();
     }
 
+    /**
+     * Method to find a computer in the database by his id.
+     * @param id of the researched computer.
+     * @return the researched computer.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
     public Computer getComputerById(int id) throws SQLException, CompanyDAOException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         PreparedStatement ps = connection.prepareStatement(BY_ID);

@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.cli;
+package main.java.fr.ebiz.nurdiales.trainingJava.cli;
 
 import java.sql.Date;
 import java.util.Scanner;
@@ -6,11 +6,11 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import main.java.fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import main.java.fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 
 public abstract class PageCLI {
-    private static Logger logger = LoggerFactory.getLogger(PageCLI.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
     protected int SIZE_PAGE = 10;
     protected int page;
     protected int idComputer;
@@ -37,34 +37,48 @@ public abstract class PageCLI {
     /**
      * Default function for print entities that the page contains.
      * @param sc Scanner for the CLI output.
-     * @throws ComputerDAOException ComputerDAO fails to execute request.
-     * @throws CompanyDAOException CompanyDAO fails to execute request.
+     * @throws ComputerDAOException ComputerDAO fails to execute a request.
+     * @throws CompanyDAOException CompanyDAO fails to execute a request.
      */
     public abstract void printEntities(Scanner sc) throws ComputerDAOException, CompanyDAOException;
 
     /**
-     * Default function for get companies who have similar name if it's necessary for a request.
+     * Default function for get companies who have similar name if it's
+     * necessary for a request.
      * @param sc Scanner for the CLI output.
      * @return true if necessary for a request.
      */
     protected abstract boolean companyName(Scanner sc);
 
     /**
-     * Default function for get companies who have same id if it's necessary for a request.
+     * Default function for get companies who have same id if it's necessary for
+     * a request.
      * @param sc Scanner for the CLI output.
      * @return true if necessary for a request.
      */
     protected abstract boolean companyId(Scanner sc);
 
     /**
-     * Default function for print menu (inside page context) and scan user choice.
+     * Default function for print menu (inside page context) and scan user
+     * choice.
      * @param sc Scanner for the CLI output.
      * @return the user choice.
      */
     protected abstract String menuPage(Scanner sc);
 
+    /**
+     * Default function for set the name of searched entity.
+     * @param name String for search entities by names
+     */
     protected abstract void setName(String name);
 
+    /**
+     * Fonction for print the menu and analyse the user answer.
+     * @param sc Scanner for the CLI output.
+     * @param isPageComputers true if need companyid and companyname options.
+     * @return true if exit wanted by user, false else when user do good
+     *         command.
+     */
     protected boolean printChoicesAndGet(Scanner sc, boolean isPageComputers) {
         String tmp = null;
         while (true) {

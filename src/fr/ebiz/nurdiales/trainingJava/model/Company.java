@@ -1,10 +1,15 @@
-package fr.ebiz.nurdiales.trainingJava.model;
+package main.java.fr.ebiz.nurdiales.trainingJava.model;
 
 public class Company {
 
     private int id;
     private String name;
 
+    /**
+     * Constructor with all arguments.
+     * @param id Id of the company.
+     * @param name Name of the company.
+     */
     public Company(int id, String name) {
         this.id = id;
         this.name = name;

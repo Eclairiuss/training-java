@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.cli;
+package main.java.fr.ebiz.nurdiales.trainingJava.cli;
 
 import java.util.List;
 import java.util.Scanner;
@@ -6,14 +6,17 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
+import main.java.fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import main.java.fr.ebiz.nurdiales.trainingJava.model.Computer;
+import main.java.fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 
 public class ComputerCLI extends PageCLI {
-    private static Logger logger = LoggerFactory.getLogger(PageCLI.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
     ComputerManager computerManager;
 
+    /**
+     * Constructor of ComputerCLI, make a new Page for print computers.
+     */
     public ComputerCLI() {
         super();
         page = 0;
@@ -21,8 +24,9 @@ public class ComputerCLI extends PageCLI {
         computerManager = new ComputerManager();
     }
 
+    @Override
     public void printEntities(Scanner sc) throws ComputerDAOException {
-        logger.debug("start of printComputers");
+        LOGGER.debug("start of printComputers");
         boolean exitWanted = false;
         while (!exitWanted) {
             System.out.println("Page " + page + " : ");
@@ -43,7 +47,7 @@ public class ComputerCLI extends PageCLI {
             }
             exitWanted = printChoicesAndGet(sc, true);
         }
-        logger.debug("end of printComputers");
+        LOGGER.debug("end of printComputers");
     }
 
     @Override
