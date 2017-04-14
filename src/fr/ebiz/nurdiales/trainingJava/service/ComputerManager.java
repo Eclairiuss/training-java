@@ -3,6 +3,7 @@ package fr.ebiz.nurdiales.trainingJava.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
@@ -18,7 +19,8 @@ public class ComputerManager {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.requestAllComputers(page, pageSize);
-		} catch (SQLException e) {
+		} catch (SQLException | CompanyDAOException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return computers;
@@ -28,7 +30,8 @@ public class ComputerManager {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.requestAllComputersByCompanyName(name, page, pageSize);
-		} catch (SQLException e) {
+		} catch (SQLException | CompanyDAOException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return computers;
@@ -38,7 +41,8 @@ public class ComputerManager {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.requestAllComputersByCompanyID(idCompany, page, pageSize);
-		} catch (SQLException e) {
+		} catch (SQLException | CompanyDAOException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return computers;
@@ -48,7 +52,8 @@ public class ComputerManager {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.requestAllComputersByName(name, page, pageSize);
-		} catch (SQLException e) {
+		} catch (SQLException | CompanyDAOException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return computers;
@@ -58,7 +63,8 @@ public class ComputerManager {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.requestAllComputersByCompanyIDAndName(idCompany, name, page, pageSize);
-		} catch (SQLException e) {
+		} catch (SQLException | CompanyDAOException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return computers;
@@ -69,7 +75,8 @@ public class ComputerManager {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.requestAllComputersByCompanyNameAndName(companyName, name, page, pageSize);
-		} catch (SQLException e) {
+		} catch (SQLException | CompanyDAOException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return computers;
@@ -79,7 +86,8 @@ public class ComputerManager {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.saladeTomateOignon(companyName, companyId, name, page, pageSize);
-		} catch (SQLException e) {
+		} catch (SQLException | CompanyDAOException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return computers;
@@ -90,6 +98,7 @@ public class ComputerManager {
 		try {
 			result = computerDAO.add(c);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return result;
@@ -100,6 +109,7 @@ public class ComputerManager {
 		try {
 			result = computerDAO.delete(id);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return result;
@@ -110,6 +120,7 @@ public class ComputerManager {
 		try {
 			result = computerDAO.update(c);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return result;
@@ -119,7 +130,8 @@ public class ComputerManager {
 		Computer computer = null;
 		try {
 			computer = computerDAO.getComputerById(id);
-		} catch (SQLException e) {
+		} catch (SQLException | CompanyDAOException e) {
+			e.printStackTrace();
 			throw new ComputerDAOException();
 		}
 		return computer;

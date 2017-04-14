@@ -9,10 +9,14 @@ import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 
 public class CompanyCLI extends PageCLI {
 	private CompanyManager companyManager;
-	
+
 	public CompanyCLI() {
+		super();
+		page = 0;
+		SIZE_PAGE = 10;
 		companyManager = new CompanyManager();
 	}
+
 	public void printEntities(Scanner sc) throws CompanyDAOException {
 		// logger.debug("start of printCompanies");
 		boolean exitWanted = false;
