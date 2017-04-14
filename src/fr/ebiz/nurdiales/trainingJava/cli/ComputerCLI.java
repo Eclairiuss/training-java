@@ -14,6 +14,9 @@ public class ComputerCLI extends PageCLI {
     private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
     ComputerManager computerManager;
 
+    /**
+     * Constructor of ComputerCLI, make a new Page for print computers.
+     */
     public ComputerCLI() {
         super();
         page = 0;
@@ -21,6 +24,7 @@ public class ComputerCLI extends PageCLI {
         computerManager = new ComputerManager();
     }
 
+    @Override
     public void printEntities(Scanner sc) throws ComputerDAOException {
         LOGGER.debug("start of printComputers");
         boolean exitWanted = false;

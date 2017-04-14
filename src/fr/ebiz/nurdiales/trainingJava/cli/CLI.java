@@ -26,12 +26,9 @@ public class CLI {
     private static CompanyManager companyManager;
 
     /**
-     * Main function with main loop for the CLI
-     * 
-     * @throws ComputerDAOException
-     *             ComputerDAO fails to execute a request.
-     * @throws CompanyDAOException
-     *             CompanyDAO fails to execute a request.
+     * Main function with main loop for the CLI.
+     * @throws ComputerDAOException ComputerDAO fails to execute a request.
+     * @throws CompanyDAOException CompanyDAO fails to execute a request.
      */
     public void mainCLI() throws ComputerDAOException, CompanyDAOException {
 
@@ -95,9 +92,7 @@ public class CLI {
     /**
      * Called when user want delete a computer. Ask the ID of computer to
      * delete.
-     * 
-     * @param sc
-     *            Scanner for the CLI output.
+     * @param sc Scanner for the CLI output.
      */
     private void deleteComputer(Scanner sc) {
         System.out.print("ID of computer to delete : ");
@@ -111,9 +106,7 @@ public class CLI {
 
     /**
      * Convert a String to a sql.Date.
-     * 
-     * @param s
-     *            String to convert.
+     * @param s String to convert.
      * @return Date from the s content.
      */
     public static Date stringToDate(String s) {
@@ -122,15 +115,10 @@ public class CLI {
 
     /**
      * Called when user want create a new user.
-     * 
-     * @param sc
-     *            Scanner for the CLI output.
-     * @throws ComputerDAOException
-     *             ComputerDAO fails to execute a request.
-     * @throws CompanyDAOException
-     *             CompanyDAO fails to execute a request.
+     * @param sc Scanner for the CLI output.
+     * @throws ComputerDAOException ComputerDAO fails to execute a request.
      */
-    private void newComputer(Scanner sc) throws SQLException, ComputerDAOException {
+    private void newComputer(Scanner sc) throws ComputerDAOException {
         Computer computer = new Computer(0, "", null, null, null);
         while (computer.getName().equals("")) {
             System.out.print("Name : ");
@@ -160,15 +148,10 @@ public class CLI {
 
     /**
      * Called when a user want change a computer. Ask first the computer id.
-     * 
-     * @param sc
-     *            Scanner for the CLI output.
-     * @throws ComputerDAOException
-     *             ComputerDAO fails to execute a request.
-     * @throws CompanyDAOException
-     *             CompanyDAO fails to execute a request.
+     * @param sc Scanner for the CLI output.
+     * @throws ComputerDAOException ComputerDAO fails to execute a request.
      */
-    private void updateComputer(Scanner sc) throws SQLException, ComputerDAOException {
+    private void updateComputer(Scanner sc) throws ComputerDAOException {
         Computer computer = new Computer(0, "", null, null, null);
         boolean isInteger = true;
         String s;
@@ -213,7 +196,6 @@ public class CLI {
 
     /**
      * Main menu of the CLI. Read the next line of the user.
-     * 
      * @return Next line of the user.
      */
     public static String mainMenu() {
