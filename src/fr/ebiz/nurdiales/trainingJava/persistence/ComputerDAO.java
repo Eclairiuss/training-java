@@ -19,13 +19,13 @@ public class ComputerDAO {
 	private static final String COMPUTER_INTRODUCED = "introduced";
 	private static final String COMPUTER_DISCONTINUED = "discontinued";
 	private static final String COMPUTER_COMPANY = "company_id";
-	
+
 	private static final String SELECT = " SELECT * FROM " + COMPUTER_TABLE;
 	private static final String LIKE = " LIKE ?";
 	private static final String LIMIT_OFFSET = " LIMIT ? OFFSET ? ";
-	
+
 	private static final String ALL = SELECT + LIMIT_OFFSET;
-	
+
 	private static final String BY_COMPANY_ID = SELECT + " WHERE " + COMPUTER_COMPANY + "=? " + LIMIT_OFFSET;
 	private static final String BY_COMPANY_NAME_AND_NAME = SELECT + " WHERE (?) AND + " + COMPUTER_NAME + LIKE
 			+ LIMIT_OFFSET;
@@ -56,14 +56,15 @@ public class ComputerDAO {
 		ps.setInt(2, pageSize * page);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			retour.add(
-					new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME), rs.getDate(COMPUTER_INTRODUCED),
-							rs.getDate(COMPUTER_DISCONTINUED), companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+			retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
+					rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
+					companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
 		}
 		return retour;
 	}
 
-	public List<Computer> requestAllComputersByCompanyName(String name, int page, int pageSize) throws SQLException, CompanyDAOException {
+	public List<Computer> requestAllComputersByCompanyName(String name, int page, int pageSize)
+			throws SQLException, CompanyDAOException {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
 		List<Computer> retour = new ArrayList<Computer>();
 		{
@@ -96,7 +97,8 @@ public class ComputerDAO {
 		return retour;
 	}
 
-	public List<Computer> requestAllComputersByCompanyID(int idCompany, int page, int pageSize) throws SQLException, CompanyDAOException {
+	public List<Computer> requestAllComputersByCompanyID(int idCompany, int page, int pageSize)
+			throws SQLException, CompanyDAOException {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
 		List<Computer> retour = new ArrayList<Computer>();
 		PreparedStatement ps = connection.prepareStatement(BY_COMPANY_ID);
@@ -105,14 +107,15 @@ public class ComputerDAO {
 		ps.setInt(3, pageSize * page);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			retour.add(
-					new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME), rs.getDate(COMPUTER_INTRODUCED),
-							rs.getDate(COMPUTER_DISCONTINUED), companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+			retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
+					rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
+					companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
 		}
 		return retour;
 	}
 
-	public List<Computer> requestAllComputersByName(String name, int page, int pageSize) throws SQLException, CompanyDAOException {
+	public List<Computer> requestAllComputersByName(String name, int page, int pageSize)
+			throws SQLException, CompanyDAOException {
 		JDBCSingleton connection = JDBCSingleton.getInstance();
 		List<Computer> retour = new ArrayList<Computer>();
 		if (!name.contains("%")) {
@@ -137,7 +140,7 @@ public class ComputerDAO {
 		if (!name.contains("%")) {
 			PreparedStatement ps = connection.prepareStatement(BY_COMPANY_ID_AND_NAME);
 			ps.setInt(1, idCompany);
-			ps.setString(2,"%" + name + "%");
+			ps.setString(2, "%" + name + "%");
 			ps.setInt(3, pageSize);
 			ps.setInt(4, pageSize * page);
 			ResultSet rs = ps.executeQuery();

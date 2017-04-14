@@ -26,7 +26,8 @@ public class ComputerManager {
 		return computers;
 	}
 
-	public List<Computer> requestAllComputersByCompanyName(String name, int page, int pageSize) throws ComputerDAOException {
+	public List<Computer> requestAllComputersByCompanyName(String name, int page, int pageSize)
+			throws ComputerDAOException {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.requestAllComputersByCompanyName(name, page, pageSize);
@@ -37,7 +38,8 @@ public class ComputerManager {
 		return computers;
 	}
 
-	public List<Computer> requestAllComputersByCompanyID(int idCompany, int page, int pageSize) throws ComputerDAOException {
+	public List<Computer> requestAllComputersByCompanyID(int idCompany, int page, int pageSize)
+			throws ComputerDAOException {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.requestAllComputersByCompanyID(idCompany, page, pageSize);
@@ -59,7 +61,8 @@ public class ComputerManager {
 		return computers;
 	}
 
-	public List<Computer> requestAllComputersByCompanyIDAndName(int idCompany, String name, int page, int pageSize) throws ComputerDAOException {
+	public List<Computer> requestAllComputersByCompanyIDAndName(int idCompany, String name, int page, int pageSize)
+			throws ComputerDAOException {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.requestAllComputersByCompanyIDAndName(idCompany, name, page, pageSize);
@@ -82,7 +85,8 @@ public class ComputerManager {
 		return computers;
 	}
 
-	public List<Computer> saladeTomateOignon(String companyName, int companyId, String name, int page, int pageSize) throws ComputerDAOException {
+	public List<Computer> saladeTomateOignon(String companyName, int companyId, String name, int page, int pageSize)
+			throws ComputerDAOException {
 		List<Computer> computers = null;
 		try {
 			computers = computerDAO.saladeTomateOignon(companyName, companyId, name, page, pageSize);

@@ -41,11 +41,11 @@ public class JDBCSingleton {
 		}
 		return null;
 	}
-	
-	private static class JDBCSingletonManagerHolder{
+
+	private static class JDBCSingletonManagerHolder {
 		private final static JDBCSingleton instance = new JDBCSingleton();
 	}
-	
+
 	public static JDBCSingleton getInstance() {
 		return JDBCSingletonManagerHolder.instance;
 	}

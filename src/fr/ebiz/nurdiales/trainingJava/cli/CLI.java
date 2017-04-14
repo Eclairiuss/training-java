@@ -75,14 +75,7 @@ public class CLI {
 				}
 					break;
 				case DELETE:
-					String l2 = l[1].toLowerCase();
-					switch (l2.split(SEPARATOR2)[0]) {
-					case ID:
-						computerManager.delete(Integer.parseInt(l2.split("=")[1]));
-						break;
-					default:
-						break;
-					}
+					deleteComputer(sc);
 					break;
 				default:
 					break;
@@ -93,6 +86,16 @@ public class CLI {
 			e.printStackTrace();
 		}
 		sc.close();
+	}
+
+	private void deleteComputer(Scanner sc2) {
+		System.out.print("ID of computer to delete : ");
+		String l = sc.nextLine();
+		try {
+			computerManager.delete(Integer.parseInt(l));
+		} catch (ComputerDAOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static boolean parseForComputer(String s, Computer c) {
@@ -211,7 +214,7 @@ public class CLI {
 		System.out.println("Show computer details : " + DETAILS + SEPARATOR + ID + SEPARATOR2 + ID);
 		System.out.println("Create a computer : " + NEW);
 		System.out.println("Update a computer : " + UPDATE);
-		System.out.println("Delete a computer : " + DELETE + SEPARATOR + ID + SEPARATOR2 + ID);
+		System.out.println("Delete a computer : " + DELETE);
 		System.out.println("Exit and close connexion : " + EXIT);
 
 		return sc.nextLine();

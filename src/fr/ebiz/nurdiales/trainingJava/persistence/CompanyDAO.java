@@ -66,7 +66,7 @@ public class CompanyDAO {
 		List<Company> list = new ArrayList<Company>();
 		if (!name.contains("%")) {
 			PreparedStatement ps = connection.prepareStatement(COMPANIES_BY_NAME);
-			ps.setString(1,"%" + name + "%");
+			ps.setString(1, "%" + name + "%");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				list.add(new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME)));
