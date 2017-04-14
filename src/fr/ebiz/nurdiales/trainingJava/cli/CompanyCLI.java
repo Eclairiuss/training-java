@@ -14,6 +14,9 @@ public class CompanyCLI extends PageCLI {
     private static Logger logger = LoggerFactory.getLogger(CompanyCLI.class);
     private CompanyManager companyManager;
 
+    /**
+     * Constructor of CompanyCLI, make a new Page for print companies.
+     */
     public CompanyCLI() {
         super();
         page = 0;
@@ -21,6 +24,7 @@ public class CompanyCLI extends PageCLI {
         companyManager = new CompanyManager();
     }
 
+    @Override
     public void printEntities(Scanner sc) throws CompanyDAOException {
         logger.debug("start of printCompanies");
         boolean exitWanted = false;
