@@ -25,6 +25,14 @@ public class CLI {
     private static ComputerManager computerManager;
     private static CompanyManager companyManager;
 
+    /**
+     * Main function with main loop for the CLI
+     * 
+     * @throws ComputerDAOException
+     *             ComputerDAO fails to execute a request.
+     * @throws CompanyDAOException
+     *             CompanyDAO fails to execute a request.
+     */
     public void mainCLI() throws ComputerDAOException, CompanyDAOException {
 
         JDBCSingleton connection = JDBCSingleton.getInstance();
@@ -84,7 +92,14 @@ public class CLI {
         sc.close();
     }
 
-    private void deleteComputer(Scanner sc2) {
+    /**
+     * Called when user want delete a computer. Ask the ID of computer to
+     * delete.
+     * 
+     * @param sc
+     *            Scanner for the CLI output.
+     */
+    private void deleteComputer(Scanner sc) {
         System.out.print("ID of computer to delete : ");
         String l = sc.nextLine();
         try {
@@ -94,44 +109,27 @@ public class CLI {
         }
     }
 
-    public static boolean parseForComputer(String s, Computer c) {
-        String[] splited = s.split(SEPARATOR2);
-        switch (splited[0]) {
-        case NAME:
-            c.setName(splited[1]);
-            return true;
-        case DATE_OF_INTRODUCED:
-            c.setDateOfIntroduced(stringToDate(splited[1]));
-            break;
-        case DATE_OF_DISCONTINUED:
-            c.setDateOfDiscontinued(stringToDate(splited[1]));
-            break;
-        case ID_COMPANY:
-            try {
-                c.setCompany(companyManager.companyById(Integer.parseInt(splited[1])));
-            } catch (NumberFormatException | CompanyDAOException e) {
-                c.setCompany(null);
-                e.printStackTrace();
-            }
-            break;
-        case ID:
-            try {
-                c.setId(Integer.parseInt(splited[1]));
-            } catch (NumberFormatException e) {
-                c.setId(0);
-                e.printStackTrace();
-            }
-            break;
-        default:
-            break;
-        }
-        return false;
-    }
-
+    /**
+     * Convert a String to a sql.Date.
+     * 
+     * @param s
+     *            String to convert.
+     * @return Date from the s content.
+     */
     public static Date stringToDate(String s) {
         return Date.valueOf(s);
     }
 
+    /**
+     * Called when user want create a new user.
+     * 
+     * @param sc
+     *            Scanner for the CLI output.
+     * @throws ComputerDAOException
+     *             ComputerDAO fails to execute a request.
+     * @throws CompanyDAOException
+     *             CompanyDAO fails to execute a request.
+     */
     private void newComputer(Scanner sc) throws SQLException, ComputerDAOException {
         Computer computer = new Computer(0, "", null, null, null);
         while (computer.getName().equals("")) {
@@ -160,6 +158,16 @@ public class CLI {
         computerManager.add(computer);
     }
 
+    /**
+     * Called when a user want change a computer. Ask first the computer id.
+     * 
+     * @param sc
+     *            Scanner for the CLI output.
+     * @throws ComputerDAOException
+     *             ComputerDAO fails to execute a request.
+     * @throws CompanyDAOException
+     *             CompanyDAO fails to execute a request.
+     */
     private void updateComputer(Scanner sc) throws SQLException, ComputerDAOException {
         Computer computer = new Computer(0, "", null, null, null);
         boolean isInteger = true;
@@ -203,6 +211,11 @@ public class CLI {
         }
     }
 
+    /**
+     * Main menu of the CLI. Read the next line of the user.
+     * 
+     * @return Next line of the user.
+     */
     public static String mainMenu() {
         System.out.println("What do you want doing ?");
         System.out.println();

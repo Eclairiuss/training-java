@@ -42,7 +42,7 @@ public class ComputerDAO {
             + COMPUTER_INTRODUCED + "=?, " + COMPUTER_DISCONTINUED + "=?, " + COMPUTER_COMPANY + "=? WHERE "
             + COMPUTER_ID + "=? ";
     private static final String DELETE_COMPUTER = " DELETE FROM " + COMPUTER_TABLE + " WHERE id=?";
-    private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
     private CompanyManager companyManager;
 
