@@ -2,9 +2,6 @@ package fr.ebiz.nurdiales.trainingJava.model;
 
 import java.sql.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Computer {
 	private static final Date neverBefore = Date.valueOf("1970-01-01");
 

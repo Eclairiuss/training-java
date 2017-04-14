@@ -3,51 +3,55 @@ package fr.ebiz.nurdiales.trainingJava.cli;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Scanner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import fr.ebiz.nurdiales.trainingJava.database.BasicConnector;
+
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
 import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
 
 public class CLI {
-	private static Logger logger;
+	// private static Logger logger = LoggerFactory.getLogger(CLI.class);
 	private static final String EXIT = "exit", ALLCOMPUTERS = "computers", ALLCOMPANIES = "companies",
 			DELETE = "delete", DETAILS = "details", UPDATE = "update", NEW = "new", ID = "id",
 			ID_COMPANY = "company_id", NAME = "name", DATE_OF_DISCONTINUED = "date_of_discontinued",
 			DATE_OF_INTRODUCED = "date_of_introduced", SEPARATOR = " ", DATE_FORMA = "AAAA-MM-JJ", SEPARATOR2 = "=";
 
+	private static Scanner sc;
+	private static PageCLI p;
+	private static ComputerDAO computerDAO;
+	
 	public static void mainCLI() {
-		Scanner sc = new Scanner(System.in);
-		boolean wantExit = false;
+		
+		JDBCSingleton connection = JDBCSingleton.getInstance();
+		
+		sc = new Scanner(System.in);
+		computerDAO = new ComputerDAO();
+		
+		boolean wantContinue = true;
 		try {
-			logger.debug("Try connection to DB");
-			BasicConnector.connectToDB("admincdb", "qwerty1234");
-			logger.debug("Succes connection to DB");
-			while (!wantExit) {
-				printChoices();
-				String line = sc.nextLine();
-				String[] l = line.split(SEPARATOR);
+			while (wantContinue) {
+				String[] l = mainMenu().split(SEPARATOR);
 				switch (l[0].toLowerCase()) {
 				case EXIT:
-					wantExit = true;
+					wantContinue = false;
 					break;
 				case ALLCOMPUTERS: {
-					PageCLI p = new PageCLI();
-					p.printComputers(sc);
+					p = new ComputerCLI();
+					p.printEntities(sc);
 				}
 					break;
 				case ALLCOMPANIES: {
-					PageCLI p = new PageCLI();
-					p.printCompanies(sc);
+					p = new CompanyCLI();
+					p.printEntities(sc);
 				}
 					break;
 				case DETAILS:
 					switch (l[1].split(SEPARATOR2)[0]) {
 					case ID:
 						try {
-							Computer computer = ComputerDAO
-									.getComputerById(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
+							Computer computer = computerDAO.getComputerById(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
 							System.out.println(computer);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -69,7 +73,7 @@ public class CLI {
 					String l2 = l[1].toLowerCase();
 					switch (l2.split(SEPARATOR2)[0]) {
 					case ID:
-						ComputerDAO.delete(Integer.parseInt(l2.split("=")[1]));
+						computerDAO.delete(Integer.parseInt(l2.split("=")[1]));
 						break;
 					default:
 						break;
@@ -79,7 +83,7 @@ public class CLI {
 					break;
 				}
 			}
-			BasicConnector.disconnectToDB();
+			connection.disconnectToDB();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -100,9 +104,9 @@ public class CLI {
 			break;
 		case ID_COMPANY:
 			try {
-				c.setManufacturer(CompanyDAO.getCompanyById(Integer.parseInt(splited[1])));
+				c.setCompany(CompanyDAO.companyById(Integer.parseInt(splited[1])));
 			} catch (NumberFormatException | SQLException e) {
-				c.setManufacturer(null);
+				c.setCompany(null);
 				e.printStackTrace();
 			}
 			break;
@@ -134,22 +138,23 @@ public class CLI {
 		try {
 			computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
 		} catch (IllegalArgumentException e) {
-			logger.debug("Date of Introduced is invalid");
+			// logger.debug("Date of Introduced is invalid");
 		}
 		System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
 		try {
 			computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
 		} catch (IllegalArgumentException e) {
-			logger.debug("Date of Introduced is invalid");
+			// logger.debug("Date of Introduced=
+			// LoggerFactory.getLogger(CLI.class); is invalid");
 		}
 		System.out.print("Id of Company : ");
 		try {
-			computer.setManufacturer(CompanyDAO.getCompanyById(Integer.parseInt(sc.nextLine())));
+			computer.setCompany(CompanyDAO.companyById(Integer.parseInt(sc.nextLine())));
 		} catch (Exception e) {
-			computer.setManufacturer(null);
+			computer.setCompany(null);
 		}
-		logger.debug(computer.toString());
-		ComputerDAO.Add(computer);
+		// logger.debug(computer.toString());
+		computerDAO.Add(computer);
 	}
 
 	private static void updateComputer(Scanner sc) throws SQLException {
@@ -160,7 +165,7 @@ public class CLI {
 			System.out.print("Id : ");
 			s = sc.nextLine();
 			try {
-				computer = ComputerDAO.getComputerById(Integer.parseInt(s));
+				computer = computerDAO.getComputerById(Integer.parseInt(s));
 			} catch (IllegalArgumentException e) {
 				isInteger = false;
 			}
@@ -176,24 +181,24 @@ public class CLI {
 			try {
 				computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
 			} catch (IllegalArgumentException e) {
-				logger.debug("Date of Introduced is invalid");
+				// logger.debug("Date of Introduced is invalid");
 			}
 			System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
 			try {
 				computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
 			} catch (IllegalArgumentException e) {
-				logger.debug("Date of Introduced is invalid");
+				// logger.debug("Date of Introduced is invalid");
 			}
 			System.out.print("Id of Company : ");
 			try {
-				computer.setManufacturer(CompanyDAO.getCompanyById(Integer.parseInt(sc.nextLine())));
+				computer.setCompany(CompanyDAO.companyById(Integer.parseInt(sc.nextLine())));
 			} catch (Exception e) {
 			}
-			ComputerDAO.update(computer);
+			computerDAO.update(computer);
 		}
 	}
 
-	public static void printChoices() {
+	public static String mainMenu() {
 		System.out.println("What do you want doing ?");
 		System.out.println();
 		System.out.println("List of computers : " + ALLCOMPUTERS);
@@ -203,9 +208,7 @@ public class CLI {
 		System.out.println("Update a computer : " + UPDATE);
 		System.out.println("Delete a computer : " + DELETE + SEPARATOR + ID + SEPARATOR2 + ID);
 		System.out.println("Exit and close connexion : " + EXIT);
-	}
-
-	public static void initLogger() {
-		logger = LoggerFactory.getLogger(CLI.class);
+		
+		return sc.nextLine();
 	}
 }
