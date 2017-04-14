@@ -11,15 +11,20 @@ public class Computer {
     private Date discontinued;
     private Company company;
 
+    /**
+     * Constructor for computer.
+     * @param id id of the computer.
+     * @param name name of the computer.
+     * @param introduced introduced of the computer.
+     * @param discontinued discontinued of the computer.
+     * @param company company of the computer.
+     */
     public Computer(int id, String name, Date introduced, Date discontinued, Company company) {
         this.id = id;
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;
         this.company = company;
-    }
-
-    public Computer() {
     }
 
     public int getId() {
@@ -43,7 +48,8 @@ public class Computer {
     }
 
     public void setDateOfIntroduced(Date introduced) {
-        this.introduced = (introduced != null) ? (introduced.before(NEVER_BEFORE) ? this.introduced : introduced) : null;
+        this.introduced = (introduced != null) ? (introduced.before(NEVER_BEFORE) ? this.introduced : introduced)
+                : null;
     }
 
     public Date getDateOfDiscontinued() {
@@ -69,6 +75,10 @@ public class Computer {
                 + ", company=" + company + "]";
     }
 
+    /**
+     * Check the validity of dates of computers.
+     * @return false is Introduce isn't before discontinued. else return true.
+     */
     public boolean checkDates() {
         return (introduced != null && discontinued != null && introduced.after(discontinued)) ? false : true;
     }
