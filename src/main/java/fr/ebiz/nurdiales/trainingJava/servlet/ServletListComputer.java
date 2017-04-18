@@ -22,16 +22,29 @@ public class ServletListComputer extends HttpServlet {
         super();
     }
 
+    /**
+     * TODO.
+     * @param request TODO.
+     * @param response TODO.
+     * @throws javax.servlet.ServletException TODO.
+     * @throws IOException TODO.
+     */
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
 
     }
 
-
+    /**
+     * TODO.
+     * @param request TODO.
+     * @param response TODO.
+     * @throws javax.servlet.ServletException TODO.
+     * @throws IOException TODO.
+     */
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         int page = Integer.parseInt(request.getParameter("page"));
         int size = Integer.parseInt(request.getParameter("size"));
-        System.out.println("page : "+ page);
-        System.out.println("page : "+ size);
+        System.out.println("page : " + page);
+        System.out.println("page : " + size);
 
         List<Computer> listComputers = null;
         manager = new ComputerManager();

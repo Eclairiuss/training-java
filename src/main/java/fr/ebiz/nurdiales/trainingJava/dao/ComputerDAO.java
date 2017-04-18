@@ -6,14 +6,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 
 public class ComputerDAO {
     private static final String COMPUTER_TABLE = "computer";
