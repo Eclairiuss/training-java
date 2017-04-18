@@ -17,11 +17,7 @@ public class JDBCSingleton {
     private Connection DB_CONNECTION;
 
     /**
-     * <<<<<<< HEAD:src/main/java/fr/ebiz/nurdiales/trainingJava/database/JDBCSingleton.java
      * Constructor of JDBCSingleton who init all value and connect to DataBase.
-     * =======
-     * Constructor.
-     * >>>>>>> c9b01a48d449a4286b2074292ae686b75bc0a9a4:src/fr/ebiz/nurdiales/trainingJava/database/JDBCSingleton.java
      */
     public JDBCSingleton() {
         DB_URL = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
@@ -64,14 +60,8 @@ public class JDBCSingleton {
     }
 
     /**
-     * <<<<<<< HEAD:src/main/java/fr/ebiz/nurdiales/trainingJava/database/JDBCSingleton.java
      * Try to disconnect the JDBCSingleton of the database.
-     *
-     * @throws SQLException Error in SQL.
-     *                      =======
-     *                      Disconnect the Singleton from the database.
      * @throws SQLException Exception of sql request.
-     *                      >>>>>>> c9b01a48d449a4286b2074292ae686b75bc0a9a4:src/fr/ebiz/nurdiales/trainingJava/database/JDBCSingleton.java
      */
     public void disconnectToDB() throws SQLException {
         LOGGER.debug("Try close connection");
@@ -80,17 +70,10 @@ public class JDBCSingleton {
     }
 
     /**
-     * <<<<<<< HEAD:src/main/java/fr/ebiz/nurdiales/trainingJava/database/JDBCSingleton.java
      * Method who create a PreparedStatement with a String who connais instructions.
-     *
-     * @param q String who contain the request to complete.
-     * @param q request sql to put into preparedStatement.
+     * @param q String who contain the request to put into preparedStatement.
      * @return preparedStatement with q sql request.
-     * @throws SQLException Error in SQL.
-     *                      =======
-     *                      Make a prepared statement from the sql request q string.
      * @throws SQLException Exception of sql request.
-     *                      >>>>>>> c9b01a48d449a4286b2074292ae686b75bc0a9a4:src/fr/ebiz/nurdiales/trainingJava/database/JDBCSingleton.java
      */
     public PreparedStatement prepareStatement(String q) throws SQLException {
         LOGGER.debug("PrepareStatement asked");
