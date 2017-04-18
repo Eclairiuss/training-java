@@ -80,6 +80,6 @@ public class Computer {
      * @return true if it's ok (introduced is before discontinued) else false.
      */
     public boolean checkDates() {
-        return (introduced != null && discontinued != null && introduced.after(discontinued)) ? false : true;
+        return !(introduced != null && discontinued != null && introduced.after(discontinued));
     }
 }
