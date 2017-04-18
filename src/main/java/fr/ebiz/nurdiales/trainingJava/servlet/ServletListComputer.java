@@ -26,18 +26,22 @@ public class ServletListComputer extends HttpServlet {
 
     }
 
+
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         int page = Integer.parseInt(request.getParameter("page"));
         int size = Integer.parseInt(request.getParameter("size"));
+        System.out.println("page : "+ page);
+        System.out.println("page : "+ size);
+
         List<Computer> listComputers = null;
         manager = new ComputerManager();
         try {
-            listComputers = manager.requestAllComputers(page,size);
+            listComputers = manager.requestAllComputers(page, size);
         } catch (ComputerDAOException e) {
             e.printStackTrace();
         }
 
-        request.setAttribute("computers",listComputers);
-        this.getServletContext().getRequestDispatcher(LIST_COMPUTER_VIEW).forward(request,response);
+        request.setAttribute("computers", listComputers);
+        this.getServletContext().getRequestDispatcher(LIST_COMPUTER_VIEW).forward(request, response);
     }
 }

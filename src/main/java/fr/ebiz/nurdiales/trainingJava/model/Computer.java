@@ -85,6 +85,6 @@ public class Computer {
 >>>>>>> {JAVADOC} + préparation dto + update pom.xml
      */
     public boolean checkDates() {
-        return (introduced != null && discontinued != null && introduced.after(discontinued)) ? false : true;
+        return !(introduced != null && discontinued != null && introduced.after(discontinued));
     }
 }
