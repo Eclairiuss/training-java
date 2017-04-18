@@ -21,11 +21,12 @@ public class ComputerManager {
     }
 
     /**
-     * Method to find all computer, (but get just part).
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * Get all computer in the DB from the "page"'s page who contains "pageSize"
+     * computers.
+     * @param page Current page (start at 0).
+     * @param pageSize Size a the page.
+     * @return The list of all computers who verify parameters.
+     * @throws ComputerDAOException Error in the ComputerDAO.
      */
     public List<Computer> requestAllComputers(int page, int pageSize) throws ComputerDAOException {
         List<Computer> computers = null;
@@ -39,13 +40,13 @@ public class ComputerManager {
     }
 
     /**
-     * Method to find all computer, (but get just part), who have a special
-     * company.
-     * @param name String who must be contain by the entities searched name.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get by company name.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * Get all computer in the DB from the "page"'s page who contains "pageSize"
+     * computers and where name of computer equals "name".
+     * @param name Name of the company computer in the DB.
+     * @param page Current page (start at 0).
+     * @param pageSize Size a the page.
+     * @return The list of all computers who verify parameters.
+     * @throws ComputerDAOException Error in the ComputerDAO.
      */
     public List<Computer> requestAllComputersByCompanyName(String name, int page, int pageSize)
             throws ComputerDAOException {
@@ -63,10 +64,10 @@ public class ComputerManager {
      * Method to find all computer, (but get just part), who have a special
      * company.
      * @param idCompany Id of the company of the computers searched.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get by company id.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @param page Current page (start at 0).
+     * @param pageSize Size a the page.
+     * @return The list of all computers who verify parameters.
+     * @throws ComputerDAOException Error in the ComputerDAO.
      */
     public List<Computer> requestAllComputersByCompanyID(int idCompany, int page, int pageSize)
             throws ComputerDAOException {
@@ -83,10 +84,10 @@ public class ComputerManager {
     /**
      * Method to find all computer, (but get just part), who have special name.
      * @param name String who must be contain by the entities searched.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get by computer name.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @param page Current page (start at 0).
+     * @param pageSize Size a the page.
+     * @return The list of all computers who verify parameters.
+     * @throws ComputerDAOException Error in the ComputerDAO.
      */
     public List<Computer> requestAllComputersByName(String name, int page, int pageSize) throws ComputerDAOException {
         List<Computer> computers = null;
@@ -102,10 +103,10 @@ public class ComputerManager {
     /**
      * @param idCompany Id of the company to found. And get all num.
      * @param name String who must be contain by the entities searched.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @param page Current page (start at 0).
+     * @param pageSize Size a the page.
+     * @return The list of all computers who verify parameters.
+     * @throws ComputerDAOException Error in the ComputerDAO.
      */
     public List<Computer> requestAllComputersByCompanyIDAndName(int idCompany, String name, int page, int pageSize)
             throws ComputerDAOException {
@@ -123,10 +124,10 @@ public class ComputerManager {
      * Method to get all computers by name, and company name, in the page.
      * @param companyName String who must be contain by composent's company.
      * @param name String who must be contain by the entities searched.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @param page Current page (start at 0).
+     * @param pageSize Size a the page.
+     * @return The list of all computers who verify parameters.
+     * @throws ComputerDAOException Error in the ComputerDAO.
      */
     public List<Computer> requestAllComputersByCompanyNameAndName(String companyName, String name, int page,
             int pageSize) throws ComputerDAOException {
@@ -146,10 +147,10 @@ public class ComputerManager {
      * @param companyName String who must be contain by composent's company.
      * @param companyId Id who must be equal to composent's company id.
      * @param name String who must be contain by the entities searched.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @param page Current page (start at 0).
+     * @param pageSize Size a the page.
+     * @return The list of all computers who verify parameters.
+     * @throws ComputerDAOException Error in the ComputerDAO.
      */
     public List<Computer> saladeTomateOignon(String companyName, int companyId, String name, int page, int pageSize)
             throws ComputerDAOException {
