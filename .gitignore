@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/java,eclipse,intellij
+# Created by https://www.gitignore.io/api/java,maven,eclipse,intellij
 
 ### Eclipse ###
 
@@ -15,9 +15,6 @@ local.properties
 .loadpath
 .recommenders
 
-# Eclipse Core
-.project
-
 # External tool builders
 .externalToolBuilders/
 
@@ -29,9 +26,6 @@ local.properties
 
 # CDT-specific (C/C++ Development Tooling)
 .cproject
-
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
 
 # Java annotation processor (APT)
 .factorypath
@@ -80,6 +74,9 @@ local.properties
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
+
+# CMake
+cmake-build-debug/
 
 # Mongo Explorer plugin:
 .idea/**/mongoSettings.xml
@@ -142,12 +139,6 @@ fabric.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# End of https://www.gitignore.io/api/java,eclipse,intellij
-/build/
-/target/
-
-# Created by https://www.gitignore.io/api/maven
-
 ### Maven ###
 target/
 pom.xml.tag
@@ -162,4 +153,4 @@ buildNumber.properties
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
 
-# End of https://www.gitignore.io/api/maven
+# End of https://www.gitignore.io/api/java,maven,eclipse,intellij
