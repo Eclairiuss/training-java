@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.cli;
+package main.java.fr.ebiz.nurdiales.trainingJava.cli;
 
 import java.util.List;
 import java.util.Scanner;
@@ -6,9 +6,9 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
+import main.java.fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import main.java.fr.ebiz.nurdiales.trainingJava.model.Computer;
+import main.java.fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 
 public class ComputerCLI extends PageCLI {
     private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
