@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.model;
+package main.java.fr.ebiz.nurdiales.trainingJava.model;
 
 import java.sql.Date;
 
@@ -11,15 +11,20 @@ public class Computer {
     private Date discontinued;
     private Company company;
 
+    /**
+     * Constructor for computer, who takes all arguments.
+     * @param id Id of the computer.
+     * @param name Name of the computer.
+     * @param introduced Date of introduced of Computer.
+     * @param discontinued Date of discontinued of Computer.
+     * @param company Company who have make the computer.
+     */
     public Computer(int id, String name, Date introduced, Date discontinued, Company company) {
         this.id = id;
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;
         this.company = company;
-    }
-
-    public Computer() {
     }
 
     public int getId() {
@@ -69,6 +74,10 @@ public class Computer {
                 + ", company=" + company + "]";
     }
 
+    /**
+     * Method who check if introduced is before discontinued.
+     * @return true if it's ok (introduced is before discontinued) else false.
+     */
     public boolean checkDates() {
         return (introduced != null && discontinued != null && introduced.after(discontinued)) ? false : true;
     }

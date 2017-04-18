@@ -1,8 +1,8 @@
-package fr.ebiz.nurdiales.trainingJava.main;
+package main.java.fr.ebiz.nurdiales.trainingJava.main;
 
-import fr.ebiz.nurdiales.trainingJava.cli.CLI;
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import main.java.fr.ebiz.nurdiales.trainingJava.cli.CLI;
+import main.java.fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import main.java.fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 
 public class Main {
     /**
