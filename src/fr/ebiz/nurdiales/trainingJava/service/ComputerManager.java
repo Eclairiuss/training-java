@@ -1,12 +1,12 @@
-package fr.ebiz.nurdiales.trainingJava.service;
+package main.java.fr.ebiz.nurdiales.trainingJava.service;
 
 import java.sql.SQLException;
 import java.util.List;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
+import main.java.fr.ebiz.nurdiales.trainingJava.dao.ComputerDAO;
+import main.java.fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import main.java.fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import main.java.fr.ebiz.nurdiales.trainingJava.model.Computer;
 
 public class ComputerManager {
     // private static Logger logger =
@@ -14,19 +14,18 @@ public class ComputerManager {
     private ComputerDAO computerDAO;
 
     /**
-     * Defaut constructor for the manager.
+     * Constructor of ComputerManager, create the computerDAO.
      */
     public ComputerManager() {
         this.computerDAO = new ComputerDAO();
     }
 
     /**
-     * Get all computer in the DB from the "page"'s page who contains "pageSize"
-     * computers.
-     * @param page Current page (start at 0).
-     * @param pageSize Size a the page.
-     * @return The list of all computers who verify parameters.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * Method to find all computer, (but get just part).
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public List<Computer> requestAllComputers(int page, int pageSize) throws ComputerDAOException {
         List<Computer> computers = null;
@@ -40,13 +39,13 @@ public class ComputerManager {
     }
 
     /**
-     * Get all computer in the DB from the "page"'s page who contains "pageSize"
-     * computers and where name of computer equals "name".
-     * @param name Name of the company computer in the DB.
-     * @param page Current page (start at 0).
-     * @param pageSize Size a the page.
-     * @return The list of all computers who verify parameters.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * Method to find all computer, (but get just part), who have a special
+     * company.
+     * @param name String who must be contain by the entities searched name.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get by company name.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public List<Computer> requestAllComputersByCompanyName(String name, int page, int pageSize)
             throws ComputerDAOException {
@@ -61,11 +60,13 @@ public class ComputerManager {
     }
 
     /**
-     * @param idCompany ID of the company computer.
-     * @param page Current page (start at 0).
-     * @param pageSize Size a the page.
-     * @return The list of all computers who verify parameters.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * Method to find all computer, (but get just part), who have a special
+     * company.
+     * @param idCompany Id of the company of the computers searched.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get by company id.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public List<Computer> requestAllComputersByCompanyID(int idCompany, int page, int pageSize)
             throws ComputerDAOException {
@@ -80,11 +81,12 @@ public class ComputerManager {
     }
 
     /**
-     * @param name Name of the computer in the DB.
-     * @param page Current page (start at 0).
-     * @param pageSize Size a the page.
-     * @return The list of all computers who verify parameters.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * Method to find all computer, (but get just part), who have special name.
+     * @param name String who must be contain by the entities searched.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get by computer name.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public List<Computer> requestAllComputersByName(String name, int page, int pageSize) throws ComputerDAOException {
         List<Computer> computers = null;
@@ -98,12 +100,12 @@ public class ComputerManager {
     }
 
     /**
-     * @param idCompany
-     * @param name Name of the computer in the DB.
-     * @param page Current page (start at 0).
-     * @param pageSize Size a the page.
-     * @return The list of all computers who verify parameters.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * @param idCompany Id of the company to found. And get all num.
+     * @param name String who must be contain by the entities searched.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public List<Computer> requestAllComputersByCompanyIDAndName(int idCompany, String name, int page, int pageSize)
             throws ComputerDAOException {
@@ -118,12 +120,13 @@ public class ComputerManager {
     }
 
     /**
-     * @param companyName
-     * @param name Name of the computer in the DB.
-     * @param page Current page (start at 0).
-     * @param pageSize Size a the page.
-     * @return The list of all computers who verify parameters.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * Method to get all computers by name, and company name, in the page.
+     * @param companyName String who must be contain by composent's company.
+     * @param name String who must be contain by the entities searched.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public List<Computer> requestAllComputersByCompanyNameAndName(String companyName, String name, int page,
             int pageSize) throws ComputerDAOException {
@@ -138,15 +141,15 @@ public class ComputerManager {
     }
 
     /**
-     * Search in the database all computers who verify those conditions in the
-     * DB.
-     * @param companyName Name of the company who make the computer in the DB.
-     * @param companyId Id of the company who make the computer in the DB.
-     * @param name Name of the computer in the DB.
-     * @param page Current page (start at 0).
-     * @param pageSize Size a the page.
-     * @return The list of all computers who verify parameters.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * Method to get all computers by name, or by, companyName, or by company in
+     * the page. id in the page's page sized with pageSize.
+     * @param companyName String who must be contain by composent's company.
+     * @param companyId Id who must be equal to composent's company id.
+     * @param name String who must be contain by the entities searched.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public List<Computer> saladeTomateOignon(String companyName, int companyId, String name, int page, int pageSize)
             throws ComputerDAOException {
@@ -161,10 +164,14 @@ public class ComputerManager {
     }
 
     /**
-     * Add a computer in the database from the computer pass in parameter.
-     * @param c Computer to add in DB.
-     * @return {@link ComputerDAO#add(Computer)}.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * Method to add a new computer in the database.
+     * @param c Computer to add in the database, id don't need because the
+     *            database generate it.
+     * @return Executes the SQL statement in this PreparedStatement object,
+     *         which must be an SQL Data Manipulation Language (DML) statement,
+     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
+     *         returns nothing, such as a DDL statement.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int add(Computer c) throws ComputerDAOException {
         int result = 0;
@@ -178,10 +185,13 @@ public class ComputerManager {
     }
 
     /**
-     * Delete a computer in the database from an id.
-     * @param id ID of the computer to delete in DB.
-     * @return {@link ComputerDAO#delete}.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * Methode to delete a computer in the database by his id.
+     * @param id Id of the computer to delete.
+     * @return Executes the SQL statement in this PreparedStatement object,
+     *         which must be an SQL Data Manipulation Language (DML) statement,
+     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
+     *         returns nothing, such as a DDL statement.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int delete(int id) throws ComputerDAOException {
         int result = 0;
@@ -195,10 +205,13 @@ public class ComputerManager {
     }
 
     /**
-     * update the database with updated computer.
-     * @param c Computer with update values to put in the DB.
-     * @return {@link ComputerDAO#update}.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * Method to update a computer in the database.
+     * @param c Computer to update in the database, the id of c must be in DB.
+     * @return Executes the SQL statement in this PreparedStatement object,
+     *         which must be an SQL Data Manipulation Language (DML) statement,
+     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
+     *         returns nothing, such as a DDL statement.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int update(Computer c) throws ComputerDAOException {
         int result = 0;
@@ -212,10 +225,10 @@ public class ComputerManager {
     }
 
     /**
-     * Get a computer in database with the specific id give in parameter.
-     * @param id ID of the researched Computer in DB.
-     * @return the good computer if it exists else null.
-     * @throws ComputerDAOException Error in the ComputerDAO.
+     * Method to find a computer in the database by his id.
+     * @param id of the researched computer.
+     * @return the researched computer.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public Computer getComputerById(int id) throws ComputerDAOException {
         Computer computer = null;

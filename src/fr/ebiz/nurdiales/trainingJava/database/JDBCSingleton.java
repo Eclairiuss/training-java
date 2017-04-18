@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.database;
+package main.java.fr.ebiz.nurdiales.trainingJava.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +17,7 @@ public class JDBCSingleton {
     private Connection DB_CONNECTION;
 
     /**
-     * Constructor.
+     * Constructor of JDBCSingleton who init all value and connect to DataBase.
      */
     public JDBCSingleton() {
         DB_URL = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
@@ -28,8 +28,8 @@ public class JDBCSingleton {
     }
 
     /**
-     * Method for connect the singleton and the program to DB.
-     * @return Return the connection to the DB.
+     * Method who create a connection to the database.
+     * @return Connection to a database.
      */
     private Connection connectToDB() {
         LOGGER.debug("Init driver ");
@@ -59,8 +59,8 @@ public class JDBCSingleton {
     }
 
     /**
-     * Disconnect the Singleton from the database.
-     * @throws SQLException Exception of sql request.
+     * Try to disconnect the JDBCSingleton of the database.
+     * @throws SQLException Error in SQL.
      */
     public void disconnectToDB() throws SQLException {
         LOGGER.debug("Try close connection");
@@ -69,10 +69,10 @@ public class JDBCSingleton {
     }
 
     /**
-     * Make a prepared statement from the sql request q string.
-     * @param q request sql to put into preparedStatement.
-     * @return preparedStatement with q sql request.
-     * @throws SQLException Exception of sql request.
+     * Method who create a PreparedStatement with a String who connais instructions.
+     * @param q String who contain the request to complete.
+     * @return PreparedStatement with q in.
+     * @throws SQLException Error in SQL.
      */
     public PreparedStatement prepareStatement(String q) throws SQLException {
         LOGGER.debug("PrepareStatement asked");
