@@ -3,7 +3,6 @@ package fr.ebiz.nurdiales.trainingJava.cli;
 import java.util.List;
 import java.util.Scanner;
 
-import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,19 +19,29 @@ public class ComputerCLI extends PageCLI {
      */
     public ComputerCLI() {
         super();
-        params = new Parameters.Builder().page(0).size(10).build();
+        page = 0;
+        SIZE_PAGE = 10;
         computerManager = new ComputerManager();
     }
 
     @Override
     public void printEntities(Scanner sc) throws ComputerDAOException {
         LOGGER.debug("start of printComputers");
-        params = new Parameters.Builder().size(10).build();
         boolean exitWanted = false;
         while (!exitWanted) {
-            System.out.println("Page " + params.getPage() + " : ");
+            System.out.println("Page " + page + " : ");
             List<Computer> cl;
-            cl = computerManager.getAll(params);
+            if (nameCompany == null && idCompany == 0 && nameComputer == null) {
+                cl = computerManager.requestAllComputers(page, SIZE_PAGE);
+            } else if (nameCompany == null && nameComputer == null) {
+                cl = computerManager.requestAllComputersByCompanyID(idCompany, page, SIZE_PAGE);
+            } else if (idCompany == 0 && nameComputer == null) {
+                cl = computerManager.requestAllComputersByCompanyName(nameCompany, page, SIZE_PAGE);
+            } else if (idCompany == 0 && nameCompany == null) {
+                cl = computerManager.requestAllComputersByName(nameComputer, page, SIZE_PAGE);
+            } else {
+                cl = computerManager.requestAllComputers(page, SIZE_PAGE);
+            }
             for (Computer c : cl) {
                 System.out.println(c);
             }
@@ -43,7 +52,7 @@ public class ComputerCLI extends PageCLI {
 
     @Override
     protected void setName(String name) {
-        params.setName(name);
+        this.nameComputer = name;
     }
 
     @Override
@@ -62,7 +71,7 @@ public class ComputerCLI extends PageCLI {
         System.out.print("Company Name : ");
         String tmp = sc.nextLine();
         tmp = tmp.equals("") ? null : tmp;
-        params.setNameCompany(tmp);
+        setNameCompany(tmp);
         return true;
     }
 
@@ -72,7 +81,7 @@ public class ComputerCLI extends PageCLI {
         String tmp = sc.nextLine();
         try {
             int id = tmp.equals("") ? 0 : Integer.parseInt(tmp);
-            params.setIdCompany(id);
+            setIdCompany(id);
         } catch (IllegalArgumentException e) {
             System.out.println("Not an Id");
         }

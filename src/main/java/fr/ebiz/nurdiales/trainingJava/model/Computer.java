@@ -1,8 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.model;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class Computer {
     private static final Date NEVER_BEFORE = Date.valueOf("1970-01-01");
@@ -29,13 +27,6 @@ public class Computer {
         this.company = company;
     }
 
-    /**
-     * Default Constructor for Computer.
-     */
-    public Computer() {
-
-    }
-
     public int getId() {
         return id;
     }
@@ -49,52 +40,29 @@ public class Computer {
     }
 
     public void setName(String name) {
-        this.name = (!name.contains("%") && !name.contains("'")) ? name : this.name;
+        this.name = name;
     }
 
-    public Date getIntroduced() {
+    public Date getDateOfIntroduced() {
         return introduced;
     }
 
-    public void setIntroduced(Date introduced) {
+    public void setDateOfIntroduced(Date introduced) {
         this.introduced = (introduced != null) ? (introduced.before(NEVER_BEFORE) ? this.introduced : introduced)
-                                  : null;
-    }
-    /**
-     * Setter for introduced who parse a string.
-     * @param introduced Date with format "AAAA-MM-JJ"
-     */
-    public void setIntroduced(String introduced) {
-        Date intro = stringToDate(introduced);
-        this.introduced = (intro != null)
-                                    ? (intro.before(NEVER_BEFORE) ? this.introduced : intro) : null;
+                : null;
     }
 
-    public Date getDiscontinued() {
+    public Date getDateOfDiscontinued() {
         return discontinued;
     }
 
-    public void setDiscontinued(Date discontinued) {
+    public void setDateOfDiscontinued(Date discontinued) {
         this.discontinued = (discontinued != null)
-                                    ? (discontinued.before(NEVER_BEFORE) ? this.discontinued : discontinued) : null;
-    }
-
-    /**
-     * Setter for discontinued who parse a string.
-     * @param discontinued Date with format "AAAA-MM-JJ"
-     */
-    public void setDiscontinued(String discontinued) {
-        Date discont = stringToDate(discontinued);
-        this.discontinued = (discont != null)
-                                    ? (discont.before(NEVER_BEFORE) ? this.discontinued : discont) : null;
+                ? (discontinued.before(NEVER_BEFORE) ? this.discontinued : discontinued) : null;
     }
 
     public Company getCompany() {
         return company;
-    }
-
-    public String getCompanyName() {
-        return (company != null) ? company.getName() : "";
     }
 
     public void setCompany(Company company) {
@@ -104,30 +72,14 @@ public class Computer {
     @Override
     public String toString() {
         return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-                       + ", company=" + getCompanyName() + "]";
-    }
-
-    /**
-     * Function to transform string to a Date.
-     * @param s Date in string.
-     * @return Date from the param
-     */
-    private Date stringToDate(String s) {
-        if (s == null || s.equals("")) {
-            return null;
-        }
-
-        return Date.valueOf(LocalDate.parse(s, DateTimeFormatter.ISO_LOCAL_DATE));
+                + ", company=" + company + "]";
     }
 
     /**
      * Method who check if introduced is before discontinued.
-     * @return false is Introduce isn't before discontinued. else return true.
+     * @return true if it's ok (introduced is before discontinued) else false.
      */
     public boolean checkDates() {
-        if (introduced == null || discontinued == null) {
-            return true;
-        }
-        return introduced.before(discontinued);
+        return (introduced != null && discontinued != null && introduced.after(discontinued)) ? false : true;
     }
 }

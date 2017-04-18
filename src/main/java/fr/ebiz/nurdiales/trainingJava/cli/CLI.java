@@ -1,16 +1,17 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 
 public class CLI {
     private static Logger logger = LoggerFactory.getLogger(CLI.class);
@@ -18,6 +19,7 @@ public class CLI {
             DELETE = "delete", DETAILS = "details", UPDATE = "update", NEW = "new", ID = "id",
             ID_COMPANY = "company_id", NAME = "name", DATE_OF_DISCONTINUED = "date_of_discontinued",
             DATE_OF_INTRODUCED = "date_of_introduced", SEPARATOR = " ", DATE_FORMA = "AAAA-MM-JJ", SEPARATOR2 = "=";
+
     private static Scanner sc;
     private static PageCLI p;
     private static ComputerManager computerManager;
@@ -37,9 +39,10 @@ public class CLI {
         companyManager = new CompanyManager();
 
         boolean wantContinue = true;
-        while (wantContinue) {
-            String[] l = mainMenu().split(SEPARATOR);
-            switch (l[0].toLowerCase()) {
+        try {
+            while (wantContinue) {
+                String[] l = mainMenu().split(SEPARATOR);
+                switch (l[0].toLowerCase()) {
                 case EXIT:
                     wantContinue = false;
                     break;
@@ -53,17 +56,17 @@ public class CLI {
                     break;
                 case DETAILS:
                     switch (l[1].split(SEPARATOR2)[0]) {
-                        case ID:
-                            try {
-                                Computer computer = computerManager
-                                                            .get(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
-                                System.out.println(computer);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            break;
-                        default:
-                            break;
+                    case ID:
+                        try {
+                            Computer computer = computerManager
+                                    .getComputerById(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
+                            System.out.println(computer);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    default:
+                        break;
                     }
                     break;
                 case NEW:
@@ -77,7 +80,11 @@ public class CLI {
                     break;
                 default:
                     break;
+                }
             }
+            connection.disconnectToDB();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         sc.close();
     }
@@ -119,19 +126,19 @@ public class CLI {
         }
         System.out.print("Date of Introduced (" + DATE_FORMA + ") : ");
         try {
-            computer.setIntroduced(stringToDate(sc.nextLine()));
+            computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
         } catch (IllegalArgumentException e) {
             logger.debug("Date of Introduced is invalid");
         }
         System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
         try {
-            computer.setDiscontinued(stringToDate(sc.nextLine()));
+            computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
         } catch (IllegalArgumentException e) {
             logger.debug("Date of Introduced is invalid");
         }
         System.out.print("Id of Company : ");
         try {
-            computer.setCompany(companyManager.get(Integer.parseInt(sc.nextLine())));
+            computer.setCompany(companyManager.companyById(Integer.parseInt(sc.nextLine())));
         } catch (Exception e) {
             computer.setCompany(null);
         }
@@ -152,7 +159,7 @@ public class CLI {
             System.out.print("Id : ");
             s = sc.nextLine();
             try {
-                computer = computerManager.get(Integer.parseInt(s));
+                computer = computerManager.getComputerById(Integer.parseInt(s));
             } catch (IllegalArgumentException e) {
                 isInteger = false;
             }
@@ -168,19 +175,19 @@ public class CLI {
             }
             System.out.print("Date of Introduced (" + DATE_FORMA + ") : ");
             try {
-                computer.setIntroduced(stringToDate(sc.nextLine()));
+                computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
             } catch (IllegalArgumentException e) {
                 logger.debug("Date of Introduced is invalid");
             }
             System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
             try {
-                computer.setDiscontinued(stringToDate(sc.nextLine()));
+                computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
             } catch (IllegalArgumentException e) {
                 logger.debug("Date of Introduced is invalid");
             }
             System.out.print("Id of Company : ");
             try {
-                computer.setCompany(companyManager.get(Integer.parseInt(sc.nextLine())));
+                computer.setCompany(companyManager.companyById(Integer.parseInt(sc.nextLine())));
             } catch (Exception e) {
             }
             computerManager.update(computer);

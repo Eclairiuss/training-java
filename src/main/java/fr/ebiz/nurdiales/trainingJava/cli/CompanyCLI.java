@@ -3,12 +3,12 @@ package fr.ebiz.nurdiales.trainingJava.cli;
 import java.util.List;
 import java.util.Scanner;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
-import fr.ebiz.nurdiales.trainingJava.model.Parameters;
-import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 
 public class CompanyCLI extends PageCLI {
     private static Logger logger = LoggerFactory.getLogger(CompanyCLI.class);
@@ -19,7 +19,8 @@ public class CompanyCLI extends PageCLI {
      */
     public CompanyCLI() {
         super();
-        params  = (new Parameters.Builder()).page(10).size(10).build();
+        page = 0;
+        SIZE_PAGE = 10;
         companyManager = new CompanyManager();
     }
 
@@ -28,13 +29,13 @@ public class CompanyCLI extends PageCLI {
         logger.debug("start of printCompanies");
         boolean exitWanted = false;
         while (!exitWanted) {
-            System.out.println("Page " + params.getPage() + " : ");
+            System.out.println("Page " + page + " : ");
 
             List<Company> cl;
-            if (params.getNameCompany() == null) {
-                cl = companyManager.getAll(params.getPage(), params.getSize());
+            if (nameCompany == null) {
+                cl = companyManager.allCompanies(page, SIZE_PAGE);
             } else {
-                cl = companyManager.getAll(params.getNameCompany(), params.getPage(), params.getSize());
+                cl = companyManager.allCompaniesByName(nameCompany, page, SIZE_PAGE);
             }
             for (Company c : cl) {
                 System.out.println(c);
@@ -47,7 +48,7 @@ public class CompanyCLI extends PageCLI {
 
     @Override
     protected void setName(String name) {
-        params.setNameCompany(name);
+        this.nameCompany = name;
     }
 
     @Override
