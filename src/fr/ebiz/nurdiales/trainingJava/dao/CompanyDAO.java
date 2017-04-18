@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.persistence;
+package main.java.fr.ebiz.nurdiales.trainingJava.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,8 +9,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import main.java.fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
+import main.java.fr.ebiz.nurdiales.trainingJava.model.Company;
 
 public class CompanyDAO {
     private static final String COMPANY_TABLE = "company";
@@ -26,6 +26,13 @@ public class CompanyDAO {
     private static final String COMPANY_BY_ID_REQUEST = SELECT + " WHERE " + COMPANY_ID + "=? ";
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 
+    /**
+     * Method for get in data base a company corresponding to a id, if no match
+     * return null.
+     * @param id Id of the company to search in the database.
+     * @return The company corresponding to the id.
+     * @throws SQLException Error in SQL.
+     */
     public Company companyById(int id) throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         PreparedStatement ps = connection.prepareStatement(COMPANY_BY_ID_REQUEST);
@@ -38,6 +45,11 @@ public class CompanyDAO {
         return null;
     }
 
+    /**
+     * Method for get all companies in database, dangerous if many.
+     * @return All companies in DB.
+     * @throws SQLException Error in SQL.
+     */
     public List<Company> allCompanies() throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Company> list = new ArrayList<Company>();
@@ -49,6 +61,14 @@ public class CompanyDAO {
         return list;
     }
 
+    /**
+     * Method for get pageSize companies,
+     * [pageSize*page->(pageSize*(page+1))-1].
+     * @param page Number of the page (start = 0).
+     * @param pageSize Number of entities wanted.
+     * @return pageSize companies in the page's page.
+     * @throws SQLException Error in SQL.
+     */
     public List<Company> allCompanies(int page, int pageSize) throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Company> list = new ArrayList<Company>();
@@ -63,6 +83,13 @@ public class CompanyDAO {
         return list;
     }
 
+    /**
+     * Method for get all companies who have name look like the parameter, not
+     * case sensitive.
+     * @param name String who must be contain in wanted companies.
+     * @return The list of companies who the name contains the parameter.
+     * @throws SQLException Error in SQL.
+     */
     public List<Company> allCompaniesByName(String name) throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Company> list = new ArrayList<Company>();
@@ -77,6 +104,15 @@ public class CompanyDAO {
         return list;
     }
 
+    /**
+     * Method for get pageSize companies who have name look like the parameter,
+     * not case sensitive, [pageSize*page->(pageSize*(page+1))-1].
+     * @param name Sting who must be contain in wanted companies
+     * @param page Number of the current page.
+     * @param pageSize Size of the page.
+     * @return The pageSize companies who the name contains the parameter.
+     * @throws SQLException Error in SQL.
+     */
     public List<Company> allCompaniesByName(String name, int page, int pageSize) throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Company> list = new ArrayList<Company>();
