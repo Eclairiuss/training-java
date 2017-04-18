@@ -40,7 +40,7 @@ public abstract class PageCLI {
      * @throws ComputerDAOException ComputerDAO fails to execute a request.
      * @throws CompanyDAOException CompanyDAO fails to execute a request.
      */
-    public abstract void printEntities(Scanner sc) throws ComputerDAOException, CompanyDAOException, ComputerDAOException, CompanyDAOException;
+    public abstract void printEntities(Scanner sc) throws ComputerDAOException, CompanyDAOException;
 
     /**
      * Default function for get companies who have similar name if it's
