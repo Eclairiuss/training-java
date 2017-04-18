@@ -60,7 +60,7 @@ public class JDBCSingleton {
 
     /**
      * Try to disconnect the JDBCSingleton of the database.
-     * @throws SQLException Error in SQL.
+     * @throws SQLException Exception of sql request.
      */
     public void disconnectToDB() throws SQLException {
         LOGGER.debug("Try close connection");
@@ -70,9 +70,9 @@ public class JDBCSingleton {
 
     /**
      * Method who create a PreparedStatement with a String who connais instructions.
-     * @param q String who contain the request to complete.
-     * @return PreparedStatement with q in.
-     * @throws SQLException Error in SQL.
+     * @param q String who contain the request to put into preparedStatement.
+     * @return preparedStatement with q sql request.
+     * @throws SQLException Exception of sql request.
      */
     public PreparedStatement prepareStatement(String q) throws SQLException {
         LOGGER.debug("PrepareStatement asked");
