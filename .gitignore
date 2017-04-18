@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/java,maven,eclipse,intellij
+# Created by https://www.gitignore.io/api/java,maven,eclipse,intellij,intellij+iml
 
 ### Eclipse ###
 
@@ -115,6 +115,42 @@ fabric.properties
 # Sonarlint plugin
 .idea/sonarlint
 
+### Intellij+iml ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# User-specific stuff:
+
+# Sensitive or high-churn files:
+
+# Gradle:
+
+# CMake
+
+# Mongo Explorer plugin:
+
+## File-based project format:
+
+## Plugin-specific files:
+
+# IntelliJ
+
+# mpeltonen/sbt-idea plugin
+
+# JIRA plugin
+
+# Cursive Clojure plugin
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+
+### Intellij+iml Patch ###
+# Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
+
+*.iml
+modules.xml
+.idea/misc.xml
+*.ipr
+
 ### Java ###
 # Compiled class file
 *.class
@@ -153,4 +189,4 @@ buildNumber.properties
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
 
-# End of https://www.gitignore.io/api/java,maven,eclipse,intellij
+# End of https://www.gitignore.io/api/java,maven,eclipse,intellij,intellij+iml
