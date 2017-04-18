@@ -1,7 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.exceptions;
 
-public class CompanyDAOException extends Exception {
-    /**
+public class CompanyDAOException extends Exception {    /**
      * constructor who call the super constructor.
      * @param message message for the error.
      */

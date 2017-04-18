@@ -1,28 +1,19 @@
 package fr.ebiz.nurdiales.trainingJava.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
-import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.mapper.ComputerMapper;
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
-
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-
-import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.ID;
-import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.NAME;
-import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.INTRODUCED;
-import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.DISCONTINUED;
-import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.COMPANY;
 
 public class ComputerDAO {
     private static final String COMPUTER_TABLE = "computer";
@@ -32,21 +23,26 @@ public class ComputerDAO {
     private static final String COMPUTER_DISCONTINUED = "discontinued";
     private static final String COMPUTER_COMPANY = "company_id";
 
-    private static final String SORT_BY = " ORDER BY ";
-    private static final String INVERT = " DESC ";
-
     private static final String SELECT = " SELECT * FROM " + COMPUTER_TABLE;
-    private static final String COUNT = " SELECT COUNT(*) FROM " + COMPUTER_TABLE;
+    private static final String LIKE = " LIKE ?";
     private static final String LIMIT_OFFSET = " LIMIT ? OFFSET ? ";
 
+    private static final String ALL = SELECT + LIMIT_OFFSET;
+
+    private static final String BY_COMPANY_ID = SELECT + " WHERE " + COMPUTER_COMPANY + "=? " + LIMIT_OFFSET;
+    private static final String BY_COMPANY_NAME_AND_NAME = SELECT + " WHERE (?) AND + " + COMPUTER_NAME + LIKE
+            + LIMIT_OFFSET;
+    private static final String BY_COMPANY_ID_AND_NAME = SELECT + " WHERE + " + COMPUTER_COMPANY + "=? AND "
+            + COMPUTER_NAME + LIKE + LIMIT_OFFSET;
+    private static final String BY_NAME = SELECT + " WHERE " + COMPUTER_NAME + LIKE + LIMIT_OFFSET;
     private static final String BY_ID = SELECT + " WHERE " + COMPUTER_ID + "=?";
     private static final String INSERT_COMPUTER = " INSERT INTO " + COMPUTER_TABLE + "(" + COMPUTER_NAME + ","
-                                                          + COMPUTER_INTRODUCED + "," + COMPUTER_DISCONTINUED + "," + COMPUTER_COMPANY + ") values (?,?,?,?)";
+            + COMPUTER_INTRODUCED + "," + COMPUTER_DISCONTINUED + "," + COMPUTER_COMPANY + ") values (?,?,?,?)";
     private static final String UPDATE_COMPUTER = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_NAME + "=?, "
-                                                          + COMPUTER_INTRODUCED + "=?, " + COMPUTER_DISCONTINUED + "=?, " + COMPUTER_COMPANY + "=? WHERE "
-                                                          + COMPUTER_ID + "=? ";
+            + COMPUTER_INTRODUCED + "=?, " + COMPUTER_DISCONTINUED + "=?, " + COMPUTER_COMPANY + "=? WHERE "
+            + COMPUTER_ID + "=? ";
     private static final String DELETE_COMPUTER = " DELETE FROM " + COMPUTER_TABLE + " WHERE id=?";
-    private static final String DELETE_COMPUTERS = " DELETE FROM " + COMPUTER_TABLE + " WHERE ";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
     private CompanyManager companyManager;
 
@@ -58,6 +54,224 @@ public class ComputerDAO {
     }
 
     /**
+     * Method to find all computer, (but get just part).
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
+    public List<Computer> requestAllComputers(int page, int pageSize) throws SQLException, CompanyDAOException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        List<Computer> retour = new ArrayList<Computer>();
+        PreparedStatement ps = connection.prepareStatement(ALL);
+        ps.setInt(1, pageSize);
+        ps.setInt(2, pageSize * page);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
+                    rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
+                    companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+        }
+        return retour;
+    }
+
+    /**
+     * Method to find all computer, (but get just part), who have a special
+     * company.
+     * @param companyName String who must be contain by composent's company.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get by company name.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
+    public List<Computer> requestAllComputersByCompanyName(String companyName, int page, int pageSize)
+            throws SQLException, CompanyDAOException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        List<Computer> retour = new ArrayList<Computer>();
+
+        List<Company> companies = companyManager.allCompaniesByName(companyName);
+        System.out.println(companies);
+        StringBuffer idCompanies = new StringBuffer();
+        boolean notFirst = false;
+        for (Company company : companies) {
+            if (notFirst) {
+                idCompanies.append(" OR ");
+            }
+            idCompanies.append(COMPUTER_COMPANY + " = " + company.getId());
+            if (!notFirst) {
+                notFirst = true;
+            }
+        }
+        PreparedStatement ps = connection.prepareStatement(SELECT + " WHERE " + idCompanies + LIMIT_OFFSET);
+        ps.setInt(1, pageSize);
+        ps.setInt(2, pageSize * page);
+        System.out.println(ps);
+        ResultSet rs = ps.executeQuery();
+        System.out.println(rs);
+        while (rs.next()) {
+            retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
+                    rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
+                    companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+        }
+        System.out.println(retour);
+
+        return retour;
+    }
+
+    /**
+     * Method to find all computer, (but get just part), who have a special
+     * company.
+     * @param idCompany Id of the company of the computers searched.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get by company id.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
+    public List<Computer> requestAllComputersByCompanyID(int idCompany, int page, int pageSize)
+            throws SQLException, CompanyDAOException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        List<Computer> retour = new ArrayList<Computer>();
+        PreparedStatement ps = connection.prepareStatement(BY_COMPANY_ID);
+        ps.setInt(1, idCompany);
+        ps.setInt(2, pageSize);
+        ps.setInt(3, pageSize * page);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
+                    rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
+                    companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+        }
+        return retour;
+    }
+
+    /**
+     * Method to find all computer, (but get just part), who have special name.
+     * @param name String who must be contain by the entities searched name.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get by computer name.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
+    public List<Computer> requestAllComputersByName(String name, int page, int pageSize)
+            throws SQLException, CompanyDAOException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        List<Computer> retour = new ArrayList<Computer>();
+        if (!name.contains("%")) {
+            PreparedStatement ps = connection.prepareStatement(BY_NAME);
+            ps.setString(1, "%" + name + "%");
+            ps.setInt(2, pageSize);
+            ps.setInt(3, pageSize * page);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
+                        rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
+                        companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+            }
+        }
+        return retour;
+    }
+
+    /**
+     * @param idCompany Id of the company to found. And get all num.
+     * @param name String who must be contain by the entities searched.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
+    public List<Computer> requestAllComputersByCompanyIDAndName(int idCompany, String name, int page, int pageSize)
+            throws SQLException, CompanyDAOException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        List<Computer> retour = new ArrayList<Computer>();
+        if (!name.contains("%")) {
+            PreparedStatement ps = connection.prepareStatement(BY_COMPANY_ID_AND_NAME);
+            ps.setInt(1, idCompany);
+            ps.setString(2, "%" + name + "%");
+            ps.setInt(3, pageSize);
+            ps.setInt(4, pageSize * page);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
+                        rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
+                        companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+            }
+        }
+        return retour;
+    }
+
+    /**
+     * Methode to get all computers by name, or by, companyName, or by company
+     * id in the page's page sized with pageSize.
+     * @param name String who must be contain by the entities searched name.
+     * @param companyName String who must be contain by composent's company.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
+    public List<Computer> requestAllComputersByCompanyNameAndName(String companyName, String name, int page,
+            int pageSize) throws SQLException, CompanyDAOException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        List<Computer> retour = new ArrayList<Computer>();
+        if (!name.contains("%")) {
+            List<Company> companies = companyManager.allCompaniesByName(companyName);
+            StringBuffer idCompanies = new StringBuffer();
+            boolean notFirst = false;
+            for (Company company : companies) {
+                if (notFirst) {
+                    idCompanies.append(" OR ");
+                }
+                idCompanies.append(COMPUTER_ID + " = " + company.getId());
+                if (!notFirst) {
+                    notFirst = true;
+                }
+            }
+            PreparedStatement ps = connection.prepareStatement(BY_COMPANY_NAME_AND_NAME);
+            ps.setString(1, idCompanies.toString());
+            ps.setString(2, "%" + name + "%");
+            ps.setInt(3, pageSize);
+            ps.setInt(4, pageSize * page);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
+                        rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
+                        companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+            }
+        }
+        return retour;
+    }
+
+    /**
+     * Methode to get all computers by name, or by, companyName, or by company
+     * id in the page's page sized with pageSize.
+     * @param companyName String who must be contain by composent's company.
+     * @param companyId Id who must be equal to composent's company id.
+     * @param name String who must be contain by the entities searched name.
+     * @param page Page to get elements.
+     * @param pageSize Size of a page.
+     * @return List of all computers in the page to get.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
+    public List<Computer> saladeTomateOignon(String companyName, int companyId, String name, int page, int pageSize)
+            throws SQLException, CompanyDAOException {
+        List<Computer> retour = new ArrayList<Computer>();
+        if (!name.contains("%")) {
+            if (companyId == 0) {
+                return requestAllComputersByCompanyNameAndName(companyName, name, page, pageSize);
+            }
+
+        }
+        return retour;
+    }
+
+    /**
      * Methode to add a new computer in the database.
      * @param c Computer to add in the database, id don't need because the
      *            database generate it.
@@ -65,34 +279,26 @@ public class ComputerDAO {
      *         which must be an SQL Data Manipulation Language (DML) statement,
      *         such as INSERT, UPDATE or DELETE; or an SQL statement that
      *         returns nothing, such as a DDL statement.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @throws SQLException Error in SQL.
      */
-    public int add(ComputerDTO c) throws ComputerDAOException {
-        Connection connection = null;
-        int retour = 0;
-        if (c.getName() == null) {
-            c.setName("default");
+    public int add(Computer c) throws SQLException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        PreparedStatement ps = connection.prepareStatement(INSERT_COMPUTER);
+        ps.setString(1, c.getName());
+        if (c.checkDates()) {
+            ps.setDate(2, c.getDateOfIntroduced());
+            ps.setDate(3, c.getDateOfDiscontinued());
+        } else {
+            ps.setDate(2, null);
+            ps.setDate(3, null);
         }
-        PreparedStatement ps = null;
+
         try {
-            connection = getConnexion();
-            ps = connection.prepareStatement(INSERT_COMPUTER);
-            ps.setString(1, c.getName());
-            ps.setString(2, c.getIntroduced());
-            ps.setString(3, c.getDiscontinued());
-            ps.setString(4, c.getCompanyId());
-            retour = ps.executeUpdate();
-            connection.close();
-        } catch (SQLException e) {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                throw new ComputerDAOException(e.getMessage());
-            }
+            ps.setInt(4, c.getCompany().getId());
+        } catch (Exception e) {
+            ps.setString(4, null);
         }
-        return retour;
+        return ps.executeUpdate();
     }
 
     /**
@@ -102,65 +308,13 @@ public class ComputerDAO {
      *         which must be an SQL Data Manipulation Language (DML) statement,
      *         such as INSERT, UPDATE or DELETE; or an SQL statement that
      *         returns nothing, such as a DDL statement.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @throws SQLException Error in SQL.
      */
-    public int delete(int id) throws ComputerDAOException {
-        Connection connection = null;
-        int retour = 0;
-        try {
-            connection = getConnexion();
-            PreparedStatement ps = connection.prepareStatement(DELETE_COMPUTER);
-            ps.setInt(1, id);
-            retour = ps.executeUpdate();
-            connection.close();
-        } catch (SQLException e) {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                throw new ComputerDAOException(e.getMessage());
-            }
-        }
-        return retour;
-    }
-
-    /**
-     * Methode to delete a computer in the database by his id.
-     * @param ids List of Ids of computers to delete.
-     * @return Executes the SQL statement in this PreparedStatement object,
-     *         which must be an SQL Data Manipulation Language (DML) statement,
-     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
-     *         returns nothing, such as a DDL statement.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
-     */
-    public int delete(int[] ids) throws ComputerDAOException {
-        Connection connection = null;
-        StringBuffer idsSB = new StringBuffer();
-        int retour = 0;
-        boolean isntFirst = false;
-        for (int i : ids) {
-            if (isntFirst) {
-                idsSB.append(" OR ");
-            } else {
-                isntFirst = true;
-            }
-            idsSB.append("(" + COMPUTER_ID + "=" + i + ")");
-        }
-        try {
-            connection = getConnexion();
-            retour = connection.prepareStatement(DELETE_COMPUTERS + idsSB.toString()).executeUpdate();
-            connection.close();
-        } catch (SQLException e) {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                throw new ComputerDAOException(e.getMessage());
-            }
-        }
-        return retour;
+    public int delete(int id) throws SQLException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        PreparedStatement ps = connection.prepareStatement(DELETE_COMPUTER);
+        ps.setInt(1, id);
+        return ps.executeUpdate();
     }
 
     /**
@@ -170,252 +324,43 @@ public class ComputerDAO {
      *         which must be an SQL Data Manipulation Language (DML) statement,
      *         such as INSERT, UPDATE or DELETE; or an SQL statement that
      *         returns nothing, such as a DDL statement.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @throws SQLException Error in SQL.
      */
-    public int update(ComputerDTO c) throws ComputerDAOException {
-        Connection connection = null;
-        int retour = 0;
-        if (c.getName() != null) {
-            try {
-                connection = getConnexion();
-                PreparedStatement ps = connection.prepareStatement(UPDATE_COMPUTER);
-                ps.setString(1, c.getName());
-                ps.setString(2, c.getIntroduced());
-                ps.setString(3, c.getDiscontinued());
-                ps.setString(4, c.getCompanyId());
-                ps.setString(5, c.getId());
-                retour = ps.executeUpdate();
-                connection.close();
-            } catch (SQLException e) {
-                try {
-                    connection.close();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                } finally {
-                    throw new ComputerDAOException(e.getMessage());
-                }
-            }
+    public int update(Computer c) throws SQLException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        PreparedStatement ps = connection.prepareStatement(UPDATE_COMPUTER);
+        ps.setString(1, c.getName());
+        if (c.checkDates()) {
+            ps.setDate(2, c.getDateOfIntroduced());
+            ps.setDate(3, c.getDateOfDiscontinued());
+        } else {
+            ps.setDate(2, null);
+            ps.setDate(3, null);
         }
-        return retour;
-    }
-
-    /**
-     * Method to get the number of computers in the database.
-     * @param params list of parameters for the search.
-     * @return int corresponding to number of computers in the DB.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
-     */
-    public int getCount(Parameters params) throws ComputerDAOException {
-        StringBuffer companies = testCompany(params);
-        String nameLike = testNameLike(params);
-        Connection connection = null;
-
-        boolean searchCompany = companies != null;
-        boolean searchName = nameLike != null;
-
-        if (params.getPage() < 0) {
-            params.setPage(0);
-        }
-
-        if (params.getSize() < 1) {
-            params.setSize(1);
-        }
-
         try {
-            connection = getConnexion();
-            PreparedStatement ps = connection.prepareStatement(COUNT
-                                                                                + ((searchName || searchCompany) ? " WHERE " : "")
-                                                                                + ((searchCompany) ? companies.toString() : "")
-                                                                                + ((searchName && searchCompany) ? " AND " : "")
-                                                                                + ((searchName) ? nameLike : ""));
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            int retour = rs.getInt("count(*)");
-            connection.close();
-            return retour;
-        } catch (SQLException e) {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                throw new ComputerDAOException(e.getMessage());
-            }
+            ps.setInt(4, c.getCompany().getId());
+        } catch (Exception e) {
+            ps.setString(4, null);
         }
+        ps.setInt(5, c.getId());
+        return ps.executeUpdate();
     }
 
     /**
      * Method to find a computer in the database by his id.
      * @param id of the researched computer.
      * @return the researched computer.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @throws SQLException Error in SQL.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
-    public Computer getById(int id) throws ComputerDAOException {
-        Connection connection = null;
-        try {
-            connection = getConnexion();
-            PreparedStatement ps = connection.prepareStatement(BY_ID);
-            ps.setInt(1, id);
-            return ComputerMapper.toObject(ps.executeQuery());
-        } catch (SQLException | CompanyDAOException e) {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                throw new ComputerDAOException(e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * Général method for get all computers corresponding to parameters.
-     * @param params contains all search arguments.
-     * @return list of corresponding Computer.
-     * @throws ComputerDAOException Error in CompanyDAO SQL.
-     */
-    public List<Computer> getAll(Parameters params) throws ComputerDAOException {
-        List<Computer> retour = new ArrayList<Computer>();
-        StringBuffer companies = testCompany(params);
-        String nameLike = testNameLike(params);
-
-        boolean searchCompany = companies != null;
-        boolean searchName = nameLike != null;
-
-        if (params.getPage() < 0) {
-            params.setPage(0);
-        }
-
-        if (params.getSize() < 1) {
-            params.setSize(1);
-        }
-        Connection connection = null;
-        PreparedStatement ps = null;
-        try {
-            connection = getConnexion();
-            ps = connection.prepareStatement(SELECT
-                                                                       + ((searchName || searchCompany) ? " WHERE " : "")
-                                                                       + ((searchCompany) ? companies.toString() : "")
-                                                                       + ((searchName && searchCompany) ? " AND " : "")
-                                                                       + ((searchName) ? nameLike : "")
-                                                                       + " LIMIT " + params.getSize() + " OFFSET " + params.getSize() * params.getPage()
-                                                                       + sorted(params));
-            retour = ComputerMapper.map2Object(ps.executeQuery());
-            connection.close();
-            return retour;
-        } catch (SQLException | CompanyDAOException e) {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                throw new ComputerDAOException(e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * Look if params need special sort.
-     * @param params all params of the request.
-     * @return the end of the request with special sort if needed.
-     */
-    private String sorted(Parameters params) {
-        StringBuffer retour = new StringBuffer();
-        if (params == null || params.getTrierPar() == null) {
-            return retour.toString();
-        }
-        if (params.isReversed() || params.getTrierPar() != ID) {
-            retour.append(SORT_BY);
-            switch (params.getTrierPar()) {
-                case ID :
-                    retour.append(COMPUTER_ID);
-                    break;
-                case NAME:
-                    retour.append(COMPUTER_NAME);
-                    break;
-                case INTRODUCED:
-                    retour.append(COMPUTER_INTRODUCED);
-                    break;
-                case DISCONTINUED:
-                    retour.append(COMPUTER_DISCONTINUED);
-                    break;
-                case COMPANY:
-                    retour.append(COMPUTER_COMPANY);
-                    break;
-                default:
-                    retour.append(COMPUTER_ID);
-                    break;
-            }
-        }
-        if (params.isReversed()) {
-            retour.append(INVERT);
-        }
-        return retour.toString();
-    }
-
-    /**
-     * test if a company is wanted and return the string for search.
-     * @param params parameters who must contain a string for nameCompany or a idCompany != 0, else return null.
-     * @return null if no company searched.
-     * @throws ComputerDAOException Error in CompanyDAO SQL.
-     */
-    private StringBuffer testCompany(Parameters params) throws ComputerDAOException {
-        StringBuffer companies = new StringBuffer();
-        boolean retour = false;
-        if (params.getIdCompany() != 0) {
-            retour = true;
-            try {
-                companies.append(COMPUTER_COMPANY + "=" + companyManager.get(params.getIdCompany()).getId());
-            } catch (CompanyDAOException e) {
-                throw new ComputerDAOException(e.getMessage());
-            }
-        } else if (params.getNameCompany() != null) {
-            boolean isntFirst = false;
-            List<Company> tmp = null;
-            try {
-                tmp = companyManager.getAll(params.getNameCompany());
-            } catch (CompanyDAOException e) {
-                throw new ComputerDAOException(e.getMessage());
-            }
-            for (Company c : tmp) {
-                if (isntFirst) {
-                    companies.append(" OR ");
-                } else {
-                    companies.append("( ");
-                    isntFirst = true;
-                }
-                companies.append(COMPUTER_COMPANY + "=" + c.getId());
-            }
-            if (!tmp.isEmpty()) {
-                retour = true;
-                companies.append(" )");
-            }
-        }
-        return retour ? companies : null;
-    }
-
-    /**
-     * test if name isn't null and prepare the String.
-     * @param params parameters who must contain a string for name else the method return null.
-     * @return String corresponding to name wanted.
-     */
-    private String testNameLike(Parameters params) {
-        String nameLike = null;
-        if (params.getName() != null) {
-            if (!params.getName().contains("%") && !params.getName().contains("'")) {
-                nameLike = " name LIKE '%" + params.getName() + "%' ";
-            }
-        }
-        return nameLike;
-    }
-
-    /**
-     * Method who create a PreparedStatement with a String who connais instructions.
-     * @return preparedStatement with q sql request.
-     * @throws SQLException Exception of sql request.
-     */
-    public Connection getConnexion() throws SQLException {
+    public Computer getComputerById(int id) throws SQLException, CompanyDAOException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
-        return connection.getDataSource().getConnection();
+        PreparedStatement ps = connection.prepareStatement(BY_ID);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME), rs.getDate(COMPUTER_INTRODUCED),
+                rs.getDate(COMPUTER_DISCONTINUED), companyManager.companyById(rs.getInt(COMPUTER_COMPANY)));
+
     }
 }

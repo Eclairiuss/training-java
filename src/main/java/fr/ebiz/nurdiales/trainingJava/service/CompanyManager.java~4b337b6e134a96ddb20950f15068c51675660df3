@@ -1,11 +1,11 @@
-package main.java.fr.ebiz.nurdiales.trainingJava.service;
+package fr.ebiz.nurdiales.trainingJava.service;
 
 import java.sql.SQLException;
 import java.util.List;
 
-import main.java.fr.ebiz.nurdiales.trainingJava.dao.CompanyDAO;
-import main.java.fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import main.java.fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.dao.CompanyDAO;
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 
 public class CompanyManager {
     // private static final Logger logger =
@@ -26,15 +26,35 @@ public class CompanyManager {
      * @return The company corresponding to the id.
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
-    public Company companyById(int id) throws CompanyDAOException {
+    public Company get(int id) throws CompanyDAOException {
         Company company = null;
         try {
             company = companyDAO.companyById(id);
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.get1");
         }
         return company;
+    }
+
+    /**
+     * Method for get in data base a company corresponding to a id, if no match
+     * return null.
+     * @param sId Id of the company to search in the database.
+     * @return The company corresponding to the id.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
+    public Company get(String sId) throws CompanyDAOException {
+        try {
+            try {
+                int id = Integer.parseInt(sId);
+                return companyDAO.companyById(id);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new CompanyDAOException("Company.get2");
+        }
     }
 
     /**
@@ -42,13 +62,13 @@ public class CompanyManager {
      * @return All companies in DB.
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
-    public List<Company> allCompanies() throws CompanyDAOException {
+    public List<Company> getAll() throws CompanyDAOException {
         List<Company> companies = null;
         try {
             companies = companyDAO.allCompanies();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.getAll1");
         }
         return companies;
     }
@@ -61,13 +81,13 @@ public class CompanyManager {
      * @return pageSize companies in the page's page.
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
-    public List<Company> allCompanies(int page, int pageSize) throws CompanyDAOException {
+    public List<Company> getAll(int page, int pageSize) throws CompanyDAOException {
         List<Company> companies = null;
         try {
             companies = companyDAO.allCompanies(page, pageSize);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.getAll2");
         }
         return companies;
     }
@@ -79,13 +99,13 @@ public class CompanyManager {
      * @return The list of companies who the name contains the parameter.
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
-    public List<Company> allCompaniesByName(String name) throws CompanyDAOException {
+    public List<Company> getAll(String name) throws CompanyDAOException {
         List<Company> companies = null;
         try {
             companies = companyDAO.allCompaniesByName(name);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.getAll3");
         }
         return companies;
     }
@@ -99,13 +119,13 @@ public class CompanyManager {
      * @return The pageSize companies who the name contains the parameter.
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
-    public List<Company> allCompaniesByName(String name, int page, int pageSize) throws CompanyDAOException {
+    public List<Company> getAll(String name, int page, int pageSize) throws CompanyDAOException {
         List<Company> companies = null;
         try {
             companies = companyDAO.allCompaniesByName(name, page, pageSize);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.getAll4");
         }
         return companies;
     }

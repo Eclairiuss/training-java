@@ -1,17 +1,16 @@
 package fr.ebiz.nurdiales.trainingJava.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
-import fr.ebiz.nurdiales.trainingJava.mapper.CompanyMapper;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 
 public class CompanyDAO {
     private static final String COMPANY_TABLE = "company";
@@ -35,16 +34,15 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public Company companyById(int id) throws SQLException {
-        Connection connection = getConnexion();
-        Company c = null;
+        JDBCSingleton connection = JDBCSingleton.getInstance();
         PreparedStatement ps = connection.prepareStatement(COMPANY_BY_ID_REQUEST);
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            c = new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME));
+            Company c = new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME));
+            return c;
         }
-        connection.close();
-        return c;
+        return null;
     }
 
     /**
@@ -53,10 +51,13 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public List<Company> allCompanies() throws SQLException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Company> list = new ArrayList<Company>();
-        Connection connection = getConnexion();
-        list = CompanyMapper.map2Object(connection.prepareStatement(ALL_COMPANIES_REQUEST).executeQuery());
-        connection.close();
+        PreparedStatement ps = connection.prepareStatement(ALL_COMPANIES_REQUEST);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME)));
+        }
         return list;
     }
 
@@ -69,14 +70,16 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public List<Company> allCompanies(int page, int pageSize) throws SQLException {
-        Connection connection = getConnexion();
+        JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Company> list = new ArrayList<Company>();
 
         PreparedStatement ps = connection.prepareStatement(ALL_COMPANIES_REQUEST_BETWEEN);
         ps.setInt(1, pageSize);
         ps.setInt(2, pageSize * page);
-        list = CompanyMapper.map2Object(ps.executeQuery());
-        connection.close();
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME)));
+        }
         return list;
     }
 
@@ -88,15 +91,16 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public List<Company> allCompaniesByName(String name) throws SQLException {
-        Connection connection = getConnexion();
+        JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Company> list = new ArrayList<Company>();
-        if (!name.contains("%") && !name.contains("'")) {
+        if (!name.contains("%")) {
             PreparedStatement ps = connection.prepareStatement(COMPANIES_BY_NAME);
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
-            list = CompanyMapper.map2Object(rs);
+            while (rs.next()) {
+                list.add(new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME)));
+            }
         }
-        connection.close();
         return list;
     }
 
@@ -110,7 +114,7 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public List<Company> allCompaniesByName(String name, int page, int pageSize) throws SQLException {
-        Connection connection = getConnexion();
+        JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Company> list = new ArrayList<Company>();
         if (!name.contains("%")) {
             PreparedStatement ps = connection.prepareStatement(COMPANIES_BY_NAME_BETWEEN);
@@ -118,19 +122,10 @@ public class CompanyDAO {
             ps.setInt(2, pageSize);
             ps.setInt(3, pageSize * page);
             ResultSet rs = ps.executeQuery();
-            list = CompanyMapper.map2Object(rs);
+            while (rs.next()) {
+                list.add(new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME)));
+            }
         }
-        connection.close();
         return list;
-    }
-
-    /**
-     * Method who create a PreparedStatement with a String who connais instructions.
-     * @return preparedStatement with q sql request.
-     * @throws SQLException Exception of sql request.
-     */
-    public Connection getConnexion() throws SQLException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
-        return connection.getDataSource().getConnection();
     }
 }
