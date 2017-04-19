@@ -92,7 +92,6 @@
                     <td> ${computer.getIntroduced()}</td>
                     <td> ${computer.getDiscontinued()}</td>
                     <td><c:if test="${computer.getCompany() != null}"> ${computer.getCompanyName()}</c:if></td>
-
                 </tr>
             </c:forEach>
             </tbody>
