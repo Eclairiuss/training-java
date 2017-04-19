@@ -50,20 +50,20 @@ public class Computer {
         this.name = name;
     }
 
-    public Date getDateOfIntroduced() {
+    public Date getIntroduced() {
         return introduced;
     }
 
-    public void setDateOfIntroduced(Date introduced) {
+    public void setIntroduced(Date introduced) {
         this.introduced = (introduced != null) ? (introduced.before(NEVER_BEFORE) ? this.introduced : introduced)
                 : null;
     }
 
-    public Date getDateOfDiscontinued() {
+    public Date getDiscontinued() {
         return discontinued;
     }
 
-    public void setDateOfDiscontinued(Date discontinued) {
+    public void setDiscontinued(Date discontinued) {
         this.discontinued = (discontinued != null)
                 ? (discontinued.before(NEVER_BEFORE) ? this.discontinued : discontinued) : null;
     }

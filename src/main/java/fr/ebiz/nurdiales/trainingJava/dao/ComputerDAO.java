@@ -65,13 +65,15 @@ public class ComputerDAO {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Computer> retour = new ArrayList<Computer>();
         PreparedStatement ps = connection.prepareStatement(ALL);
-        ps.setInt(1, pageSize);
-        ps.setInt(2, pageSize * page);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
-                    rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-                    companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+        if (ps != null) {
+            ps.setInt(1, pageSize);
+            ps.setInt(2, pageSize * page);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
+                                               rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
+                                               companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+            }
         }
         return retour;
     }
@@ -286,8 +288,8 @@ public class ComputerDAO {
         PreparedStatement ps = connection.prepareStatement(INSERT_COMPUTER);
         ps.setString(1, c.getName());
         if (c.checkDates()) {
-            ps.setDate(2, c.getDateOfIntroduced());
-            ps.setDate(3, c.getDateOfDiscontinued());
+            ps.setDate(2, c.getIntroduced());
+            ps.setDate(3, c.getDiscontinued());
         } else {
             ps.setDate(2, null);
             ps.setDate(3, null);
@@ -331,8 +333,8 @@ public class ComputerDAO {
         PreparedStatement ps = connection.prepareStatement(UPDATE_COMPUTER);
         ps.setString(1, c.getName());
         if (c.checkDates()) {
-            ps.setDate(2, c.getDateOfIntroduced());
-            ps.setDate(3, c.getDateOfDiscontinued());
+            ps.setDate(2, c.getIntroduced());
+            ps.setDate(3, c.getDiscontinued());
         } else {
             ps.setDate(2, null);
             ps.setDate(3, null);
