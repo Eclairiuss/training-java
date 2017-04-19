@@ -59,7 +59,7 @@ public class CLI {
                     case ID:
                         try {
                             Computer computer = computerManager
-                                    .getComputerById(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
+                                    .get(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
                             System.out.println(computer);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -126,19 +126,19 @@ public class CLI {
         }
         System.out.print("Date of Introduced (" + DATE_FORMA + ") : ");
         try {
-            computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
+            computer.setIntroduced(stringToDate(sc.nextLine()));
         } catch (IllegalArgumentException e) {
             logger.debug("Date of Introduced is invalid");
         }
         System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
         try {
-            computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
+            computer.setDiscontinued(stringToDate(sc.nextLine()));
         } catch (IllegalArgumentException e) {
             logger.debug("Date of Introduced is invalid");
         }
         System.out.print("Id of Company : ");
         try {
-            computer.setCompany(companyManager.companyById(Integer.parseInt(sc.nextLine())));
+            computer.setCompany(companyManager.get(Integer.parseInt(sc.nextLine())));
         } catch (Exception e) {
             computer.setCompany(null);
         }
@@ -159,7 +159,7 @@ public class CLI {
             System.out.print("Id : ");
             s = sc.nextLine();
             try {
-                computer = computerManager.getComputerById(Integer.parseInt(s));
+                computer = computerManager.get(Integer.parseInt(s));
             } catch (IllegalArgumentException e) {
                 isInteger = false;
             }
@@ -175,19 +175,19 @@ public class CLI {
             }
             System.out.print("Date of Introduced (" + DATE_FORMA + ") : ");
             try {
-                computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
+                computer.setIntroduced(stringToDate(sc.nextLine()));
             } catch (IllegalArgumentException e) {
                 logger.debug("Date of Introduced is invalid");
             }
             System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
             try {
-                computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
+                computer.setDiscontinued(stringToDate(sc.nextLine()));
             } catch (IllegalArgumentException e) {
                 logger.debug("Date of Introduced is invalid");
             }
             System.out.print("Id of Company : ");
             try {
-                computer.setCompany(companyManager.companyById(Integer.parseInt(sc.nextLine())));
+                computer.setCompany(companyManager.get(Integer.parseInt(sc.nextLine())));
             } catch (Exception e) {
             }
             computerManager.update(computer);

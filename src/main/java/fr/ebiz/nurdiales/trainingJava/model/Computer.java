@@ -50,26 +50,30 @@ public class Computer {
         this.name = name;
     }
 
-    public Date getDateOfIntroduced() {
+    public Date getIntroduced() {
         return introduced;
     }
 
-    public void setDateOfIntroduced(Date introduced) {
+    public void setIntroduced(Date introduced) {
         this.introduced = (introduced != null) ? (introduced.before(NEVER_BEFORE) ? this.introduced : introduced)
-                : null;
+                                  : null;
     }
 
-    public Date getDateOfDiscontinued() {
+    public Date getDiscontinued() {
         return discontinued;
     }
 
-    public void setDateOfDiscontinued(Date discontinued) {
+    public void setDiscontinued(Date discontinued) {
         this.discontinued = (discontinued != null)
-                ? (discontinued.before(NEVER_BEFORE) ? this.discontinued : discontinued) : null;
+                                    ? (discontinued.before(NEVER_BEFORE) ? this.discontinued : discontinued) : null;
     }
 
     public Company getCompany() {
         return company;
+    }
+
+    public String getCompanyName() {
+        return (company != null) ? company.getName() : "";
     }
 
     public void setCompany(Company company) {
@@ -79,7 +83,7 @@ public class Computer {
     @Override
     public String toString() {
         return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-                + ", company=" + company + "]";
+                       + ", company=" + getCompanyName() + "]";
     }
 
     /**

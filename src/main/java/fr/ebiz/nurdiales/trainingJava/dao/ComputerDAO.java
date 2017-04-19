@@ -65,13 +65,15 @@ public class ComputerDAO {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Computer> retour = new ArrayList<Computer>();
         PreparedStatement ps = connection.prepareStatement(ALL);
-        ps.setInt(1, pageSize);
-        ps.setInt(2, pageSize * page);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
-                    rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-                    companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+        if (ps != null) {
+            ps.setInt(1, pageSize);
+            ps.setInt(2, pageSize * page);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
+                                               rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
+                                               companyManager.get(rs.getInt(COMPUTER_COMPANY))));
+            }
         }
         return retour;
     }
@@ -91,7 +93,7 @@ public class ComputerDAO {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Computer> retour = new ArrayList<Computer>();
 
-        List<Company> companies = companyManager.allCompaniesByName(companyName);
+        List<Company> companies = companyManager.getAll(companyName);
         System.out.println(companies);
         StringBuffer idCompanies = new StringBuffer();
         boolean notFirst = false;
@@ -113,7 +115,7 @@ public class ComputerDAO {
         while (rs.next()) {
             retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
                     rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-                    companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+                    companyManager.get(rs.getInt(COMPUTER_COMPANY))));
         }
         System.out.println(retour);
 
@@ -142,7 +144,7 @@ public class ComputerDAO {
         while (rs.next()) {
             retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
                     rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-                    companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+                    companyManager.get(rs.getInt(COMPUTER_COMPANY))));
         }
         return retour;
     }
@@ -169,7 +171,7 @@ public class ComputerDAO {
             while (rs.next()) {
                 retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
                         rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-                        companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+                        companyManager.get(rs.getInt(COMPUTER_COMPANY))));
             }
         }
         return retour;
@@ -198,7 +200,7 @@ public class ComputerDAO {
             while (rs.next()) {
                 retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
                         rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-                        companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+                        companyManager.get(rs.getInt(COMPUTER_COMPANY))));
             }
         }
         return retour;
@@ -220,7 +222,7 @@ public class ComputerDAO {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Computer> retour = new ArrayList<Computer>();
         if (!name.contains("%")) {
-            List<Company> companies = companyManager.allCompaniesByName(companyName);
+            List<Company> companies = companyManager.getAll(companyName);
             StringBuffer idCompanies = new StringBuffer();
             boolean notFirst = false;
             for (Company company : companies) {
@@ -241,7 +243,7 @@ public class ComputerDAO {
             while (rs.next()) {
                 retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
                         rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-                        companyManager.companyById(rs.getInt(COMPUTER_COMPANY))));
+                        companyManager.get(rs.getInt(COMPUTER_COMPANY))));
             }
         }
         return retour;
@@ -286,8 +288,8 @@ public class ComputerDAO {
         PreparedStatement ps = connection.prepareStatement(INSERT_COMPUTER);
         ps.setString(1, c.getName());
         if (c.checkDates()) {
-            ps.setDate(2, c.getDateOfIntroduced());
-            ps.setDate(3, c.getDateOfDiscontinued());
+            ps.setDate(2, c.getIntroduced());
+            ps.setDate(3, c.getDiscontinued());
         } else {
             ps.setDate(2, null);
             ps.setDate(3, null);
@@ -327,23 +329,26 @@ public class ComputerDAO {
      * @throws SQLException Error in SQL.
      */
     public int update(Computer c) throws SQLException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
-        PreparedStatement ps = connection.prepareStatement(UPDATE_COMPUTER);
-        ps.setString(1, c.getName());
-        if (c.checkDates()) {
-            ps.setDate(2, c.getDateOfIntroduced());
-            ps.setDate(3, c.getDateOfDiscontinued());
-        } else {
-            ps.setDate(2, null);
-            ps.setDate(3, null);
+        if (c.getName() != null) {
+            JDBCSingleton connection = JDBCSingleton.getInstance();
+            PreparedStatement ps = connection.prepareStatement(UPDATE_COMPUTER);
+            ps.setString(1, c.getName());
+            if (c.checkDates()) {
+                ps.setDate(2, c.getIntroduced());
+                ps.setDate(3, c.getDiscontinued());
+            } else {
+                ps.setDate(2, null);
+                ps.setDate(3, null);
+            }
+            try {
+                ps.setInt(4, c.getCompany().getId());
+            } catch (Exception e) {
+                ps.setString(4, null);
+            }
+            ps.setInt(5, c.getId());
+            return ps.executeUpdate();
         }
-        try {
-            ps.setInt(4, c.getCompany().getId());
-        } catch (Exception e) {
-            ps.setString(4, null);
-        }
-        ps.setInt(5, c.getId());
-        return ps.executeUpdate();
+        return 0;
     }
 
     /**
@@ -360,7 +365,7 @@ public class ComputerDAO {
         ResultSet rs = ps.executeQuery();
         rs.next();
         return new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME), rs.getDate(COMPUTER_INTRODUCED),
-                rs.getDate(COMPUTER_DISCONTINUED), companyManager.companyById(rs.getInt(COMPUTER_COMPANY)));
+                rs.getDate(COMPUTER_DISCONTINUED), companyManager.get(rs.getInt(COMPUTER_COMPANY)));
 
     }
 }
