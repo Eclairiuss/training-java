@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +13,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.jsp"> Application - Computer Database </a>
+            <a class="navbar-brand" href="../"> Application - Computer Database </a>
         </div>
     </header>
     <section id="main">
@@ -19,36 +21,39 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: 0
+                        id:${computer.getId()}
                     </div>
                     <h1>Edit Computer</h1>
 
-                    <form action="editComputer" method="POST">
-                        <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
+                    <form action="edit_computer" method="POST">
+                        <input type="hidden" value="${computer.getId()}" id="id"/>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" value="${computer.getName()}" placeholder="Computer name">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date">
+                                <input type="date" class="form-control" id="introduced" <c:if test="${computer.getIntroduced() != null}">value="${computer.getIntroduced()}"</c:if> placeholder="Introduced date">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" id="discontinued" <c:if test="${computer.getDiscontinued() != null}">value="${computer.getDiscontinued()}"</c:if> placeholder="Discontinued date">
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" >
-                                    <option value="0">--</option>
+                                    <option value="0" <c:if test="${computer.getCompany() == null}">selected</c:if>">--</option>
+                                    <c:forEach var="company" items="${companies}">
+                                        <option value="${company.getId()}" <c:if test="${company.getName().equals(computer.getCompanyName())}">selected</c:if> >${company.getName()}</option>
+                                    </c:forEach>
                                 </select>
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary">
                             or
-                            <a href="dashboard.jsp" class="btn btn-default">Cancel</a>
+                            <a href="../" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

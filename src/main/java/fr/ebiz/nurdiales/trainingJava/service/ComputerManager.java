@@ -27,7 +27,7 @@ public class ComputerManager {
      * @return List of all computers in the page to get.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    public List<Computer> requestAllComputers(int page, int pageSize) throws ComputerDAOException {
+    public List<Computer> getAll(int page, int pageSize) throws ComputerDAOException {
         List<Computer> computers = null;
         try {
             computers = computerDAO.requestAllComputers(page, pageSize);
@@ -47,7 +47,7 @@ public class ComputerManager {
      * @return List of all computers in the page to get by company name.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    public List<Computer> requestAllComputersByCompanyName(String name, int page, int pageSize)
+    public List<Computer> getAll(String name, int page, int pageSize)
             throws ComputerDAOException {
         List<Computer> computers = null;
         try {
@@ -68,7 +68,7 @@ public class ComputerManager {
      * @return List of all computers in the page to get by company id.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    public List<Computer> requestAllComputersByCompanyID(int idCompany, int page, int pageSize)
+    public List<Computer> getAll(int idCompany, int page, int pageSize)
             throws ComputerDAOException {
         List<Computer> computers = null;
         try {
@@ -88,7 +88,7 @@ public class ComputerManager {
      * @return List of all computers in the page to get by computer name.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    public List<Computer> requestAllComputersByName(String name, int page, int pageSize) throws ComputerDAOException {
+    public List<Computer> getAllByName(String name, int page, int pageSize) throws ComputerDAOException {
         List<Computer> computers = null;
         try {
             computers = computerDAO.requestAllComputersByName(name, page, pageSize);
@@ -107,7 +107,7 @@ public class ComputerManager {
      * @return List of all computers in the page to get.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    public List<Computer> requestAllComputersByCompanyIDAndName(int idCompany, String name, int page, int pageSize)
+    public List<Computer> getAll(int idCompany, String name, int page, int pageSize)
             throws ComputerDAOException {
         List<Computer> computers = null;
         try {
@@ -128,8 +128,8 @@ public class ComputerManager {
      * @return List of all computers in the page to get.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    public List<Computer> requestAllComputersByCompanyNameAndName(String companyName, String name, int page,
-            int pageSize) throws ComputerDAOException {
+    public List<Computer> getAll(String companyName, String name, int page,
+                                 int pageSize) throws ComputerDAOException {
         List<Computer> computers = null;
         try {
             computers = computerDAO.requestAllComputersByCompanyNameAndName(companyName, name, page, pageSize);
@@ -151,7 +151,7 @@ public class ComputerManager {
      * @return List of all computers in the page to get.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    public List<Computer> saladeTomateOignon(String companyName, int companyId, String name, int page, int pageSize)
+    public List<Computer> getAll(String companyName, int companyId, String name, int page, int pageSize)
             throws ComputerDAOException {
         List<Computer> computers = null;
         try {
@@ -230,7 +230,7 @@ public class ComputerManager {
      * @return the researched computer.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    public Computer getComputerById(int id) throws ComputerDAOException {
+    public Computer get(int id) throws ComputerDAOException {
         Computer computer = null;
         try {
             computer = computerDAO.getComputerById(id);

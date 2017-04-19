@@ -32,9 +32,9 @@ public class CompanyCLI extends PageCLI {
 
             List<Company> cl;
             if (nameCompany == null) {
-                cl = companyManager.allCompanies(page, SIZE_PAGE);
+                cl = companyManager.getAll(page, SIZE_PAGE);
             } else {
-                cl = companyManager.allCompaniesByName(nameCompany, page, SIZE_PAGE);
+                cl = companyManager.getAll(nameCompany, page, SIZE_PAGE);
             }
             for (Company c : cl) {
                 System.out.println(c);

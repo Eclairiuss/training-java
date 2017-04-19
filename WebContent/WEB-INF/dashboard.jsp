@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +33,7 @@
                 </form>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" id="addComputer" href="addComputer.jsp">Add Computer</a>
+                <a class="btn btn-success" id="addComputer" href="add_computer.jsp">Add Computer</a>
                 <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
             </div>
         </div>
@@ -84,17 +84,11 @@
                         <input type="checkbox" name="cb" class="cb" value="0">
                     </td>
                     <td>
-                        <a href="EditComputer?id=${computer.getId()}" onclick=""> ${computer.getName()}</a>
+                        <a href="edit_computer?id=${computer.getId()}" onclick=""> ${computer.getName()}</a>
                     </td>
                     <td> ${computer.getIntroduced()}</td>
                     <td> ${computer.getDiscontinued()}</td>
-                    <c:if test="${computer.getCompany() != null}">
-                        <td> ${computer.getCompany().getName()}</td>
-                    </c:if>
-                    <c:if test="${computer.getCompany() == null}">
-                        <td></td>
-                    </c:if>
-
+                    <td><c:if test="${computer.getCompany() != null}"> ${computer.getCompanyName()}</c:if></td>
                 </tr>
             </c:forEach>
             </tbody>

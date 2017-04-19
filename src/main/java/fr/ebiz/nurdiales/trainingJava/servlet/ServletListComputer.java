@@ -15,31 +15,6 @@ public class ServletListComputer extends HttpServlet {
 
     private static final String LIST_COMPUTER_VIEW = "/WEB-INF/dashboard.jsp";
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ServletListComputer() {
-        super();
-    }
-
-    /**
-     * TODO.
-     * @param request TODO.
-     * @param response TODO.
-     * @throws javax.servlet.ServletException TODO.
-     * @throws IOException TODO.
-     */
-    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-
-    }
-
-    /**
-     * TODO.
-     * @param request TODO.
-     * @param response TODO.
-     * @throws javax.servlet.ServletException TODO.
-     * @throws IOException TODO.
-     */
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         int page = 0;
         int size = 10;
@@ -59,13 +34,10 @@ public class ServletListComputer extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        System.out.println("page : " + page);
-        System.out.println("size : " + size);
-
         List<Computer> listComputers = null;
         manager = new ComputerManager();
         try {
-            listComputers = manager.requestAllComputers(page, size);
+            listComputers = manager.getAll(page, size);
         } catch (ComputerDAOException e) {
             e.printStackTrace();
         }
