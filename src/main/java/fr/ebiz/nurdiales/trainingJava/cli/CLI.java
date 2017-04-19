@@ -126,13 +126,13 @@ public class CLI {
         }
         System.out.print("Date of Introduced (" + DATE_FORMA + ") : ");
         try {
-            computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
+            computer.setIntroduced(stringToDate(sc.nextLine()));
         } catch (IllegalArgumentException e) {
             logger.debug("Date of Introduced is invalid");
         }
         System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
         try {
-            computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
+            computer.setDiscontinued(stringToDate(sc.nextLine()));
         } catch (IllegalArgumentException e) {
             logger.debug("Date of Introduced is invalid");
         }
@@ -175,13 +175,13 @@ public class CLI {
             }
             System.out.print("Date of Introduced (" + DATE_FORMA + ") : ");
             try {
-                computer.setDateOfIntroduced(stringToDate(sc.nextLine()));
+                computer.setIntroduced(stringToDate(sc.nextLine()));
             } catch (IllegalArgumentException e) {
                 logger.debug("Date of Introduced is invalid");
             }
             System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
             try {
-                computer.setDateOfDiscontinued(stringToDate(sc.nextLine()));
+                computer.setDiscontinued(stringToDate(sc.nextLine()));
             } catch (IllegalArgumentException e) {
                 logger.debug("Date of Introduced is invalid");
             }

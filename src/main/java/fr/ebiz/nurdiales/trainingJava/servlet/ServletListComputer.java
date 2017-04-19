@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ServletListComputer")
+@WebServlet("")
 public class ServletListComputer extends HttpServlet {
     private ComputerManager manager;
 
-    private static final String LIST_COMPUTER_VIEW = "/WEB-INF/computer_list.jsp";
+    private static final String LIST_COMPUTER_VIEW = "/WEB-INF/dashboard.jsp";
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -41,10 +41,26 @@ public class ServletListComputer extends HttpServlet {
      * @throws IOException TODO.
      */
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        int page = Integer.parseInt(request.getParameter("page"));
-        int size = Integer.parseInt(request.getParameter("size"));
+        int page = 0;
+        int size = 10;
+        String sPage = request.getParameter("page");
+        String sSize = request.getParameter("size");
+        if (sPage != null) {
+            try {
+                page = Integer.parseInt(sPage);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        if (sSize != null) {
+            try {
+                size = Integer.parseInt(sSize);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
         System.out.println("page : " + page);
-        System.out.println("page : " + size);
+        System.out.println("size : " + size);
 
         List<Computer> listComputers = null;
         manager = new ComputerManager();

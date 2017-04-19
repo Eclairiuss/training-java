@@ -20,7 +20,7 @@ public class JDBCSingleton {
      * Constructor of JDBCSingleton who init all value and connect to DataBase.
      */
     public JDBCSingleton() {
-        DB_URL = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+        DB_URL = "jdbc:mysql://localhost:3306/computer-database-db";
         DB_USERNAME = "admincdb";
         DB_PASSWORD = "qwerty1234";
 
@@ -32,15 +32,14 @@ public class JDBCSingleton {
      * @return Connection to a database.
      */
     private Connection connectToDB() {
-        LOGGER.debug("Init driver ");
         try {
-            LOGGER.debug("Succes driver ?");
-            return DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            LOGGER.debug("Error Connection");
+            String url = DB_URL + "?zeroDateTimeBehavior=convertToNull&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+            Connection conn = DriverManager.getConnection(url, DB_USERNAME, DB_PASSWORD);
+            return conn;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -55,7 +54,13 @@ public class JDBCSingleton {
      * @return return the Singleton.
      */
     public static JDBCSingleton getInstance() {
-        return JDBCSingletonManagerHolder.INSTANCE;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return JDBCSingletonManagerHolder.INSTANCE;
+        } catch (ExceptionInInitializerError | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -76,6 +81,11 @@ public class JDBCSingleton {
      */
     public PreparedStatement prepareStatement(String q) throws SQLException {
         LOGGER.debug("PrepareStatement asked");
-        return DB_CONNECTION.prepareStatement(q);
+        try {
+            return DB_CONNECTION.prepareStatement(q);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
