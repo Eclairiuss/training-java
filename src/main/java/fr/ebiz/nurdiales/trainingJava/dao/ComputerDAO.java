@@ -348,6 +348,7 @@ public class ComputerDAO {
             ps.setInt(5, c.getId());
             return ps.executeUpdate();
         }
+        return 0;
     }
 
     /**

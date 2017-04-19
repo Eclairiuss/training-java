@@ -26,23 +26,23 @@
                     <h1>Edit Computer</h1>
 
                     <form action="edit_computer" method="POST">
-                        <input type="hidden" value="${computer.getId()}" id="id"/>
+                        <input type="hidden" value="${computer.getId()}" name="id" id="id"/>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" value="${computer.getName()}" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" name="computerName" value="${computer.getName()}" placeholder="Computer name">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" <c:if test="${computer.getIntroduced() != null}">value="${computer.getIntroduced()}"</c:if> placeholder="Introduced date">
+                                <input type="date" class="form-control" id="introduced" name="introduced"<c:if test="${computer.getIntroduced() != null}">value="${computer.getIntroduced()}"</c:if> placeholder="Introduced date">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" <c:if test="${computer.getDiscontinued() != null}">value="${computer.getDiscontinued()}"</c:if> placeholder="Discontinued date">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued"<c:if test="${computer.getDiscontinued() != null}">value="${computer.getDiscontinued()}"</c:if> placeholder="Discontinued date">
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" >
+                                <select class="form-control" id="companyId" name="companyId">
                                     <option value="0" <c:if test="${computer.getCompany() == null}">selected</c:if>">--</option>
                                     <c:forEach var="company" items="${companies}">
                                         <option value="${company.getId()}" <c:if test="${company.getName().equals(computer.getCompanyName())}">selected</c:if> >${company.getName()}</option>
