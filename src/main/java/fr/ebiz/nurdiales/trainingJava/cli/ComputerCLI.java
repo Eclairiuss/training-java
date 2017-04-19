@@ -32,15 +32,15 @@ public class ComputerCLI extends PageCLI {
             System.out.println("Page " + page + " : ");
             List<Computer> cl;
             if (nameCompany == null && idCompany == 0 && nameComputer == null) {
-                cl = computerManager.requestAllComputers(page, SIZE_PAGE);
+                cl = computerManager.getAll(page, SIZE_PAGE);
             } else if (nameCompany == null && nameComputer == null) {
-                cl = computerManager.requestAllComputersByCompanyID(idCompany, page, SIZE_PAGE);
+                cl = computerManager.getAll(idCompany, page, SIZE_PAGE);
             } else if (idCompany == 0 && nameComputer == null) {
-                cl = computerManager.requestAllComputersByCompanyName(nameCompany, page, SIZE_PAGE);
+                cl = computerManager.getAll(nameCompany, page, SIZE_PAGE);
             } else if (idCompany == 0 && nameCompany == null) {
-                cl = computerManager.requestAllComputersByName(nameComputer, page, SIZE_PAGE);
+                cl = computerManager.getAllByName(nameComputer, page, SIZE_PAGE);
             } else {
-                cl = computerManager.requestAllComputers(page, SIZE_PAGE);
+                cl = computerManager.getAll(page, SIZE_PAGE);
             }
             for (Computer c : cl) {
                 System.out.println(c);
