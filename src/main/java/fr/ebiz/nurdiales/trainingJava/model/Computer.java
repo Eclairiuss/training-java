@@ -58,6 +58,15 @@ public class Computer {
         this.introduced = (introduced != null) ? (introduced.before(NEVER_BEFORE) ? this.introduced : introduced)
                                   : null;
     }
+    /**
+     * Setter for introduced who parse a string.
+     * @param introduced Date with format "AAAA-MM-JJ"
+     */
+    public void setIntroduced(String introduced) {
+        Date intro = stringToDate(introduced);
+        this.introduced = (intro != null)
+                                    ? (intro.before(NEVER_BEFORE) ? this.introduced : intro) : null;
+    }
 
     public Date getDiscontinued() {
         return discontinued;
@@ -66,6 +75,16 @@ public class Computer {
     public void setDiscontinued(Date discontinued) {
         this.discontinued = (discontinued != null)
                                     ? (discontinued.before(NEVER_BEFORE) ? this.discontinued : discontinued) : null;
+    }
+
+    /**
+     * Setter for discontinued who parse a string.
+     * @param discontinued Date with format "AAAA-MM-JJ"
+     */
+    public void setDiscontinued(String discontinued) {
+        Date discont = stringToDate(discontinued);
+        this.discontinued = (discont != null)
+                                    ? (discont.before(NEVER_BEFORE) ? this.discontinued : discont) : null;
     }
 
     public Company getCompany() {
@@ -84,6 +103,18 @@ public class Computer {
     public String toString() {
         return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
                        + ", company=" + getCompanyName() + "]";
+    }
+
+    /**
+     * Function to transform string to a Date.
+     * @param s Date in string.
+     * @return Date from the param
+     */
+    private Date stringToDate(String s) {
+        if ("".equals(s) || s == null) {
+            return null;
+        }
+        return Date.valueOf(s);
     }
 
     /**

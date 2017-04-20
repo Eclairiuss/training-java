@@ -24,6 +24,7 @@ public class ComputerDAO {
     private static final String COMPUTER_COMPANY = "company_id";
 
     private static final String SELECT = " SELECT * FROM " + COMPUTER_TABLE;
+    private static final String COUNT = " SELECT COUNT(*) FROM " + COMPUTER_TABLE;
     private static final String LIKE = " LIKE ?";
     private static final String LIMIT_OFFSET = " LIMIT ? OFFSET ? ";
 
@@ -212,7 +213,7 @@ public class ComputerDAO {
      * @param name String who must be contain by the entities searched name.
      * @param companyName String who must be contain by composent's company.
      * @param page Page to get elements.
-     * @param pageSize Size of a page.
+     * @param pageSize Size of a page.= rs.getInt("count(*)");
      * @return List of all computers in the page to get.
      * @throws SQLException Error in SQL.
      * @throws CompanyDAOException Error in CompanyDAO SQL.
@@ -349,6 +350,21 @@ public class ComputerDAO {
             return ps.executeUpdate();
         }
         return 0;
+    }
+
+    /**
+     * Method to get the number of computers in the database.
+     * @return int corresponding to number of computers in the DB.
+     * @throws SQLException Error in SQL.
+     */
+    public int getCount() throws SQLException {
+        int retour = 0;
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        PreparedStatement ps = connection.prepareStatement(COUNT);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        retour = rs.getInt("count(*)");
+        return retour;
     }
 
     /**
