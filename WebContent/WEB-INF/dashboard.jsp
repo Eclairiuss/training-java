@@ -81,7 +81,7 @@
             <c:forEach var="computer" items="${computers}">
                 <tr>
                     <td class="editMode">
-                        <input type="checkbox" name="cb" class="cb" value="0">
+                        <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
                     </td>
                     <td>
                         <a href="edit_computer?id=${computer.getId()}" onclick=""> ${computer.getName()}</a>
@@ -101,7 +101,7 @@
         <ul class="pagination">
             <c:if test="${page > 3}">
                 <li>
-                    <a href="./?page=${page-3}&size=${size}" aria-label="Previous">
+                    <a href="./?page=${page-5}&size=${size}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
@@ -112,11 +112,11 @@
             <c:if test="${page > 1}">
                 <li><a href="./?page=${page-1}&size=${size}">${page-1}</a></li>
             </c:if>
-            <li><a href="./?page=${page}&size=${size}">${page}</a></li>
+            <li><a href="./?page=${page}&size=${size}" class="btn active">${page}</a></li>
             <li><a href="./?page=${page+1}&size=${size}">${page+1}</a></li>
             <li><a href="./?page=${page+2}&size=${size}">${page+2}</a></li>
             <li>
-                <a href="./?page=${page+3}&size=${size}" aria-label="Next">
+                <a href="./?page=${page+5}&size=${size}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
