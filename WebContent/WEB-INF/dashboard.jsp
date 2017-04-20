@@ -21,7 +21,7 @@
 <section id="main">
     <div class="container">
         <h1 id="homeTitle">
-            121 Computers found
+            ${numberComputers} Computer(s) found
         </h1>
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
@@ -33,7 +33,7 @@
                 </form>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" id="addComputer" href="add_computer.jsp">Add Computer</a>
+                <a class="btn btn-success" id="addComputer" href="add_computer">Add Computer</a>
                 <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
             </div>
         </div>
@@ -99,18 +99,24 @@
 <footer class="navbar-fixed-bottom">
     <div class="container text-center">
         <ul class="pagination">
+            <c:if test="${page > 3}">
+                <li>
+                    <a href="./?page=${page-3}&size=${size}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            </c:if>
+            <c:if test="${page > 2}">
+                <li><a href="./?page=${page-2}&size=${size}">${page-2}</a></li>
+            </c:if>
+            <c:if test="${page > 1}">
+                <li><a href="./?page=${page-1}&size=${size}">${page-1}</a></li>
+            </c:if>
+            <li><a href="./?page=${page}&size=${size}">${page}</a></li>
+            <li><a href="./?page=${page+1}&size=${size}">${page+1}</a></li>
+            <li><a href="./?page=${page+2}&size=${size}">${page+2}</a></li>
             <li>
-                <a href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li>
-                <a href="#" aria-label="Next">
+                <a href="./?page=${page+3}&size=${size}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
