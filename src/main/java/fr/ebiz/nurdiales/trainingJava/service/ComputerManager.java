@@ -241,4 +241,18 @@ public class ComputerManager {
         }
         return computer;
     }
+
+    /**
+     * Method to get the number of computers in the database.
+     * @return int corresponding to number of computers in the DB.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     */
+    public int getCount() throws ComputerDAOException {
+        try {
+            return computerDAO.getCount();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ComputerDAOException();
+        }
+    }
 }
