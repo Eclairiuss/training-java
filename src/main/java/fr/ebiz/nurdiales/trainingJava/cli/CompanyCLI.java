@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +19,9 @@ public class CompanyCLI extends PageCLI {
      */
     public CompanyCLI() {
         super();
-        page = 0;
-        SIZE_PAGE = 10;
+        params = new Parameters();
+        params.setPage(0);
+        params.setSize(10);
         companyManager = new CompanyManager();
     }
 
@@ -28,13 +30,13 @@ public class CompanyCLI extends PageCLI {
         logger.debug("start of printCompanies");
         boolean exitWanted = false;
         while (!exitWanted) {
-            System.out.println("Page " + page + " : ");
+            System.out.println("Page " + params.getPage() + " : ");
 
             List<Company> cl;
-            if (nameCompany == null) {
-                cl = companyManager.getAll(page, SIZE_PAGE);
+            if (params.getNameCompany() == null) {
+                cl = companyManager.getAll(params.getPage(), params.getSize());
             } else {
-                cl = companyManager.getAll(nameCompany, page, SIZE_PAGE);
+                cl = companyManager.getAll(params.getNameCompany(), params.getPage(), params.getSize());
             }
             for (Company c : cl) {
                 System.out.println(c);
@@ -47,7 +49,7 @@ public class CompanyCLI extends PageCLI {
 
     @Override
     protected void setName(String name) {
-        this.nameCompany = name;
+        params.setNameCompany(name);
     }
 
     @Override

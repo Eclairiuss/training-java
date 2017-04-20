@@ -19,7 +19,6 @@ public class CLI {
             DELETE = "delete", DETAILS = "details", UPDATE = "update", NEW = "new", ID = "id",
             ID_COMPANY = "company_id", NAME = "name", DATE_OF_DISCONTINUED = "date_of_discontinued",
             DATE_OF_INTRODUCED = "date_of_introduced", SEPARATOR = " ", DATE_FORMA = "AAAA-MM-JJ", SEPARATOR2 = "=";
-
     private static Scanner sc;
     private static PageCLI p;
     private static ComputerManager computerManager;
