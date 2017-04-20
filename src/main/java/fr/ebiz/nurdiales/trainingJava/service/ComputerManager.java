@@ -7,6 +7,7 @@ import fr.ebiz.nurdiales.trainingJava.dao.ComputerDAO;
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 
 public class ComputerManager {
     // private static Logger logger =
@@ -18,149 +19,6 @@ public class ComputerManager {
      */
     public ComputerManager() {
         this.computerDAO = new ComputerDAO();
-    }
-
-    /**
-     * Method to find all computer, (but get just part).
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
-     */
-    public List<Computer> getAll(int page, int pageSize) throws ComputerDAOException {
-        List<Computer> computers = null;
-        try {
-            computers = computerDAO.requestAllComputers(page, pageSize);
-        } catch (SQLException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return computers;
-    }
-
-    /**
-     * Method to find all computer, (but get just part), who have a special
-     * company.
-     * @param name String who must be contain by the entities searched name.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get by company name.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
-     */
-    public List<Computer> getAll(String name, int page, int pageSize)
-            throws ComputerDAOException {
-        List<Computer> computers = null;
-        try {
-            computers = computerDAO.requestAllComputersByCompanyName(name, page, pageSize);
-        } catch (SQLException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return computers;
-    }
-
-    /**
-     * Method to find all computer, (but get just part), who have a special
-     * company.
-     * @param idCompany Id of the company of the computers searched.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get by company id.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
-     */
-    public List<Computer> getAll(int idCompany, int page, int pageSize)
-            throws ComputerDAOException {
-        List<Computer> computers = null;
-        try {
-            computers = computerDAO.requestAllComputersByCompanyID(idCompany, page, pageSize);
-        } catch (SQLException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return computers;
-    }
-
-    /**
-     * Method to find all computer, (but get just part), who have special name.
-     * @param name String who must be contain by the entities searched.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get by computer name.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
-     */
-    public List<Computer> getAllByName(String name, int page, int pageSize) throws ComputerDAOException {
-        List<Computer> computers = null;
-        try {
-            computers = computerDAO.requestAllComputersByName(name, page, pageSize);
-        } catch (SQLException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return computers;
-    }
-
-    /**
-     * @param idCompany Id of the company to found. And get all num.
-     * @param name String who must be contain by the entities searched.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
-     */
-    public List<Computer> getAll(int idCompany, String name, int page, int pageSize)
-            throws ComputerDAOException {
-        List<Computer> computers = null;
-        try {
-            computers = computerDAO.requestAllComputersByCompanyIDAndName(idCompany, name, page, pageSize);
-        } catch (SQLException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return computers;
-    }
-
-    /**
-     * Method to get all computers by name, and company name, in the page.
-     * @param companyName String who must be contain by composent's company.
-     * @param name String who must be contain by the entities searched.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
-     */
-    public List<Computer> getAll(String companyName, String name, int page,
-                                 int pageSize) throws ComputerDAOException {
-        List<Computer> computers = null;
-        try {
-            computers = computerDAO.requestAllComputersByCompanyNameAndName(companyName, name, page, pageSize);
-        } catch (SQLException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return computers;
-    }
-
-    /**
-     * Method to get all computers by name, or by, companyName, or by company in
-     * the page. id in the page's page sized with pageSize.
-     * @param companyName String who must be contain by composent's company.
-     * @param companyId Id who must be equal to composent's company id.
-     * @param name String who must be contain by the entities searched.
-     * @param page Page to get elements.
-     * @param pageSize Size of a page.
-     * @return List of all computers in the page to get.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
-     */
-    public List<Computer> getAll(String companyName, int companyId, String name, int page, int pageSize)
-            throws ComputerDAOException {
-        List<Computer> computers = null;
-        try {
-            computers = computerDAO.saladeTomateOignon(companyName, companyId, name, page, pageSize);
-        } catch (SQLException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return computers;
     }
 
     /**
@@ -233,7 +91,7 @@ public class ComputerManager {
     public Computer get(int id) throws ComputerDAOException {
         Computer computer = null;
         try {
-            computer = computerDAO.getComputerById(id);
+            computer = computerDAO.getById(id);
         } catch (SQLException | CompanyDAOException e) {
             e.printStackTrace();
             throw new ComputerDAOException();
@@ -243,13 +101,30 @@ public class ComputerManager {
 
     /**
      * Method to get the number of computers in the database.
+     * @param params contains all search arguments.
      * @return int corresponding to number of computers in the DB.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    public int getCount() throws ComputerDAOException {
+    public int getCount(Parameters params) throws ComputerDAOException {
         try {
-            return computerDAO.getCount();
-        } catch (SQLException e) {
+            return computerDAO.getCount(params);
+        } catch (SQLException | CompanyDAOException e) {
+            e.printStackTrace();
+            throw new ComputerDAOException();
+        }
+    }
+
+    /**
+     * Général method for get all computers corresponding to parameters.
+     * @param params contains all search arguments.
+     * @return list of corresponding Computer.
+     * @throws SQLException Error in SQL.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     */
+    public List<Computer> getAll(Parameters params) throws SQLException, ComputerDAOException {
+        try {
+            return computerDAO.getAll(params);
+        } catch (SQLException | CompanyDAOException e) {
             e.printStackTrace();
             throw new ComputerDAOException();
         }

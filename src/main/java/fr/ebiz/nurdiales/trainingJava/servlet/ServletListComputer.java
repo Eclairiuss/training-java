@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("")
@@ -46,7 +47,6 @@ public class ServletListComputer extends HttpServlet {
         try {
             listComputers = manager.getAll(params);
         } catch (ComputerDAOException e) {
-            e.printStackTrace();
         }
         try {
             count = manager.getCount(params);
