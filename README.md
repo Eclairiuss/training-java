@@ -13,25 +13,35 @@ Content
     t0+38 = t10+1 - Project presentation to sales & tech audience
 
 t1 :
-	TOVERIFY - Base Architecture 
-	DONE - CLI 
-	    DONE - List computers
-	    DONE - List companies
-	    DONE - Show computer details (the detailed information of only one computer)
-	    DONE - Create a computer
-	    DONE - Update a computer
-	    DONE - Delete a computer
-		DONE - Pages
-	TODO - Javedoc
-	TODEBUG - Logging
+	TOVERIFY - Base Architecture.
+	DONE - CLI.
+	    DONE - List computers.
+	    DONE - List companies.
+	    DONE - Show computer details (the detailed information of only one computer).
+	    DONE - Create a computer.
+	    DONE - Update a computer.
+	    DONE - Delete a computer.
+		DONE - Pages.
+	DONE - Javedoc.
+	W.I.P. - Logging.
 
 t2 : 
-	TODO - Web UI
-	TODO - Maven
-		TODO - checkstyle
-	TODO - Logging
-	TODO - Unit Tests
-	TODO - jQuery Validation
-	TODO - Backend Validation
-	TODO - Taglib
-	TODO - tested using Selenium
+	W.I.P. - Web UI.
+		DONE - Create new computer.
+		DONE - Update already existing computer.
+		W.I.P. - Dashboard.
+			DONE - print all computers.
+			DONE - select page.
+			TODO - search options.
+			TODO - delete computer(s).
+			TODO - select size of page.
+	TODO - Maven.
+		DONE - checkstyle.
+	W.I.P. - Logging.
+	W.I.P. - Unit Tests.
+	TODO - jQuery Validation.
+	TODO - Backend Validation.
+	TODO - Taglib.
+	TODO - tested using Selenium.
+	DONE - Pass to IntelliJ.
+
