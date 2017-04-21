@@ -105,11 +105,7 @@
         <ul class="pagination">
             <c:if test="${page > 3}">
                 <li>
-<<<<<<< 425b5cfbcac251159ca4f504fce7de454f76cb34
                     <a href="./?page=${0}&size=${size}&search=${name}" aria-label="Previous">
-=======
-                    <a href="./?page=${page-5}&size=${size}" aria-label="Previous">
->>>>>>> {MODEL, REFACTOR} add new class Parameters for searching computer.
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
@@ -134,8 +130,6 @@
                     </a>
                 </li>
             </c:if>
-<<<<<<< 425b5cfbcac251159ca4f504fce7de454f76cb34
-=======
             <li><a href="./?page=${page}&size=${size}" class="btn active">${page}</a></li>
             <li><a href="./?page=${page+1}&size=${size}">${page+1}</a></li>
             <li><a href="./?page=${page+2}&size=${size}">${page+2}</a></li>
@@ -144,7 +138,6 @@
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
->>>>>>> {MODEL, REFACTOR} add new class Parameters for searching computer.
         </ul>
         <div class="btn-group btn-group-sm pull-right" role="group" >
             <button type="button" onclick="window.location.href='./?page=0&size=10&search=${name}'" <c:if test="${size == 10}">class="btn active"</c:if><c:if test="${size != 10}">class="btn btn-default"</c:if>>10</button>
