@@ -25,8 +25,8 @@
         </h1>
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
-                <form id="searchForm" action="#" method="GET" class="form-inline">
-
+                <form id="searchForm" action="./" method="GET" class="form-inline">
+                    <input type="hidden" name="ACTION" value="search">
                     <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
                     <input type="submit" id="searchsubmit" value="Filter by name"
                            class="btn btn-primary" />
@@ -39,7 +39,8 @@
         </div>
     </div>
 
-    <form id="deleteForm" action="#" method="POST">
+    <form id="deleteForm" action="./" method="POST">
+        <input type="hidden" name="ACTION" value="delete">
         <input type="hidden" name="selection" value="">
     </form>
 
@@ -101,30 +102,36 @@
         <ul class="pagination">
             <c:if test="${page > 3}">
                 <li>
-                    <a href="./?page=${page-5}&size=${size}" aria-label="Previous">
+                    <a href="./?page=${0}&size=${size}&search=${name}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
             </c:if>
             <c:if test="${page > 2}">
-                <li><a href="./?page=${page-2}&size=${size}">${page-2}</a></li>
+                <li><a href="./?page=${page-2}&size=${size}&search=${name}">${page-2}</a></li>
             </c:if>
             <c:if test="${page > 1}">
-                <li><a href="./?page=${page-1}&size=${size}">${page-1}</a></li>
+                <li><a href="./?page=${page-1}&size=${size}&search=${name}">${page-1}</a></li>
             </c:if>
-            <li><a href="./?page=${page}&size=${size}" class="btn active">${page}</a></li>
-            <li><a href="./?page=${page+1}&size=${size}">${page+1}</a></li>
-            <li><a href="./?page=${page+2}&size=${size}">${page+2}</a></li>
-            <li>
-                <a href="./?page=${page+5}&size=${size}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
+            <li><a href="./?page=${page}&size=${size}&search=${name}" class="btn active">${page}</a></li>
+            <c:if test="${(page*size) < numberComputers}">
+                <li><a href="./?page=${page+1}&size=${size}&search=${name}">${page+1}</a></li>
+            </c:if>
+            <c:if test="${(page + 1)*size < numberComputers}">
+                <li><a href="./?page=${page+2}&size=${size}&search=${name}">${page+2}</a></li>
+            </c:if>
+            <c:if test="${(page + 2)*size < numberComputers}">
+                <li>
+                    <a href="./?page=${(numberComputers/size)+1}&size=${size}&search=${name}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </c:if>
         </ul>
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+            <button type="button" onclick="window.location.href='./?page=0&size=10&search=${name}'" <c:if test="${size == 10}">class="btn active"</c:if><c:if test="${size != 10}">class="btn btn-default"</c:if>>10</button>
+            <button type="button" onclick="window.location.href='./?page=0&size=50&search=${name}'" <c:if test="${size == 50}">class="btn active"</c:if><c:if test="${size != 50}">class="btn btn-default"</c:if>>50</button>
+            <button type="button" onclick="window.location.href='./?page=0&size=100&search=${name}'" <c:if test="${size == 100}">class="btn active"</c:if><c:if test="${size != 100}">class="btn btn-default"</c:if>>100</button>
         </div>
     </div>
 </footer>

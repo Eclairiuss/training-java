@@ -25,6 +25,8 @@ public class CompanyDAO {
     private static final String COMPANY_BY_ID_REQUEST = SELECT + " WHERE " + COMPANY_ID + "=? ";
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 
+    private static ResultSet all = null;
+
     /**
      * Method for get in data base a company corresponding to a id, if no match
      * return null.
@@ -50,12 +52,14 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public List<Company> allCompanies() throws SQLException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Company> list = new ArrayList<Company>();
-        PreparedStatement ps = connection.prepareStatement(ALL_COMPANIES_REQUEST);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            list.add(new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME)));
+        if (all == null) {
+            JDBCSingleton connection = JDBCSingleton.getInstance();
+            PreparedStatement ps = connection.prepareStatement(ALL_COMPANIES_REQUEST);
+            all = ps.executeQuery();
+        }
+        while (all.next()) {
+            list.add(new Company(all.getInt(COMPANY_ID), all.getString(COMPANY_NAME)));
         }
         return list;
     }
