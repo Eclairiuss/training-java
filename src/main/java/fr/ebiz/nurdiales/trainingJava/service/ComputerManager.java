@@ -64,6 +64,26 @@ public class ComputerManager {
     }
 
     /**
+     * Methode to delete a computer in the database by his id.
+     * @param ids List of Ids of computers to delete.
+     * @return Executes the SQL statement in this PreparedStatement object,
+     *         which must be an SQL Data Manipulation Language (DML) statement,
+     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
+     *         returns nothing, such as a DDL statement.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     */
+    public int delete(int[] ids) throws ComputerDAOException {
+        int result = 0;
+        try {
+            result = computerDAO.delete(ids);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ComputerDAOException();
+        }
+        return result;
+    }
+
+    /**
      * Method to update a computer in the database.
      * @param c Computer to update in the database, the id of c must be in DB.
      * @return Executes the SQL statement in this PreparedStatement object,

@@ -39,7 +39,7 @@ public class Parameters {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = (name == null) ? name : (name.equals("") ? null : name);
     }
 
     public String getNameCompany() {

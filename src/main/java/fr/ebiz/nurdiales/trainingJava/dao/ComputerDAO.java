@@ -44,6 +44,7 @@ public class ComputerDAO {
                                                           + COMPUTER_INTRODUCED + "=?, " + COMPUTER_DISCONTINUED + "=?, " + COMPUTER_COMPANY + "=? WHERE "
                                                           + COMPUTER_ID + "=? ";
     private static final String DELETE_COMPUTER = " DELETE FROM " + COMPUTER_TABLE + " WHERE id=?";
+    private static final String DELETE_COMPUTERS = " DELETE FROM " + COMPUTER_TABLE + " WHERE ";
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
     private CompanyManager companyManager;
@@ -98,6 +99,31 @@ public class ComputerDAO {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         PreparedStatement ps = connection.prepareStatement(DELETE_COMPUTER);
         ps.setInt(1, id);
+        return ps.executeUpdate();
+    }
+
+    /**
+     * Methode to delete a computer in the database by his id.
+     * @param ids List of Ids of computers to delete.
+     * @return Executes the SQL statement in this PreparedStatement object,
+     *         which must be an SQL Data Manipulation Language (DML) statement,
+     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
+     *         returns nothing, such as a DDL statement.
+     * @throws SQLException Error in SQL.
+     */
+    public int delete(int[] ids) throws SQLException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        StringBuffer idsSB = new StringBuffer();
+        boolean isntFirst = false;
+        for (int i : ids) {
+            if (isntFirst) {
+                idsSB.append(" OR ");
+            } else {
+                isntFirst = true;
+            }
+            idsSB.append("(" + COMPUTER_ID + "=" + i + ")");
+        }
+        PreparedStatement ps = connection.prepareStatement(DELETE_COMPUTERS + idsSB.toString());
         return ps.executeUpdate();
     }
 
@@ -265,7 +291,7 @@ public class ComputerDAO {
     private String testNameLike(Parameters params) {
         String nameLike = null;
         if (params.getName() != null) {
-            nameLike = " LIKE '%" + params.getName() + "%' ";
+            nameLike = " name LIKE '%" + params.getName() + "%' ";
         }
         return nameLike;
     }
