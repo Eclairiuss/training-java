@@ -18,6 +18,10 @@ import java.util.List;
 public class ServletListComputer extends HttpServlet {
     private ComputerManager manager;
 
+    private static final String ACTION = "ACTION";
+    private static final String DELETE = "delete";
+    private static final String SEARCH = "search";
+    private static final String DELETESELECTED = "selection";
     private static final String LIST_COMPUTER_VIEW = "/WEB-INF/dashboard.jsp";
 
     /**
@@ -35,7 +39,7 @@ public class ServletListComputer extends HttpServlet {
         String sSize = request.getParameter("size");
         if (sPage != null) {
             try {
-                int tmp = Integer.parseInt(sPage) - 1;
+                int tmp = (int) Float.parseFloat(sPage) - 1;
                 params.setPage((tmp < 0) ? 0 : tmp);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
@@ -49,6 +53,7 @@ public class ServletListComputer extends HttpServlet {
                 e.printStackTrace();
             }
         }
+        params.setName(request.getParameter(SEARCH));
         List<Computer> listComputers = null;
         manager = new ComputerManager();
         try {
@@ -67,6 +72,7 @@ public class ServletListComputer extends HttpServlet {
         request.setAttribute("computers", listComputers);
         request.setAttribute("page", params.getPage() + 1);
         request.setAttribute("size", params.getSize());
+        request.setAttribute("name", params.getName());
         this.getServletContext().getRequestDispatcher(LIST_COMPUTER_VIEW).forward(request, response);
     }
 
@@ -78,6 +84,20 @@ public class ServletListComputer extends HttpServlet {
      * @throws IOException                    BANANAIOException.
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        String difference = request.getParameter(ACTION);
+        if (difference.equals(DELETE)) {
+            String[] idsString = request.getParameter(DELETESELECTED).split(",");
+            int[] ids = new int[idsString.length];
+            try {
+                for (int i = 0; i < idsString.length; ++i) {
+                    ids[i] = Integer.parseInt(idsString[i]);
+                }
+                manager.delete(ids);
+            } catch (ComputerDAOException | IllegalArgumentException e) {
+                e.printStackTrace();
+                throw new IllegalStateException(e);
+            }
+        }
+        response.sendRedirect("");
     }
 }
