@@ -27,6 +27,7 @@
             <div class="pull-left">
                 <form id="searchForm" action="./" method="GET" class="form-inline">
                     <input type="hidden" name="ACTION" value="search">
+                    <input type="hidden" name="size" value="${size}">
                     <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
                     <input type="submit" id="searchsubmit" value="Filter by name"
                            class="btn btn-primary" />
@@ -41,6 +42,8 @@
 
     <form id="deleteForm" action="./" method="POST">
         <input type="hidden" name="ACTION" value="delete">
+        <input type="hidden" name="size" value="${size}">
+        <input type="hidden" name="page" value="${page}">
         <input type="hidden" name="selection" value="">
     </form>
 

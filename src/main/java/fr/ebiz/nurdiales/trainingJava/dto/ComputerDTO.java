@@ -1,5 +1,7 @@
 package fr.ebiz.nurdiales.trainingJava.dto;
 
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
+
 public class ComputerDTO {
     private Integer id;
     private Integer companyId;
@@ -7,6 +9,19 @@ public class ComputerDTO {
     private String introduced;
     private String discontinued;
     private String companyName;
+
+    /**
+     * constructor to transform object to DTO.
+     * @param computer computer to translate.
+     */
+    public ComputerDTO(Computer computer) {
+        this.id = computer.getId();
+        this.name = computer.getName();
+        introduced = computer.getIntroduced() == null ? null : computer.getIntroduced().toString();
+        discontinued = computer.getDiscontinued() == null ? null : computer.getDiscontinued().toString();
+        companyId = computer.getCompany() == null ? null : computer.getCompany().getId();
+        companyName = computer.getCompany() == null ? null : computer.getCompany().getName();
+    }
 
     public Integer getId() {
         return id;
