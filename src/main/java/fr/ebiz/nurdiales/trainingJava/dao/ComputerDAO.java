@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
+import fr.ebiz.nurdiales.trainingJava.mapper.ComputerMapper;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
@@ -206,10 +207,7 @@ public class ComputerDAO {
         PreparedStatement ps = connection.prepareStatement(BY_ID);
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
-        rs.next();
-        return new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME), rs.getDate(COMPUTER_INTRODUCED),
-                                   rs.getDate(COMPUTER_DISCONTINUED), companyManager.get(rs.getInt(COMPUTER_COMPANY)));
-
+        return ComputerMapper.toObject(rs);
     }
 
     /**
@@ -243,12 +241,7 @@ public class ComputerDAO {
                                                                    + ((searchName) ? nameLike : "")
                                                                    + " LIMIT " + params.getSize() + " OFFSET " + params.getSize() * params.getPage());
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
-                                           rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-                                           companyManager.get(rs.getInt(COMPUTER_COMPANY))));
-        }
-        return retour;
+        return ComputerMapper.map2Object(rs);
     }
 
     /**
