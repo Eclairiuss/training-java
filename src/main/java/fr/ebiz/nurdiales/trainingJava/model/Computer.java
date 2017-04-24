@@ -47,7 +47,7 @@ public class Computer {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = (!name.contains("%") && !name.contains("'")) ? name : this.name;
     }
 
     public Date getIntroduced() {
