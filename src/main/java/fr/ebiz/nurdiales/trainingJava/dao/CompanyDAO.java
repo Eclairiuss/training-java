@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
+import fr.ebiz.nurdiales.trainingJava.mapper.CompanyMapper;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,10 +59,7 @@ public class CompanyDAO {
             PreparedStatement ps = connection.prepareStatement(ALL_COMPANIES_REQUEST);
             all = ps.executeQuery();
         }
-        while (all.next()) {
-            list.add(new Company(all.getInt(COMPANY_ID), all.getString(COMPANY_NAME)));
-        }
-        return list;
+        return CompanyMapper.map2Object(all);
     }
 
     /**
@@ -80,10 +78,7 @@ public class CompanyDAO {
         ps.setInt(1, pageSize);
         ps.setInt(2, pageSize * page);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            list.add(new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME)));
-        }
-        return list;
+        return CompanyMapper.map2Object(rs);
     }
 
     /**
@@ -100,9 +95,7 @@ public class CompanyDAO {
             PreparedStatement ps = connection.prepareStatement(COMPANIES_BY_NAME);
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME)));
-            }
+            list = CompanyMapper.map2Object(rs);
         }
         return list;
     }
@@ -125,9 +118,7 @@ public class CompanyDAO {
             ps.setInt(2, pageSize);
             ps.setInt(3, pageSize * page);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME)));
-            }
+            list = CompanyMapper.map2Object(rs);
         }
         return list;
     }
