@@ -68,6 +68,9 @@ public class ComputerDAO {
      * @throws SQLException Error in SQL.
      */
     public int add(Computer c) throws SQLException {
+        if (c.getName() != null) {
+            c.setName("default");
+        }
         JDBCSingleton connection = JDBCSingleton.getInstance();
         PreparedStatement ps = connection.prepareStatement(INSERT_COMPUTER);
         ps.setString(1, c.getName());
@@ -85,6 +88,7 @@ public class ComputerDAO {
             ps.setString(4, null);
         }
         return ps.executeUpdate();
+
     }
 
     /**
@@ -284,7 +288,9 @@ public class ComputerDAO {
     private String testNameLike(Parameters params) {
         String nameLike = null;
         if (params.getName() != null) {
-            nameLike = " name LIKE '%" + params.getName() + "%' ";
+            if (!params.getName().contains("%") && !params.getName().contains("'")) {
+                nameLike = " name LIKE '%" + params.getName() + "%' ";
+            }
         }
         return nameLike;
     }
