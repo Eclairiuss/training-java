@@ -91,7 +91,7 @@ public class CompanyDAO {
     public List<Company> allCompaniesByName(String name) throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         List<Company> list = new ArrayList<Company>();
-        if (!name.contains("%")) {
+        if (!name.contains("%") && !name.contains("'")) {
             PreparedStatement ps = connection.prepareStatement(COMPANIES_BY_NAME);
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
