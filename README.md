@@ -32,12 +32,17 @@ t2 :
 		W.I.P. - Dashboard.
 			DONE - print all computers.
 			DONE - select page.
-			TODO - search options.
-			TODO - delete computer(s).
-			TODO - select size of page.
-	TODO - Maven.
+			W.I.P. - search options.
+				DONE - just name search
+				TODO - name and company name search
+			DONE - delete computer(s).
+			DONE - select size of page.
+	W.I.P. - Maven.
 		DONE - checkstyle.
+		???
 	W.I.P. - Logging.
+		DONE - Install slf4j
+		DONE - Install and config Logback
 	W.I.P. - Unit Tests.
 	TODO - jQuery Validation.
 	TODO - Backend Validation.
