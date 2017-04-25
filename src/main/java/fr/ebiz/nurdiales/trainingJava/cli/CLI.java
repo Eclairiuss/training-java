@@ -1,7 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
@@ -38,10 +37,9 @@ public class CLI {
         companyManager = new CompanyManager();
 
         boolean wantContinue = true;
-        try {
-            while (wantContinue) {
-                String[] l = mainMenu().split(SEPARATOR);
-                switch (l[0].toLowerCase()) {
+        while (wantContinue) {
+            String[] l = mainMenu().split(SEPARATOR);
+            switch (l[0].toLowerCase()) {
                 case EXIT:
                     wantContinue = false;
                     break;
@@ -55,17 +53,17 @@ public class CLI {
                     break;
                 case DETAILS:
                     switch (l[1].split(SEPARATOR2)[0]) {
-                    case ID:
-                        try {
-                            Computer computer = computerManager
-                                    .get(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
-                            System.out.println(computer);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    default:
-                        break;
+                        case ID:
+                            try {
+                                Computer computer = computerManager
+                                                            .get(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
+                                System.out.println(computer);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        default:
+                            break;
                     }
                     break;
                 case NEW:
@@ -79,11 +77,7 @@ public class CLI {
                     break;
                 default:
                     break;
-                }
             }
-            connection.disconnectToDB();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         sc.close();
     }
