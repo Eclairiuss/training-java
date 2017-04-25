@@ -1,5 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,15 +35,16 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public Company companyById(int id) throws SQLException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
+        Connection connection = getConnexion();
+        Company c = null;
         PreparedStatement ps = connection.prepareStatement(COMPANY_BY_ID_REQUEST);
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            Company c = new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME));
-            return c;
+            c = new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME));
         }
-        return null;
+        connection.close();
+        return c;
     }
 
     /**
@@ -52,9 +54,10 @@ public class CompanyDAO {
      */
     public List<Company> allCompanies() throws SQLException {
         List<Company> list = new ArrayList<Company>();
-        JDBCSingleton connection = JDBCSingleton.getInstance();
-        PreparedStatement ps = connection.prepareStatement(ALL_COMPANIES_REQUEST);
-        return CompanyMapper.map2Object(ps.executeQuery());
+        Connection connection = getConnexion();
+        list = CompanyMapper.map2Object(connection.prepareStatement(ALL_COMPANIES_REQUEST).executeQuery());
+        connection.close();
+        return list;
     }
 
     /**
@@ -66,14 +69,15 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public List<Company> allCompanies(int page, int pageSize) throws SQLException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
+        Connection connection = getConnexion();
         List<Company> list = new ArrayList<Company>();
 
         PreparedStatement ps = connection.prepareStatement(ALL_COMPANIES_REQUEST_BETWEEN);
         ps.setInt(1, pageSize);
         ps.setInt(2, pageSize * page);
-        ResultSet rs = ps.executeQuery();
-        return CompanyMapper.map2Object(rs);
+        list = CompanyMapper.map2Object(ps.executeQuery());
+        connection.close();
+        return list;
     }
 
     /**
@@ -84,7 +88,7 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public List<Company> allCompaniesByName(String name) throws SQLException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
+        Connection connection = getConnexion();
         List<Company> list = new ArrayList<Company>();
         if (!name.contains("%") && !name.contains("'")) {
             PreparedStatement ps = connection.prepareStatement(COMPANIES_BY_NAME);
@@ -92,6 +96,7 @@ public class CompanyDAO {
             ResultSet rs = ps.executeQuery();
             list = CompanyMapper.map2Object(rs);
         }
+        connection.close();
         return list;
     }
 
@@ -105,7 +110,7 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public List<Company> allCompaniesByName(String name, int page, int pageSize) throws SQLException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
+        Connection connection = getConnexion();
         List<Company> list = new ArrayList<Company>();
         if (!name.contains("%")) {
             PreparedStatement ps = connection.prepareStatement(COMPANIES_BY_NAME_BETWEEN);
@@ -115,6 +120,17 @@ public class CompanyDAO {
             ResultSet rs = ps.executeQuery();
             list = CompanyMapper.map2Object(rs);
         }
+        connection.close();
         return list;
+    }
+
+    /**
+     * Method who create a PreparedStatement with a String who connais instructions.
+     * @return preparedStatement with q sql request.
+     * @throws SQLException Exception of sql request.
+     */
+    public Connection getConnexion() throws SQLException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        return connection.getDataSource().getConnection();
     }
 }
