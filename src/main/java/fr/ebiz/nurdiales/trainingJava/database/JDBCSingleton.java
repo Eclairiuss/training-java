@@ -1,30 +1,52 @@
 package fr.ebiz.nurdiales.trainingJava.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
+
 public class JDBCSingleton {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCSingleton.class);
+    private static DataSource datasource;
     private String DB_URL;
     private String DB_USERNAME;
     private String DB_PASSWORD;
-
-    private Connection DB_CONNECTION;
+    private int Max_Pool_Size;
 
     /**
      * Constructor of JDBCSingleton who init all value and connect to DataBase.
      */
     public JDBCSingleton() {
-        DB_URL = "jdbc:mysql://localhost:3306/computer-database-db";
+        DB_URL = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         DB_USERNAME = "admincdb";
         DB_PASSWORD = "qwerty1234";
 
-        DB_CONNECTION = connectToDB();
+        Max_Pool_Size = 10;
+    }
+
+    /**
+     *  .
+     * @return .
+     */
+    public DataSource getDataSource() {
+        if (datasource == null) {
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(DB_URL);
+            config.setUsername(DB_USERNAME);
+            config.setPassword(DB_PASSWORD);
+            config.setMaximumPoolSize(Max_Pool_Size);
+            config.setAutoCommit(false);
+            config.addDataSourceProperty("cachePrepStmts", "true");
+            config.addDataSourceProperty("prepStmtCacheSize", "250");
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+            datasource = new HikariDataSource(config);
+        }
+        return datasource;
     }
 
     /**
@@ -33,8 +55,7 @@ public class JDBCSingleton {
      */
     private Connection connectToDB() {
         try {
-            String url = DB_URL + "?zeroDateTimeBehavior=convertToNull&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-            Connection conn = DriverManager.getConnection(url, DB_USERNAME, DB_PASSWORD);
+            Connection conn = getDataSource().getConnection();
             return conn;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -61,31 +82,5 @@ public class JDBCSingleton {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * Try to disconnect the JDBCSingleton of the database.
-     * @throws SQLException Exception of sql request.
-     */
-    public void disconnectToDB() throws SQLException {
-        LOGGER.debug("Try close connection");
-        DB_CONNECTION.close();
-        LOGGER.debug("Connection closed");
-    }
-
-    /**
-     * Method who create a PreparedStatement with a String who connais instructions.
-     * @param q String who contain the request to put into preparedStatement.
-     * @return preparedStatement with q sql request.
-     * @throws SQLException Exception of sql request.
-     */
-    public PreparedStatement prepareStatement(String q) throws SQLException {
-        LOGGER.debug("PrepareStatement asked");
-        try {
-            return DB_CONNECTION.prepareStatement(q);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }
