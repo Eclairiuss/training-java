@@ -19,9 +19,7 @@ public class CompanyCLI extends PageCLI {
      */
     public CompanyCLI() {
         super();
-        params = new Parameters();
-        params.setPage(0);
-        params.setSize(10);
+        params  = (new Parameters.Builder()).page(10).size(10).build();
         companyManager = new CompanyManager();
     }
 
