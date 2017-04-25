@@ -1,5 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,8 +15,6 @@ import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 
@@ -38,16 +37,8 @@ public class ComputerDAO {
 
     private static final String SELECT = " SELECT * FROM " + COMPUTER_TABLE;
     private static final String COUNT = " SELECT COUNT(*) FROM " + COMPUTER_TABLE;
-    private static final String LIKE = " LIKE ?";
     private static final String LIMIT_OFFSET = " LIMIT ? OFFSET ? ";
 
-    private static final String ALL = SELECT + LIMIT_OFFSET;
-    private static final String BY_COMPANY_ID = SELECT + " WHERE " + COMPUTER_COMPANY + "=? " + LIMIT_OFFSET;
-    private static final String BY_COMPANY_NAME_AND_NAME = SELECT + " WHERE (?) AND + " + COMPUTER_NAME + LIKE
-                                                                   + LIMIT_OFFSET;
-    private static final String BY_COMPANY_ID_AND_NAME = SELECT + " WHERE + " + COMPUTER_COMPANY + "=? AND "
-                                                                 + COMPUTER_NAME + LIKE + LIMIT_OFFSET;
-    private static final String BY_NAME = SELECT + " WHERE " + COMPUTER_NAME + LIKE + LIMIT_OFFSET;
     private static final String BY_ID = SELECT + " WHERE " + COMPUTER_ID + "=?";
     private static final String INSERT_COMPUTER = " INSERT INTO " + COMPUTER_TABLE + "(" + COMPUTER_NAME + ","
                                                           + COMPUTER_INTRODUCED + "," + COMPUTER_DISCONTINUED + "," + COMPUTER_COMPANY + ") values (?,?,?,?)";
@@ -56,7 +47,6 @@ public class ComputerDAO {
                                                           + COMPUTER_ID + "=? ";
     private static final String DELETE_COMPUTER = " DELETE FROM " + COMPUTER_TABLE + " WHERE id=?";
     private static final String DELETE_COMPUTERS = " DELETE FROM " + COMPUTER_TABLE + " WHERE ";
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
     private CompanyManager companyManager;
 
@@ -78,21 +68,31 @@ public class ComputerDAO {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int add(ComputerDTO c) throws ComputerDAOException {
+        Connection connection = null;
+        int retour = 0;
         if (c.getName() == null) {
             c.setName("default");
         }
-        JDBCSingleton connection = JDBCSingleton.getInstance();
         PreparedStatement ps = null;
         try {
+            connection = getConnexion();
             ps = connection.prepareStatement(INSERT_COMPUTER);
             ps.setString(1, c.getName());
             ps.setString(2, c.getIntroduced());
             ps.setString(3, c.getDiscontinued());
             ps.setString(4, c.getCompanyId());
-            return ps.executeUpdate();
+            retour = ps.executeUpdate();
+            connection.close();
         } catch (SQLException e) {
-            throw new ComputerDAOException(e.getMessage());
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } finally {
+                throw new ComputerDAOException(e.getMessage());
+            }
         }
+        return retour;
     }
 
     /**
@@ -105,14 +105,24 @@ public class ComputerDAO {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int delete(int id) throws ComputerDAOException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
+        Connection connection = null;
+        int retour = 0;
         try {
+            connection = getConnexion();
             PreparedStatement ps = connection.prepareStatement(DELETE_COMPUTER);
             ps.setInt(1, id);
-            return ps.executeUpdate();
+            retour = ps.executeUpdate();
+            connection.close();
         } catch (SQLException e) {
-            throw new ComputerDAOException(e.getMessage());
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } finally {
+                throw new ComputerDAOException(e.getMessage());
+            }
         }
+        return retour;
     }
 
     /**
@@ -125,8 +135,9 @@ public class ComputerDAO {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int delete(int[] ids) throws ComputerDAOException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
+        Connection connection = null;
         StringBuffer idsSB = new StringBuffer();
+        int retour = 0;
         boolean isntFirst = false;
         for (int i : ids) {
             if (isntFirst) {
@@ -137,10 +148,19 @@ public class ComputerDAO {
             idsSB.append("(" + COMPUTER_ID + "=" + i + ")");
         }
         try {
-            return connection.prepareStatement(DELETE_COMPUTERS + idsSB.toString()).executeUpdate();
+            connection = getConnexion();
+            retour = connection.prepareStatement(DELETE_COMPUTERS + idsSB.toString()).executeUpdate();
+            connection.close();
         } catch (SQLException e) {
-            throw new ComputerDAOException(e.getMessage());
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } finally {
+                throw new ComputerDAOException(e.getMessage());
+            }
         }
+        return retour;
     }
 
     /**
@@ -153,21 +173,30 @@ public class ComputerDAO {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int update(ComputerDTO c) throws ComputerDAOException {
+        Connection connection = null;
+        int retour = 0;
         if (c.getName() != null) {
-            JDBCSingleton connection = JDBCSingleton.getInstance();
             try {
+                connection = getConnexion();
                 PreparedStatement ps = connection.prepareStatement(UPDATE_COMPUTER);
                 ps.setString(1, c.getName());
                 ps.setString(2, c.getIntroduced());
                 ps.setString(3, c.getDiscontinued());
                 ps.setString(4, c.getCompanyId());
                 ps.setString(5, c.getId());
-                return ps.executeUpdate();
+                retour = ps.executeUpdate();
+                connection.close();
             } catch (SQLException e) {
-                throw new ComputerDAOException(e.getMessage());
+                try {
+                    connection.close();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                } finally {
+                    throw new ComputerDAOException(e.getMessage());
+                }
             }
         }
-        return 0;
+        return retour;
     }
 
     /**
@@ -177,9 +206,9 @@ public class ComputerDAO {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int getCount(Parameters params) throws ComputerDAOException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
         StringBuffer companies = testCompany(params);
         String nameLike = testNameLike(params);
+        Connection connection = null;
 
         boolean searchCompany = companies != null;
         boolean searchName = nameLike != null;
@@ -193,6 +222,7 @@ public class ComputerDAO {
         }
 
         try {
+            connection = getConnexion();
             PreparedStatement ps = connection.prepareStatement(COUNT
                                                                                 + ((searchName || searchCompany) ? " WHERE " : "")
                                                                                 + ((searchCompany) ? companies.toString() : "")
@@ -200,9 +230,17 @@ public class ComputerDAO {
                                                                                 + ((searchName) ? nameLike : ""));
             ResultSet rs = ps.executeQuery();
             rs.next();
-            return rs.getInt("count(*)");
+            int retour = rs.getInt("count(*)");
+            connection.close();
+            return retour;
         } catch (SQLException e) {
-            throw new ComputerDAOException(e.getMessage());
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } finally {
+                throw new ComputerDAOException(e.getMessage());
+            }
         }
     }
 
@@ -213,13 +251,20 @@ public class ComputerDAO {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public Computer getById(int id) throws ComputerDAOException {
-        JDBCSingleton connection = JDBCSingleton.getInstance();
+        Connection connection = null;
         try {
+            connection = getConnexion();
             PreparedStatement ps = connection.prepareStatement(BY_ID);
             ps.setInt(1, id);
             return ComputerMapper.toObject(ps.executeQuery());
         } catch (SQLException | CompanyDAOException e) {
-            throw new ComputerDAOException(e.getMessage());
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } finally {
+                throw new ComputerDAOException(e.getMessage());
+            }
         }
     }
 
@@ -231,7 +276,6 @@ public class ComputerDAO {
      */
     public List<Computer> getAll(Parameters params) throws ComputerDAOException {
         List<Computer> retour = new ArrayList<Computer>();
-        JDBCSingleton connection = JDBCSingleton.getInstance();
         StringBuffer companies = testCompany(params);
         String nameLike = testNameLike(params);
 
@@ -245,9 +289,10 @@ public class ComputerDAO {
         if (params.getSize() < 1) {
             params.setSize(1);
         }
-
+        Connection connection = null;
         PreparedStatement ps = null;
         try {
+            connection = getConnexion();
             ps = connection.prepareStatement(SELECT
                                                                        + ((searchName || searchCompany) ? " WHERE " : "")
                                                                        + ((searchCompany) ? companies.toString() : "")
@@ -255,9 +300,17 @@ public class ComputerDAO {
                                                                        + ((searchName) ? nameLike : "")
                                                                        + " LIMIT " + params.getSize() + " OFFSET " + params.getSize() * params.getPage()
                                                                        + sorted(params));
-            return ComputerMapper.map2Object(ps.executeQuery());
+            retour = ComputerMapper.map2Object(ps.executeQuery());
+            connection.close();
+            return retour;
         } catch (SQLException | CompanyDAOException e) {
-            throw new ComputerDAOException(e.getMessage());
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } finally {
+                throw new ComputerDAOException(e.getMessage());
+            }
         }
     }
 
@@ -354,5 +407,15 @@ public class ComputerDAO {
             }
         }
         return nameLike;
+    }
+
+    /**
+     * Method who create a PreparedStatement with a String who connais instructions.
+     * @return preparedStatement with q sql request.
+     * @throws SQLException Exception of sql request.
+     */
+    public Connection getConnexion() throws SQLException {
+        JDBCSingleton connection = JDBCSingleton.getInstance();
+        return connection.getDataSource().getConnection();
     }
 }
