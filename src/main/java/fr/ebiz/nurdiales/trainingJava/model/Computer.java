@@ -27,6 +27,13 @@ public class Computer {
         this.company = company;
     }
 
+    /**
+     * Default Constructor for Computer.
+     */
+    public Computer() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -76,15 +83,13 @@ public class Computer {
     }
 
     /**
-<<<<<<< 1d0543e0b2e45778eee8a60a3760af4a89d1b1e6
-     * Check the validity of dates of computers.
-     * @return false is Introduce isn't before discontinued. else return true.
-=======
      * Method who check if introduced is before discontinued.
-     * @return true if it's ok (introduced is before discontinued) else false.
->>>>>>> {JAVADOC} + préparation dto + update pom.xml
+     * @return false is Introduce isn't before discontinued. else return true.
      */
     public boolean checkDates() {
-        return !(introduced != null && discontinued != null && introduced.after(discontinued));
+        if (introduced == null || discontinued == null) {
+            return true;
+        }
+        return introduced.before(discontinued);
     }
 }

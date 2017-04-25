@@ -6,11 +6,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CompanyDAO {
     private static final String COMPANY_TABLE = "company";
