@@ -1,6 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Computer {
     private static final Date NEVER_BEFORE = Date.valueOf("1970-01-01");
@@ -111,10 +113,11 @@ public class Computer {
      * @return Date from the param
      */
     private Date stringToDate(String s) {
-        if ("".equals(s) || s == null) {
+        if (s == null || s.equals("")) {
             return null;
         }
-        return Date.valueOf(s);
+
+        return Date.valueOf(LocalDate.parse(s, DateTimeFormatter.ISO_LOCAL_DATE));
     }
 
     /**
