@@ -27,6 +27,13 @@ public class Computer {
         this.company = company;
     }
 
+    /**
+     * Default Constructor for Computer.
+     */
+    public Computer() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -80,6 +87,9 @@ public class Computer {
      * @return true if it's ok (introduced is before discontinued) else false.
      */
     public boolean checkDates() {
-        return !(introduced != null && discontinued != null && introduced.after(discontinued));
+        if (introduced == null || discontinued == null) {
+            return true;
+        }
+        return introduced.before(discontinued);
     }
 }

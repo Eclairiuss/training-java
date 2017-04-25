@@ -24,10 +24,6 @@ public class ComputerTest {
      */
     @Test
     public void testCheckDatesBeforeNull() {
-        Date before = Date.valueOf("1998-01-01");
-        Computer computer2 = new Computer(0, null, before, null, null);
-        assertTrue(computer2.checkDates());
-    }
 
     /**
      * @Test Check if checkDates return true if introduced is null.
@@ -70,5 +66,4 @@ public class ComputerTest {
         Computer computer6 = new Computer(0, null, before, before, null);
         assertFalse(computer6.checkDates());
     }
-
 }
