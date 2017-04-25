@@ -11,12 +11,6 @@ import java.sql.Date;
 
 public class ComputerTest {
     /**
-     * Object Constructor.
-     */
-    public ComputerTest() {
-    }
-
-    /**
      * @Test Check if checkDates return true if introduced and discontinued are null.
      */
     @Test
