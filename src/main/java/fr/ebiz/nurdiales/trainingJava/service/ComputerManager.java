@@ -1,10 +1,9 @@
 package fr.ebiz.nurdiales.trainingJava.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import fr.ebiz.nurdiales.trainingJava.dao.ComputerDAO;
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
@@ -32,14 +31,7 @@ public class ComputerManager {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int add(Computer c) throws ComputerDAOException {
-        int result = 0;
-        try {
-            result = computerDAO.add(c);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return result;
+        return computerDAO.add(new ComputerDTO(c));
     }
 
     /**
@@ -52,14 +44,7 @@ public class ComputerManager {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int delete(int id) throws ComputerDAOException {
-        int result = 0;
-        try {
-            result = computerDAO.delete(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return result;
+        return computerDAO.delete(id);
     }
 
     /**
@@ -72,14 +57,7 @@ public class ComputerManager {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int delete(int[] ids) throws ComputerDAOException {
-        int result = 0;
-        try {
-            result = computerDAO.delete(ids);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return result;
+        return computerDAO.delete(ids);
     }
 
     /**
@@ -92,14 +70,7 @@ public class ComputerManager {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int update(Computer c) throws ComputerDAOException {
-        int result = 0;
-        try {
-            result = computerDAO.update(c);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return result;
+        return computerDAO.update(new ComputerDTO(c));
     }
 
     /**
@@ -109,14 +80,7 @@ public class ComputerManager {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public Computer get(int id) throws ComputerDAOException {
-        Computer computer = null;
-        try {
-            computer = computerDAO.getById(id);
-        } catch (SQLException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
-        return computer;
+        return computerDAO.getById(id);
     }
 
     /**
@@ -126,27 +90,16 @@ public class ComputerManager {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public int getCount(Parameters params) throws ComputerDAOException {
-        try {
-            return computerDAO.getCount(params);
-        } catch (SQLException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
+        return computerDAO.getCount(params);
     }
 
     /**
      * Général method for get all computers corresponding to parameters.
      * @param params contains all search arguments.
      * @return list of corresponding Computer.
-     * @throws SQLException Error in SQL.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    public List<Computer> getAll(Parameters params) throws SQLException, ComputerDAOException {
-        try {
-            return computerDAO.getAll(params);
-        } catch (SQLException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException();
-        }
+    public List<Computer> getAll(Parameters params) throws ComputerDAOException {
+        return computerDAO.getAll(params);
     }
 }

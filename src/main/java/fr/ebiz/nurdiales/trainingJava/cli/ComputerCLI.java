@@ -1,6 +1,5 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,26 +20,19 @@ public class ComputerCLI extends PageCLI {
      */
     public ComputerCLI() {
         super();
-        params = new Parameters();
-        params.setPage(0);
-        params.setSize(10);
+        params = new Parameters.Builder().page(0).size(10).build();
         computerManager = new ComputerManager();
     }
 
     @Override
     public void printEntities(Scanner sc) throws ComputerDAOException {
         LOGGER.debug("start of printComputers");
-        Parameters params = new Parameters();
-        params.setSize(10);
+        params = new Parameters.Builder().size(10).build();
         boolean exitWanted = false;
         while (!exitWanted) {
             System.out.println("Page " + params.getPage() + " : ");
             List<Computer> cl;
-            try {
-                cl = computerManager.getAll(params);
-            } catch (SQLException e) {
-                throw new ComputerDAOException();
-            }
+            cl = computerManager.getAll(params);
             for (Computer c : cl) {
                 System.out.println(c);
             }

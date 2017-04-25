@@ -31,8 +31,7 @@ public class CompanyManager {
         try {
             company = companyDAO.companyById(id);
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.get1");
         }
         return company;
     }
@@ -54,7 +53,7 @@ public class CompanyManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.get2");
         }
     }
 
@@ -69,7 +68,7 @@ public class CompanyManager {
             companies = companyDAO.allCompanies();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.getAll1");
         }
         return companies;
     }
@@ -88,7 +87,7 @@ public class CompanyManager {
             companies = companyDAO.allCompanies(page, pageSize);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.getAll2");
         }
         return companies;
     }
@@ -106,7 +105,7 @@ public class CompanyManager {
             companies = companyDAO.allCompaniesByName(name);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.getAll3");
         }
         return companies;
     }
@@ -126,7 +125,7 @@ public class CompanyManager {
             companies = companyDAO.allCompaniesByName(name, page, pageSize);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new CompanyDAOException();
+            throw new CompanyDAOException("Company.getAll4");
         }
         return companies;
     }
