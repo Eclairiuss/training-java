@@ -77,6 +77,7 @@ public class ComputerDAO {
             ps.setString(3, c.getDiscontinued());
             ps.setString(4, c.getCompanyId());
             retour = ps.executeUpdate();
+            connection.commit();
             connection.close();
         } catch (SQLException e) {
             try {
@@ -107,6 +108,7 @@ public class ComputerDAO {
             PreparedStatement ps = connection.prepareStatement(DELETE_COMPUTER);
             ps.setInt(1, id);
             retour = ps.executeUpdate();
+            connection.commit();
             connection.close();
         } catch (SQLException e) {
             try {
@@ -146,6 +148,7 @@ public class ComputerDAO {
             connection = getConnexion();
             System.out.println(idsSB.toString());
             retour = connection.prepareStatement(DELETE_COMPUTERS + idsSB.toString()).executeUpdate();
+            connection.commit();
             connection.close();
         } catch (SQLException e) {
             try {
@@ -183,8 +186,9 @@ public class ComputerDAO {
                 ps.setString(5, c.getId());
 
                 retour = ps.executeUpdate();
+                connection.commit();
+                ps.close();
                 connection.close();
-
             } catch (SQLException e) {
                 try {
                     connection.close();
@@ -230,6 +234,7 @@ public class ComputerDAO {
             ResultSet rs = ps.executeQuery();
             rs.next();
             int retour = rs.getInt("count(*)");
+            connection.commit();
             connection.close();
             return retour;
         } catch (SQLException e) {
@@ -255,7 +260,10 @@ public class ComputerDAO {
             connection = getConnexion();
             PreparedStatement ps = connection.prepareStatement(BY_ID);
             ps.setInt(1, id);
-            return ComputerMapper.toObject(ps.executeQuery());
+            Computer c = ComputerMapper.toObject(ps.executeQuery());
+            connection.commit();
+            connection.close();
+            return c;
         } catch (SQLException | CompanyDAOException e) {
             try {
                 connection.close();
@@ -300,6 +308,7 @@ public class ComputerDAO {
                                                                        + " LIMIT " + params.getSize() + " OFFSET " + params.getSize() * params.getPage()
                                                                        + sorted(params));
             retour = ComputerMapper.map2Object(ps.executeQuery());
+            connection.commit();
             connection.close();
             return retour;
         } catch (SQLException | CompanyDAOException e) {
