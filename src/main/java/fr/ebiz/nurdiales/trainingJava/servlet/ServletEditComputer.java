@@ -21,7 +21,7 @@ public class ServletEditComputer extends HttpServlet {
     private ComputerManager computerManager;
     private CompanyManager companyManager;
 
-    private static final String DASHBOARD_REDIRECTION = "../";
+    private static final String DASHBOARD_REDIRECTION = "./";
     private static final String EDIT_COMPUTER_VIEW = "/WEB-INF/edit_computer.jsp";
     private static final String CREATE_COMPUTER_REDIRECTION = "./add_computer";
 

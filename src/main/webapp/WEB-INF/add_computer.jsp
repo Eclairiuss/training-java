@@ -16,12 +16,8 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script>
-    $( function() {
-        $( "#datepicker1" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        $( "#datepicker2" ).datepicker({ dateFormat: 'yy-mm-dd' });
-    } );
-</script>
+<script src="js/computerCheck.js"></script>
+
 <header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <a class="navbar-brand" href="./"> Application - Computer Database </a>
@@ -33,7 +29,7 @@
         <div class="row">
             <div class="col-xs-8 col-xs-offset-2 box">
                 <h1>Add Computer</h1>
-                <form action="./add_computer" method="POST">
+                <form action="./add_computer" method="POST" id="addForm">
                     <fieldset>
                         <div class="form-group">
                             <label for="computerName">Computer name</label>
@@ -58,7 +54,7 @@
                         </div>
                     </fieldset>
                     <div class="actions pull-right">
-                        <input type="submit" id="add" value="Add" class="btn btn-primary">
+                        <input type="submit" id="validate" value="Add" class="btn btn-primary">
                         or
                         <a href="./" id="cancel" class="btn btn-default">Cancel</a>
                     </div>
