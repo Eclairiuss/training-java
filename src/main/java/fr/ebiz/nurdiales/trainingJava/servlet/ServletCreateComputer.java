@@ -23,7 +23,7 @@ public class ServletCreateComputer extends HttpServlet {
     private ComputerManager computerManager;
     private CompanyManager companyManager;
 
-    private static final String DASHBOARD_REDIRECTION = "../";
+    private static final String DASHBOARD_REDIRECTION = "./";
     private static final String CREATE_COMPUTER_VIEW = "/WEB-INF/add_computer.jsp";
 
     private static final String NAME = "computerName";
