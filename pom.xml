@@ -1,10 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>TrainingJava</groupId>
-    <artifactId>TrainingJava</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
+    <artifactId>computer-database</artifactId>
     <packaging>war</packaging>
+    <version>0.3.1-SNAPSHOT</version>
+    <name>Computer Database</name>
     <dependencies>
         <dependency>
             <groupId>jstl</groupId>
@@ -94,6 +95,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>ComputerDatabase</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <resources>
@@ -117,7 +119,18 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <warSourceDirectory>WebContent</warSourceDirectory>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <configuration>
+                    <url>http://localhost:8080/manager/text</url>
+                    <server>mytomcat</server>
+                    <path>/mywebapp</path>
+                    <username>root</username>
+                    <password>root</password>
                 </configuration>
             </plugin>
             <plugin>
