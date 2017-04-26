@@ -88,7 +88,11 @@
                         <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
                     </td>
                     <td>
-                        <a href="edit_computer?id=${computer.getId()}" onclick=""> ${computer.getName()}</a>
+                        <a href="edit_computer?id=${computer.getId()}" onclick=""><c:choose>
+                            <c:when test="${computer.getName() == null}">NAME IS NULL ??</c:when>
+                            <c:when test="${computer.getName().equals('')}">NO NAME :(</c:when>
+                            <c:otherwise>${computer.getName()}</c:otherwise>
+                        </c:choose></a>
                     </td>
                     <td> ${computer.getIntroduced()}</td>
                     <td> ${computer.getDiscontinued()}</td>
@@ -140,9 +144,9 @@
             </li>
         </ul>
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" onclick="window.location.href='./?page=0&size=10&search=${name}'" <c:if test="${size == 10}">class="btn active"</c:if><c:if test="${size != 10}">class="btn btn-default"</c:if>>10</button>
-            <button type="button" onclick="window.location.href='./?page=0&size=50&search=${name}'" <c:if test="${size == 50}">class="btn active"</c:if><c:if test="${size != 50}">class="btn btn-default"</c:if>>50</button>
-            <button type="button" onclick="window.location.href='./?page=0&size=100&search=${name}'" <c:if test="${size == 100}">class="btn active"</c:if><c:if test="${size != 100}">class="btn btn-default"</c:if>>100</button>
+            <button type="button" onclick="window.location.href='./?page=0&size=10&search=${name}'" <c:choose><c:when test="${size == 10}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>10</button>
+            <button type="button" onclick="window.location.href='./?page=0&size=50&search=${name}'" <c:choose><c:when test="${size == 50}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>50</button>
+            <button type="button" onclick="window.location.href='./?page=0&size=100&search=${name}'" <c:choose><c:when test="${size == 100}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>100</button>
         </div>
     </div>
 </footer>

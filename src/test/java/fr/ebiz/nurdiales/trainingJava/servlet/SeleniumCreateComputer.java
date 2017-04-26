@@ -1,5 +1,9 @@
 package fr.ebiz.nurdiales.trainingJava.servlet;
 
+import fr.ebiz.nurdiales.trainingJava.Parameters;
+import fr.ebiz.nurdiales.trainingJava.mapper.ComputerMapper;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
@@ -15,7 +19,7 @@ public class SeleniumCreateComputer {
     private String baseUrl;
     private JavascriptExecutor jse;
 
-    private static String ID_NAME = "computerName", ID_INTRODUCED = "introduced", ID_DISCONTINUED = "discontinued", ID_COMPANY = "companyId", ID_ADD = "add", ID_CANCEL = "cancel";
+    private static String ID_NAME = "computerName", ID_INTRODUCED = "introduced", ID_DISCONTINUED = "discontinued", ID_COMPANY = "companyId", ID_ADD = "validate", ID_CANCEL = "cancel";
 
     private WebElement name, introduced, discontinued, company, add, cancel;
     @Before
@@ -36,6 +40,9 @@ public class SeleniumCreateComputer {
 
     @Test
     public void testAddFullComputer() throws Exception {
+        ComputerManager manager = new ComputerManager();
+        int avant = manager.getCount(new Parameters.Builder().build());
+
         name.click();
         name.sendKeys("nameTestSelenium");
 
@@ -51,5 +58,10 @@ public class SeleniumCreateComputer {
 
         Thread.sleep(100);
         add.click();
+
+        int after = manager.getCount(new Parameters.Builder().build());
+        Assert.assertTrue(after == avant + 1);
     }
+
+
 }
