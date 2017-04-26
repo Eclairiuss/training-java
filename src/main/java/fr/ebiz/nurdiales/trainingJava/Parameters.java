@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.model;
+package fr.ebiz.nurdiales.trainingJava;
 
 /**
  * Created by ebiz on 20/04/17.

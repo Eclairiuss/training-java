@@ -9,7 +9,7 @@ import java.util.List;
 
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
 import fr.ebiz.nurdiales.trainingJava.mapper.CompanyMapper;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +43,7 @@ public class CompanyDAO {
         if (rs.next()) {
             c = new Company(rs.getInt(COMPANY_ID), rs.getString(COMPANY_NAME));
         }
+        connection.commit();
         connection.close();
         return c;
     }
@@ -56,6 +57,7 @@ public class CompanyDAO {
         List<Company> list = new ArrayList<Company>();
         Connection connection = getConnexion();
         list = CompanyMapper.map2Object(connection.prepareStatement(ALL_COMPANIES_REQUEST).executeQuery());
+        connection.commit();
         connection.close();
         return list;
     }
@@ -76,6 +78,7 @@ public class CompanyDAO {
         ps.setInt(1, pageSize);
         ps.setInt(2, pageSize * page);
         list = CompanyMapper.map2Object(ps.executeQuery());
+        connection.commit();
         connection.close();
         return list;
     }
@@ -96,6 +99,7 @@ public class CompanyDAO {
             ResultSet rs = ps.executeQuery();
             list = CompanyMapper.map2Object(rs);
         }
+        connection.commit();
         connection.close();
         return list;
     }
@@ -120,6 +124,7 @@ public class CompanyDAO {
             ResultSet rs = ps.executeQuery();
             list = CompanyMapper.map2Object(rs);
         }
+        connection.commit();
         connection.close();
         return list;
     }

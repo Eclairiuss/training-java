@@ -5,8 +5,8 @@ import java.util.List;
 import fr.ebiz.nurdiales.trainingJava.dao.ComputerDAO;
 import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.model.Parameters;
+import fr.ebiz.nurdiales.trainingJava.Computer;
+import fr.ebiz.nurdiales.trainingJava.Parameters;
 
 public class ComputerManager {
     // private static Logger logger =

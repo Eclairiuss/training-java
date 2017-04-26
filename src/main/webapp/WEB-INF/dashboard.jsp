@@ -125,7 +125,7 @@
             </c:if>
             <c:if test="${(page + 2)*size < numberComputers}">
                 <li>
-                    <a href="./?page=${(numberComputers/size)+1}&size=${size}&search=${name}" aria-label="Next">
+                    <a href="./?page=${((numberComputers-1)/size)+1}&size=${size}&search=${name}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
@@ -146,9 +146,9 @@
         </div>
     </div>
 </footer>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/dashboard.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/dashboard.js"></script>
 
 </body>
 </html>

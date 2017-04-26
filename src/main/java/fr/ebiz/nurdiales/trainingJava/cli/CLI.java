@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.util.Scanner;
 
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.Computer;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import org.slf4j.Logger;

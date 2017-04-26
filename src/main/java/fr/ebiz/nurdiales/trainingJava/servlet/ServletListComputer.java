@@ -1,8 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.servlet;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.model.Parameters;
+import fr.ebiz.nurdiales.trainingJava.Computer;
+import fr.ebiz.nurdiales.trainingJava.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import fr.ebiz.nurdiales.trainingJava.util.Trad;
 

@@ -2,10 +2,10 @@ package fr.ebiz.nurdiales.trainingJava.servlet;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.Company;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.Computer;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +23,7 @@ public class ServletEditComputer extends HttpServlet {
 
     private static final String DASHBOARD_REDIRECTION = "../";
     private static final String EDIT_COMPUTER_VIEW = "/WEB-INF/edit_computer.jsp";
-    private static final String CREATE_COMPUTER_REDIRECTION = "/add_computer";
+    private static final String CREATE_COMPUTER_REDIRECTION = "./add_computer";
 
     private static final String ID = "id";
     private static final String NAME = "computerName";

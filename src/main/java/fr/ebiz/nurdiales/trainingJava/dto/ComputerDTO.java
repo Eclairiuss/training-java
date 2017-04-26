@@ -1,6 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.dto;
 
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.Computer;
 
 public class ComputerDTO {
     private String id;
