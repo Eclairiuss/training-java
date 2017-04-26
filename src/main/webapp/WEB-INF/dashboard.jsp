@@ -125,7 +125,7 @@
             </c:if>
             <c:if test="${(page + 2)*size < numberComputers}">
                 <li>
-                    <a href="./?page=${(numberComputers/size)+1}&size=${size}&search=${name}" aria-label="Next">
+                    <a href="./?page=${((numberComputers-1)/size)+1}&size=${size}&search=${name}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
