@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by ebiz on 20/04/17.
@@ -44,10 +45,7 @@ public class ComputerMapper {
      * @return list of ComputerDTO corresponding to computers.
      */
     public static List<ComputerDTO> map2DTO(List<Computer> computers) {
-        List<ComputerDTO> list = new ArrayList<ComputerDTO>();
-        computers.forEach(c -> {
-            list.add(new ComputerDTO(c));
-        });
+        List<ComputerDTO> list = computers.stream().map(c -> new ComputerDTO(c)).collect(Collectors.toList());
         return list;
     }
 
