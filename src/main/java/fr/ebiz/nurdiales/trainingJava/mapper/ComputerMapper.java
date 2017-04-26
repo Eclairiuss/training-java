@@ -2,7 +2,7 @@ package fr.ebiz.nurdiales.trainingJava.mapper;
 
 import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.Computer;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 
 import java.sql.ResultSet;

@@ -11,18 +11,14 @@ import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
 import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.mapper.ComputerMapper;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.model.Parameters;
+import fr.ebiz.nurdiales.trainingJava.Company;
+import fr.ebiz.nurdiales.trainingJava.Computer;
+import fr.ebiz.nurdiales.trainingJava.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 
-import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.ID;
-import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.NAME;
-import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.INTRODUCED;
-import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.DISCONTINUED;
-import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.COMPANY;
+import static fr.ebiz.nurdiales.trainingJava.Parameters.ElementTri.ID;
 
 public class ComputerDAO {
     private static final String COMPUTER_TABLE = "computer";
@@ -37,7 +33,6 @@ public class ComputerDAO {
 
     private static final String SELECT = " SELECT * FROM " + COMPUTER_TABLE;
     private static final String COUNT = " SELECT COUNT(*) FROM " + COMPUTER_TABLE;
-    private static final String LIMIT_OFFSET = " LIMIT ? OFFSET ? ";
 
     private static final String BY_ID = SELECT + " WHERE " + COMPUTER_ID + "=?";
     private static final String INSERT_COMPUTER = " INSERT INTO " + COMPUTER_TABLE + "(" + COMPUTER_NAME + ","
@@ -149,6 +144,7 @@ public class ComputerDAO {
         }
         try {
             connection = getConnexion();
+            System.out.println(idsSB.toString());
             retour = connection.prepareStatement(DELETE_COMPUTERS + idsSB.toString()).executeUpdate();
             connection.close();
         } catch (SQLException e) {
@@ -178,14 +174,17 @@ public class ComputerDAO {
         if (c.getName() != null) {
             try {
                 connection = getConnexion();
+
                 PreparedStatement ps = connection.prepareStatement(UPDATE_COMPUTER);
                 ps.setString(1, c.getName());
                 ps.setString(2, c.getIntroduced());
                 ps.setString(3, c.getDiscontinued());
                 ps.setString(4, c.getCompanyId());
                 ps.setString(5, c.getId());
+
                 retour = ps.executeUpdate();
                 connection.close();
+
             } catch (SQLException e) {
                 try {
                     connection.close();

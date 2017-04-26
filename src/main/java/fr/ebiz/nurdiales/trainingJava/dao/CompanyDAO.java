@@ -9,7 +9,7 @@ import java.util.List;
 
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
 import fr.ebiz.nurdiales.trainingJava.mapper.CompanyMapper;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
