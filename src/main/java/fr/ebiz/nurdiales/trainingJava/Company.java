@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.model;
+package fr.ebiz.nurdiales.trainingJava;
 
 public class Company {
 

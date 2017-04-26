@@ -1,7 +1,7 @@
 package fr.ebiz.nurdiales.trainingJava.mapper;
 
 import fr.ebiz.nurdiales.trainingJava.dto.CompanyDTO;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.Company;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

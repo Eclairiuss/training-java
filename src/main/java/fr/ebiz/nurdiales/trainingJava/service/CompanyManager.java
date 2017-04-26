@@ -5,7 +5,7 @@ import java.util.List;
 
 import fr.ebiz.nurdiales.trainingJava.dao.CompanyDAO;
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.Company;
 
 public class CompanyManager {
     // private static final Logger logger =

@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.model;
+package fr.ebiz.nurdiales.trainingJava;
 
 import java.sql.Date;
 import java.time.LocalDate;

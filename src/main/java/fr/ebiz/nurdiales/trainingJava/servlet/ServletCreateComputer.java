@@ -2,8 +2,8 @@ package fr.ebiz.nurdiales.trainingJava.servlet;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.Company;
+import fr.ebiz.nurdiales.trainingJava.Computer;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 
