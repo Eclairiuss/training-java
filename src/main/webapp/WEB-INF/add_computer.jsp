@@ -36,11 +36,11 @@
                             <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name">
                         </div>
                         <div class="form-group">
-                            <label>Introduced date</label>
+                            <label for="datepicker1">Introduced date</label>
                             <input type="text" class="form-control" id="datepicker1" name="introduced" placeholder="Discontinued date">
                         </div>
                         <div class="form-group">
-                            <label>Discontinued date</label>
+                            <label for="datepicker2">Discontinued date</label>
                             <input type="text" class="form-control" id="datepicker2" name="discontinued" placeholder="Discontinued date">
                         </div>
                         <div class="form-group">
