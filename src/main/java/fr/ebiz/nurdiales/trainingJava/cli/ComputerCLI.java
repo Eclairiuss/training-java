@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import fr.ebiz.nurdiales.trainingJava.Parameters;
+import fr.ebiz.nurdiales.trainingJava.dao.ComputerDAO;
+import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +36,7 @@ public class ComputerCLI extends PageCLI {
             List<Computer> cl;
             cl = computerManager.getAll(params);
             for (Computer c : cl) {
-                System.out.println(c);
+                System.out.println(new ComputerDTO(c));
             }
             exitWanted = printChoicesAndGet(sc, true);
         }
@@ -47,12 +49,23 @@ public class ComputerCLI extends PageCLI {
     }
 
     @Override
+    protected void delete(String tmp) {
+        try {
+            computerManager.delete(Integer.parseInt(tmp));
+        } catch (ComputerDAOException e) {
+            LOGGER.debug("Fail delete");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected String menuPage(Scanner sc) {
         System.out.println("Next Page : r");
         System.out.println("Previous Page : l");
         System.out.println("Search by name : name");
         System.out.println("Search by companyId : companyid");
         System.out.println("Search by companyName : companyname");
+        System.out.println("Delete : d");
         System.out.println("Exit : exit");
         return sc.nextLine();
     }
