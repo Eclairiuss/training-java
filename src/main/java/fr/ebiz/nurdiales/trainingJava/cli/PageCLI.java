@@ -90,6 +90,12 @@ public abstract class PageCLI {
                 case "r":
                     nextPage();
                     return false;
+                case "d":
+                    System.out.print("Id of " + (isPageComputers ? "Computer" : "Company") + " : ");
+                    tmp = sc.nextLine();
+                    tmp = tmp.equals("") ? null : tmp;
+                    delete(tmp);
+                    return false;
                 case "name":
                     System.out.print("Name : ");
                     tmp = sc.nextLine();
@@ -119,6 +125,12 @@ public abstract class PageCLI {
             }
         }
     }
+
+    /**
+     * delete the entity wanted.
+     * @param tmp id of entity to delete.
+     */
+    protected abstract void delete(String tmp);
 
     public Date getIntroduced() {
         return introduced;

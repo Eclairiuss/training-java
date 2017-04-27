@@ -4,8 +4,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import fr.ebiz.nurdiales.trainingJava.dao.CompanyDAO;
+import fr.ebiz.nurdiales.trainingJava.dao.ComputerDAO;
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.Company;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 
 public class CompanyManager {
     // private static final Logger logger =
@@ -28,10 +30,13 @@ public class CompanyManager {
      */
     public Company get(int id) throws CompanyDAOException {
         Company company = null;
-        try {
-            company = companyDAO.companyById(id);
-        } catch (SQLException e) {
-            throw new CompanyDAOException("Company.get1");
+        if (id > 0) {
+            try {
+                company = companyDAO.companyById(id);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new CompanyDAOException("Company.get1");
+            }
         }
         return company;
     }
@@ -128,5 +133,18 @@ public class CompanyManager {
             throw new CompanyDAOException("Company.getAll4");
         }
         return companies;
+    }
+
+    /**
+     * Methode to delete a company in the database by his id.
+     * @param i Id of company to delete.
+     * @return Executes the SQL statement in this PreparedStatement object,
+     *         which must be an SQL Data Manipulation Language (DML) statement,
+     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
+     *         returns nothing, such as a DDL statement.
+     * @throws ComputerDAOException Error in the CompanyDAO SQL.
+     */
+    public int delete(int i) throws ComputerDAOException {
+        return companyDAO.delete(i);
     }
 }

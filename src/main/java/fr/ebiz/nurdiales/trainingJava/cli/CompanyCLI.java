@@ -6,6 +6,7 @@ import java.util.Scanner;
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.Company;
 import fr.ebiz.nurdiales.trainingJava.Parameters;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ public class CompanyCLI extends PageCLI {
      */
     public CompanyCLI() {
         super();
-        params  = (new Parameters.Builder()).page(10).size(10).build();
+        params  = (new Parameters.Builder()).page(0).size(10).build();
         companyManager = new CompanyManager();
     }
 
@@ -51,9 +52,19 @@ public class CompanyCLI extends PageCLI {
     }
 
     @Override
+    protected void delete(String tmp) {
+        try {
+            companyManager.delete(Integer.parseInt(tmp));
+        } catch (ComputerDAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected String menuPage(Scanner sc) {
         System.out.println("Next Page : r");
         System.out.println("Previous Page : l");
+        System.out.println("Delete : d");
         System.out.println("Search by name : name");
         System.out.println("Exit : exit");
         return sc.nextLine();
