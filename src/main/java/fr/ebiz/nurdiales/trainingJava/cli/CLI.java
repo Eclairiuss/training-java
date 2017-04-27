@@ -72,9 +72,6 @@ public class CLI {
                 case UPDATE:
                     updateComputer(sc);
                     break;
-                case DELETE:
-                    deleteComputer(sc);
-                    break;
                 default:
                     break;
             }
@@ -199,7 +196,6 @@ public class CLI {
         System.out.println("Show computer details : " + DETAILS + SEPARATOR + ID + SEPARATOR2 + ID);
         System.out.println("Create a computer : " + NEW);
         System.out.println("Update a computer : " + UPDATE);
-        System.out.println("Delete a computer : " + DELETE);
         System.out.println("Exit and close connexion : " + EXIT);
 
         return sc.nextLine();

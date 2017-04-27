@@ -312,7 +312,9 @@ public class ComputerDAO {
             connection.close();
             return retour;
         } catch (SQLException | CompanyDAOException e) {
+            e.printStackTrace();
             try {
+                connection.rollback();
                 connection.close();
             } catch (SQLException e1) {
                 e1.printStackTrace();

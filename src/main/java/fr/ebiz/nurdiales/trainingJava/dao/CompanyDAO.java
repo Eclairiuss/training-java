@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.mapper.CompanyMapper;
 import fr.ebiz.nurdiales.trainingJava.Company;
 import org.slf4j.Logger;
@@ -15,11 +16,15 @@ import org.slf4j.LoggerFactory;
 
 public class CompanyDAO {
     private static final String COMPANY_TABLE = "company";
+    private static final String COMPUTER_TABLE = "computer";
+    private static final String COMPUTER_COMPANY = "company_id";
     private static final String COMPANY_NAME = "name";
     private static final String COMPANY_ID = "id";
     private static final String SELECT = " SELECT * FROM " + COMPANY_TABLE + " ";
     private static final String LIKE = " LIKE ? ";
     private static final String LIMIT_OFFSET = " LIMIT ? OFFSET ? ";
+    private static final String CHANGE_COMPANY = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_COMPANY + " = ? WHERE "
+                                                         + COMPUTER_COMPANY + " = ? ";;
     private static final String ALL_COMPANIES_REQUEST = SELECT;
     private static final String ALL_COMPANIES_REQUEST_BETWEEN = SELECT + LIMIT_OFFSET;
     private static final String COMPANIES_BY_NAME = SELECT + " WHERE " + COMPANY_NAME + LIKE;
@@ -35,6 +40,7 @@ public class CompanyDAO {
      * @throws SQLException Error in SQL.
      */
     public Company companyById(int id) throws SQLException {
+        System.out.println(id);
         Connection connection = getConnexion();
         Company c = null;
         PreparedStatement ps = connection.prepareStatement(COMPANY_BY_ID_REQUEST);
@@ -137,5 +143,42 @@ public class CompanyDAO {
     public Connection getConnexion() throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         return connection.getDataSource().getConnection();
+    }
+
+    /**
+     * Methode to delete a company in the database by his id.
+     * @param i Id of company to delete.
+     * @return Executes the SQL statement in this PreparedStatement object,
+     *         which must be an SQL Data Manipulation Language (DML) statement,
+     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
+     *         returns nothing, such as a DDL statement.
+     * @throws ComputerDAOException Error in the CompanyDAO SQL.
+     */
+    public int delete(int i) throws ComputerDAOException {
+        int retour = 0;
+        Connection connection = null;
+        try {
+            connection = getConnexion();
+            connection.setSavepoint();
+            PreparedStatement ps = connection.prepareStatement(CHANGE_COMPANY);
+            ps.setString(1, null);
+            ps.setInt(2, i);
+            retour = ps.executeUpdate();
+            PreparedStatement ps2 = connection.prepareStatement("DELETE FROM " + COMPANY_TABLE + " WHERE id=?");
+            ps2.setInt(1, i);
+            retour = ps2.executeUpdate();
+            connection.commit();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } finally {
+                throw new ComputerDAOException(e.getMessage());
+            }
+        }
+        return retour;
     }
 }

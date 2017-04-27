@@ -22,7 +22,7 @@ public class JDBCSingleton {
      * Constructor of JDBCSingleton who init all value and connect to DataBase.
      */
     public JDBCSingleton() {
-        DB_URL = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+        DB_URL = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false";
         DB_USERNAME = "admincdb";
         DB_PASSWORD = "qwerty1234";
 

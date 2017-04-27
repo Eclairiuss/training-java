@@ -45,6 +45,7 @@ public class ServletListComputer extends HttpServlet {
 
         try {
             listComputers = manager.getAll(params);
+            System.out.println(listComputers);
         } catch (ComputerDAOException e) {
             e.printStackTrace();
         }
