@@ -10,7 +10,7 @@ public class Trad {
      * @return return corresponding int.
      */
     public static int stringToInt(String s) {
-        if (s != null && s.matches("[0-9]*([0-9]|(.[0-9]*))")) {
+        if (s != null && s.matches("[0-9]+([0-9]*|(.[0-9]*))")) {
             try {
                 float tmp = Float.parseFloat(s);
                 return (int) ((tmp < 0) ? 0 : tmp);

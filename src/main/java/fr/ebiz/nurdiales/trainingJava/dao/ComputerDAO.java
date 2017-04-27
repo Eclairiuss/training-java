@@ -426,4 +426,15 @@ public class ComputerDAO {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         return connection.getDataSource().getConnection();
     }
+
+    /**
+     * Method who get the first object from PreparedStatement.
+     * @param ps PreparedStatement.
+     * @return Computer.
+     * @throws SQLException Exception of sql request.
+     * @throws CompanyDAOException Error in CompanyDAO SQL.
+     */
+    public Computer preparedStatementToObject(PreparedStatement ps) throws SQLException, CompanyDAOException {
+        return ComputerMapper.toObject(ps.executeQuery());
+    }
 }
