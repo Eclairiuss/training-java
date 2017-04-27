@@ -1,12 +1,14 @@
 package fr.ebiz.nurdiales.trainingJava.servlet;
 
 import fr.ebiz.nurdiales.trainingJava.Parameters;
-import fr.ebiz.nurdiales.trainingJava.mapper.ComputerMapper;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
@@ -19,9 +21,14 @@ public class SeleniumCreateComputer {
     private String baseUrl;
     private JavascriptExecutor jse;
 
-    private static String ID_NAME = "computerName", ID_INTRODUCED = "introduced", ID_DISCONTINUED = "discontinued", ID_COMPANY = "companyId", ID_ADD = "validate", ID_CANCEL = "cancel";
+    private static final String ID_NAME = "computerName", ID_INTRODUCED = "introduced", ID_DISCONTINUED = "discontinued", ID_COMPANY = "companyId", ID_ADD = "validate", ID_CANCEL = "cancel";
 
     private WebElement name, introduced, discontinued, company, add, cancel;
+
+    /**
+     * .
+     * @throws Exception ?
+     */
     @Before
     public void setUp() throws Exception {
         System.setProperty("webdriver.gecko.driver", "src/test/resources/geckodriver");
@@ -30,14 +37,18 @@ public class SeleniumCreateComputer {
         jse = (JavascriptExecutor) driver;
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get(baseUrl);
-        name=driver.findElement(By.id(ID_NAME));
-        introduced=driver.findElement(By.id(ID_INTRODUCED));
-        discontinued=driver.findElement(By.id(ID_DISCONTINUED));
-        company=driver.findElement(By.id(ID_COMPANY));
-        add=driver.findElement(By.id(ID_ADD));
-        cancel=driver.findElement(By.id(ID_CANCEL));
+        name = driver.findElement(By.id(ID_NAME));
+        introduced = driver.findElement(By.id(ID_INTRODUCED));
+        discontinued = driver.findElement(By.id(ID_DISCONTINUED));
+        company = driver.findElement(By.id(ID_COMPANY));
+        add = driver.findElement(By.id(ID_ADD));
+        cancel = driver.findElement(By.id(ID_CANCEL));
     }
 
+    /**
+     * .
+     * @throws Exception ?
+     */
     @Test
     public void testAddFullComputer() throws Exception {
         ComputerManager manager = new ComputerManager();
