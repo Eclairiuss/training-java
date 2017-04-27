@@ -134,14 +134,6 @@
                     </a>
                 </li>
             </c:if>
-            <li><a href="./?page=${page}&size=${size}" class="btn active">${page}</a></li>
-            <li><a href="./?page=${page+1}&size=${size}">${page+1}</a></li>
-            <li><a href="./?page=${page+2}&size=${size}">${page+2}</a></li>
-            <li>
-                <a href="./?page=${page+5}&size=${size}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
         </ul>
         <div class="btn-group btn-group-sm pull-right" role="group" >
             <button type="button" onclick="window.location.href='./?page=0&size=10&search=${name}'" <c:choose><c:when test="${size == 10}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>10</button>
