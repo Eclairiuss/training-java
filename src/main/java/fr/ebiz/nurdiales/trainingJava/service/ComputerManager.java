@@ -1,12 +1,17 @@
 package fr.ebiz.nurdiales.trainingJava.service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import fr.ebiz.nurdiales.trainingJava.dao.ComputerDAO;
+import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
 import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.Computer;
-import fr.ebiz.nurdiales.trainingJava.Parameters;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.model.Parameters;
+import fr.ebiz.nurdiales.trainingJava.util.Context;
+import fr.ebiz.nurdiales.trainingJava.util.MyThreadLocal;
 
 public class ComputerManager {
     // private static Logger logger =
@@ -100,6 +105,51 @@ public class ComputerManager {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     public List<Computer> getAll(Parameters params) throws ComputerDAOException {
-        return computerDAO.getAll(params);
+        List<Computer> retour = null;
+        try {
+            setConnection();
+            retour = computerDAO.getAll(params);
+            commit();
+        } catch (ComputerDAOException | SQLException e) {
+            e.printStackTrace();
+            try {
+                rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } finally {
+                throw new ComputerDAOException(e.getMessage());
+            }
+        }
+        return retour;
+    }
+
+    /**
+     * .
+     * @throws SQLException .
+     */
+    private void setConnection() throws  SQLException {
+        Context context = new Context();
+        context.setConnection(JDBCSingleton.getInstance().getDataSource().getConnection());
+        MyThreadLocal.set(context);
+    }
+
+    /**
+     * .
+     * @throws SQLException .
+     */
+    private void commit() throws SQLException {
+        Connection connection = MyThreadLocal.get().getConnection();
+        connection.commit();
+        connection.close();
+    }
+
+    /**
+     * .
+     * @throws SQLException .
+     */
+    private void rollback() throws SQLException {
+        Connection connection = MyThreadLocal.get().getConnection();
+        connection.rollback();
+        connection.close();
     }
 }

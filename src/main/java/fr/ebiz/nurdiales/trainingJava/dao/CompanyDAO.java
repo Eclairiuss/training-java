@@ -10,21 +10,20 @@ import java.util.List;
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.mapper.CompanyMapper;
-import fr.ebiz.nurdiales.trainingJava.Company;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CompanyDAO {
-    private static final String COMPANY_TABLE = "company";
-    private static final String COMPUTER_TABLE = "computer";
-    private static final String COMPUTER_COMPANY = "company_id";
-    private static final String COMPANY_NAME = "name";
-    private static final String COMPANY_ID = "id";
+    public static final String COMPANY_TABLE = "company";
+    public static final String COMPANY_NAME = "name";
+    public static final String COMPANY_ID = "id";
+
     private static final String SELECT = " SELECT * FROM " + COMPANY_TABLE + " ";
     private static final String LIKE = " LIKE ? ";
     private static final String LIMIT_OFFSET = " LIMIT ? OFFSET ? ";
-    private static final String CHANGE_COMPANY = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_COMPANY + " = ? WHERE "
-                                                         + COMPUTER_COMPANY + " = ? ";;
+    private static final String CHANGE_COMPANY = " UPDATE " + ComputerDAO.COMPUTER_TABLE + " SET " + ComputerDAO.COMPUTER_COMPANY + " = ? WHERE "
+                                                         + ComputerDAO.COMPUTER_COMPANY + " = ? ";;
     private static final String ALL_COMPANIES_REQUEST = SELECT;
     private static final String ALL_COMPANIES_REQUEST_BETWEEN = SELECT + LIMIT_OFFSET;
     private static final String COMPANIES_BY_NAME = SELECT + " WHERE " + COMPANY_NAME + LIKE;

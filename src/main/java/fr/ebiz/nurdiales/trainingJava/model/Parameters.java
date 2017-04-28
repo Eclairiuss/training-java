@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava;
+package fr.ebiz.nurdiales.trainingJava.model;
 
 /**
  * Created by ebiz on 20/04/17.
@@ -119,6 +119,36 @@ public class Parameters {
         }
 
     }
+
+    /**
+     * Parse le tri et choisi la valeur a attribuer.
+     * @param sTri string from request.
+     */
+    public void parseTri(String sTri) {
+        if (sTri == null || sTri.length() < 2) {
+            trierPar = ElementTri.ID;
+        } else {
+            switch (sTri.charAt(0)) {
+                case 'n':
+                    trierPar = ElementTri.NAME;
+                    break;
+                case 'c':
+                    trierPar = ElementTri.COMPANY;
+                    break;
+                case 'i':
+                    trierPar = ElementTri.INTRODUCED;
+                    break;
+                case 'd':
+                    trierPar = ElementTri.DISCONTINUED;
+                    break;
+                default:
+                    trierPar = ElementTri.ID;
+                    break;
+            }
+            reversed = (sTri.charAt(1) == 'u') ? true : false;
+        }
+    }
+
 
     public boolean isReversed() {
         return reversed;

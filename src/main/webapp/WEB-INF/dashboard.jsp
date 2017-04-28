@@ -1,4 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -45,6 +48,8 @@
         <input type="hidden" name="size" value="${size}">
         <input type="hidden" name="page" value="${page}">
         <input type="hidden" name="selection" value="">
+        <input type="hidden" name="order" value="${order}">
+        <input type="hidden" name="search" value="${search}">
     </form>
 
     <div class="container" style="margin-top: 10px;">
@@ -62,21 +67,29 @@
                                     </a>
                             </span>
                 </th>
+
                 <th>
                     Computer name
+                    <a href="./?size=${size}&search=${search}&order=nu" class="fa fa-arrow-up" aria-hidden="true"></a>
+                    <a href="./?size=${size}&search=${search}&order=nd" class="fa fa-arrow-down" aria-hidden="true"></a>
                 </th>
                 <th>
                     Introduced date
+                    <a href="./?size=${size}&search=${search}&order=iu" class="fa fa-arrow-up" aria-hidden="true"></a>
+                    <a href="./?size=${size}&search=${search}&order=id" class="fa fa-arrow-down" aria-hidden="true"></a>
                 </th>
                 <!-- Table header for Discontinued Date -->
                 <th>
                     Discontinued date
+                    <a href="./?size=${size}&search=${search}&order=du" class="fa fa-arrow-up" aria-hidden="true"></a>
+                    <a href="./?size=${size}&search=${search}&order=dd" class="fa fa-arrow-down" aria-hidden="true"></a>
                 </th>
                 <!-- Table header for Company -->
                 <th>
                     Company
+                    <a href="./?size=${size}&search=${search}&order=cu" class="fa fa-arrow-up" aria-hidden="true"></a>
+                    <a href="./?size=${size}&search=${search}&order=cd" class="fa fa-arrow-down" aria-hidden="true"></a>
                 </th>
-
             </tr>
             </thead>
             <!-- Browse attribute computers -->
@@ -88,11 +101,13 @@
                         <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
                     </td>
                     <td>
-                        <a href="edit_computer?id=${computer.getId()}" onclick=""><c:choose>
-                            <c:when test="${computer.getName() == null}">NAME IS NULL ??</c:when>
-                            <c:when test="${computer.getName().equals('')}">NO NAME :(</c:when>
-                            <c:otherwise>${computer.getName()}</c:otherwise>
-                        </c:choose></a>
+                        <a href="edit_computer?id=${computer.getId()}" onclick="">
+                            <c:choose>
+                                <c:when test="${computer.getName() == null}">NAME IS NULL ??</c:when>
+                                <c:when test="${computer.getName().equals('')}">NO NAME :(</c:when>
+                                <c:otherwise>${computer.getName()}</c:otherwise>
+                            </c:choose>
+                        </a>
                     </td>
                     <td> ${computer.getIntroduced()}</td>
                     <td> ${computer.getDiscontinued()}</td>
@@ -106,40 +121,7 @@
 
 <footer class="navbar-fixed-bottom">
     <div class="container text-center">
-        <ul class="pagination">
-            <c:if test="${page > 3}">
-                <li>
-                    <a href="./?page=${0}&size=${size}&search=${name}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            </c:if>
-            <c:if test="${page > 2}">
-                <li><a href="./?page=${page-2}&size=${size}&search=${name}">${page-2}</a></li>
-            </c:if>
-            <c:if test="${page > 1}">
-                <li><a href="./?page=${page-1}&size=${size}&search=${name}">${page-1}</a></li>
-            </c:if>
-            <li><a href="./?page=${page}&size=${size}&search=${name}" class="btn active">${page}</a></li>
-            <c:if test="${(page*size) < numberComputers}">
-                <li><a href="./?page=${page+1}&size=${size}&search=${name}">${page+1}</a></li>
-            </c:if>
-            <c:if test="${(page + 1)*size < numberComputers}">
-                <li><a href="./?page=${page+2}&size=${size}&search=${name}">${page+2}</a></li>
-            </c:if>
-            <c:if test="${(page + 2)*size < numberComputers}">
-                <li>
-                    <a href="./?page=${((numberComputers-1)/size)+1}&size=${size}&search=${name}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </c:if>
-        </ul>
-        <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" onclick="window.location.href='./?page=0&size=10&search=${name}'" <c:choose><c:when test="${size == 10}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>10</button>
-            <button type="button" onclick="window.location.href='./?page=0&size=50&search=${name}'" <c:choose><c:when test="${size == 50}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>50</button>
-            <button type="button" onclick="window.location.href='./?page=0&size=100&search=${name}'" <c:choose><c:when test="${size == 100}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>100</button>
-        </div>
+        <mylib:pagination redirection="./" numberComputers="${numberComputers}" page="${page}" size="${size}" search="${search}" order="${order}" />
     </div>
 </footer>
 <script src="js/jquery.min.js"></script>

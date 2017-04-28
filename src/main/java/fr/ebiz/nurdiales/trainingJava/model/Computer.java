@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava;
+package fr.ebiz.nurdiales.trainingJava.model;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -116,8 +116,7 @@ public class Computer {
         if (s == null || s.equals("")) {
             return null;
         }
-
-        return Date.valueOf(LocalDate.parse(s, DateTimeFormatter.ISO_LOCAL_DATE));
+        return Date.valueOf(LocalDate.parse(s.split(" ")[0], DateTimeFormatter.ISO_LOCAL_DATE));
     }
 
     /**

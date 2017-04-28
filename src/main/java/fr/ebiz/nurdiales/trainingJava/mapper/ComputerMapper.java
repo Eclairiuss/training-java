@@ -1,9 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.mapper;
 
+import fr.ebiz.nurdiales.trainingJava.dao.ComputerDAO;
 import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.Computer;
-import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,26 +14,16 @@ import java.util.stream.Collectors;
  * Created by ebiz on 20/04/17.
  */
 public class ComputerMapper {
-    private static final String COMPUTER_ID = "id";
-    private static final String COMPUTER_NAME = "name";
-    private static final String COMPUTER_INTRODUCED = "introduced";
-    private static final String COMPUTER_DISCONTINUED = "discontinued";
-    private static final String COMPUTER_COMPANY = "company_id";
-    private static final CompanyManager COMPANY_MANAGER = new CompanyManager();
-
     /**
      * List of all computer in the rs.
      * @param rs ResultSet form a search.
      * @return Computers from rs.
      * @throws SQLException Error in SQL.
-     * @throws CompanyDAOException Error in the companyDAO.
      */
-    public static List<Computer> map2Object(ResultSet rs) throws SQLException, CompanyDAOException {
+    public static List<Computer> map2Object(ResultSet rs) throws SQLException {
         List<Computer> retour = new ArrayList<Computer>();
         while (rs.next()) {
-            retour.add(new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
-                                           rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-                                           COMPANY_MANAGER.get(rs.getInt(COMPUTER_COMPANY))));
+            retour.add(makeComputer(rs));
         }
         return retour;
     }
@@ -55,15 +44,31 @@ public class ComputerMapper {
      * @param rs ResultSet form a search.
      * @return Computer corresponding to the first object from rs.
      * @throws SQLException Error in SQL.
-     * @throws CompanyDAOException Error in the companyDAO.
      */
-    public static Computer toObject(ResultSet rs) throws SQLException, CompanyDAOException {
+    public static Computer toObject(ResultSet rs) throws SQLException {
         Computer c = null;
         if (rs.next()) {
-            c = new Computer(rs.getInt(COMPUTER_ID), rs.getString(COMPUTER_NAME),
-                                    rs.getDate(COMPUTER_INTRODUCED), rs.getDate(COMPUTER_DISCONTINUED),
-                                    COMPANY_MANAGER.get(rs.getInt(COMPUTER_COMPANY)));
+            c = makeComputer(rs);
         }
         return c;
+    }
+
+    /**
+     * Get the first object from the ResultSet.
+     * @param rs ResultSet form a search already set on the next input.
+     * @return Computer corresponding to the first object from rs.
+     * @throws SQLException Error in SQL.
+     */
+    public static Computer makeComputer(ResultSet rs) throws SQLException {
+        ComputerDTO c = new ComputerDTO();
+
+        c.setId(rs.getString(ComputerDAO.COMPUTER_ID));
+        c.setName(rs.getString(ComputerDAO.COMPUTER_NAME));
+        c.setIntroduced(rs.getString(ComputerDAO.COMPUTER_INTRODUCED));
+        c.setDiscontinued(rs.getString(ComputerDAO.COMPUTER_DISCONTINUED));
+        c.setCompanyId(rs.getString(ComputerDAO.COMPUTER_COMPANY));
+        c.setCompanyName(rs.getString(ComputerDAO.NAME_COMPANY));
+
+        return c.toComputer();
     }
 }
