@@ -1,8 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.servlet;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.Computer;
-import fr.ebiz.nurdiales.trainingJava.Parameters;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import fr.ebiz.nurdiales.trainingJava.util.Trad;
 
@@ -21,6 +21,10 @@ public class ServletListComputer extends HttpServlet {
     private static final String ACTION = "ACTION";
     private static final String DELETE = "delete";
     private static final String SEARCH = "search";
+    private static final String ORDER = "order";
+    private static final String NAME = "name";
+    private static final String SIZE = "size";
+    private static final String PAGE = "page";
     private static final String DELETESELECTED = "selection";
     private static final String LIST_COMPUTER_VIEW = "/WEB-INF/dashboard.jsp";
 
@@ -32,20 +36,22 @@ public class ServletListComputer extends HttpServlet {
      * @throws IOException                    BANANAIOException.
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String sSize = request.getParameter("size");
-        String sPage = request.getParameter("page");
+        String sSize = request.getParameter(SIZE);
+        String sPage = request.getParameter(PAGE);
+        String sSearch = request.getParameter(SEARCH);
+        String sTri = request.getParameter(ORDER);
         Parameters params = (new Parameters.Builder())
                                     .page(Trad.stringToInt(sPage) - 1)
                                     .size(Trad.stringToInt(sSize))
-                                    .name(request.getParameter(SEARCH))
+                                    .name(sSearch)
                                     .build();
+        params.parseTri(sTri);
         int count = -1;
         List<Computer> listComputers = null;
         manager = new ComputerManager();
 
         try {
             listComputers = manager.getAll(params);
-            System.out.println(listComputers);
         } catch (ComputerDAOException e) {
             e.printStackTrace();
         }
@@ -57,9 +63,10 @@ public class ServletListComputer extends HttpServlet {
 
         request.setAttribute("numberComputers", count);
         request.setAttribute("computers", listComputers);
-        request.setAttribute("page", params.getPage() + 1);
-        request.setAttribute("size", params.getSize());
-        request.setAttribute("name", params.getName());
+        request.setAttribute(PAGE, params.getPage() + 1);
+        request.setAttribute(SIZE, params.getSize());
+        request.setAttribute(SEARCH, sSearch);
+        request.setAttribute(ORDER, sTri);
         this.getServletContext().getRequestDispatcher(LIST_COMPUTER_VIEW).forward(request, response);
     }
 
@@ -85,6 +92,9 @@ public class ServletListComputer extends HttpServlet {
                 throw new IllegalStateException(e);
             }
         }
-        response.sendRedirect("");
+        response.sendRedirect("./?" + ORDER + "=" + request.getParameter(ORDER)
+                                      + "&"  + SIZE + "=" + request.getParameter(SIZE)
+                                      + "&"  + PAGE + "=" + request.getParameter(PAGE)
+                                      + "&"  + SEARCH + "=" + request.getParameter(SEARCH));
     }
 }

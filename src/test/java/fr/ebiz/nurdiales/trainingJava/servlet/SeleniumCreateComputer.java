@@ -1,6 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.servlet;
 
-import fr.ebiz.nurdiales.trainingJava.Parameters;
+import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import org.junit.Assert;
 import org.junit.Before;

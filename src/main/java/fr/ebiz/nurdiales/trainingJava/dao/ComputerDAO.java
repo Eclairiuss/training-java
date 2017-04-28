@@ -11,35 +11,52 @@ import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
 import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.mapper.ComputerMapper;
-import fr.ebiz.nurdiales.trainingJava.Company;
-import fr.ebiz.nurdiales.trainingJava.Computer;
-import fr.ebiz.nurdiales.trainingJava.Parameters;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import fr.ebiz.nurdiales.trainingJava.util.MyThreadLocal;
 
-import static fr.ebiz.nurdiales.trainingJava.Parameters.ElementTri.ID;
+import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.ID;
 
 public class ComputerDAO {
-    private static final String COMPUTER_TABLE = "computer";
-    private static final String COMPUTER_ID = "id";
-    private static final String COMPUTER_NAME = "name";
-    private static final String COMPUTER_INTRODUCED = "introduced";
-    private static final String COMPUTER_DISCONTINUED = "discontinued";
-    private static final String COMPUTER_COMPANY = "company_id";
+    public static final String COMPUTER_TABLE = "computer";
+    public static final String COMPUTER_ID = "id";
+    public static final String COMPUTER_NAME = "name";
+    public static final String COMPUTER_INTRODUCED = "introduced";
+    public static final String COMPUTER_DISCONTINUED = "discontinued";
+    public static final String COMPUTER_COMPANY = "company_id";
+    public static final String NAME_COMPANY = "company_name";
 
     private static final String SORT_BY = " ORDER BY ";
     private static final String INVERT = " DESC ";
 
-    private static final String SELECT = " SELECT * FROM " + COMPUTER_TABLE;
+    private static final String SELECT = "SELECT " + COMPUTER_TABLE + "." + COMPUTER_ID + ", "
+                                                 + COMPUTER_TABLE + "." + COMPUTER_NAME + ", "
+                                                 + COMPUTER_INTRODUCED + ", "
+                                                 + COMPUTER_DISCONTINUED + ", "
+                                                 + COMPUTER_TABLE + "." + COMPUTER_COMPANY + ", "
+                                                 + CompanyDAO.COMPANY_TABLE + "." + CompanyDAO.COMPANY_NAME
+                                                 + " as "
+                                                 + NAME_COMPANY
+                                                 + " FROM " + ComputerDAO.COMPUTER_TABLE
+                                                 + " LEFT JOIN " + CompanyDAO.COMPANY_TABLE
+                                                 + " ON " + CompanyDAO.COMPANY_TABLE + "." + CompanyDAO.COMPANY_ID
+                                                 + "=" + ComputerDAO.COMPUTER_TABLE + "." + ComputerDAO.COMPUTER_COMPANY;
+
     private static final String COUNT = " SELECT COUNT(*) FROM " + COMPUTER_TABLE;
 
-    private static final String BY_ID = SELECT + " WHERE " + COMPUTER_ID + "=?";
+    private static final String BY_ID = SELECT + " WHERE " + COMPUTER_TABLE + "." + COMPUTER_ID + "=?";
     private static final String INSERT_COMPUTER = " INSERT INTO " + COMPUTER_TABLE + "(" + COMPUTER_NAME + ","
                                                           + COMPUTER_INTRODUCED + "," + COMPUTER_DISCONTINUED + "," + COMPUTER_COMPANY + ") values (?,?,?,?)";
-    private static final String UPDATE_COMPUTER = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_NAME + "=?, "
-                                                          + COMPUTER_INTRODUCED + "=?, " + COMPUTER_DISCONTINUED + "=?, " + COMPUTER_COMPANY + "=? WHERE "
-                                                          + COMPUTER_ID + "=? ";
+    private static final String UPDATE_COMPUTER_NOT_DATES = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_NAME + "=?, "
+                                                                    + COMPUTER_COMPANY + "=? WHERE "
+                                                                    + COMPUTER_ID + "=? ";
+    private static final String UPDATE_COMPUTER_FULL = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_NAME + "=?, "
+                                                               + COMPUTER_INTRODUCED + "=?, " + COMPUTER_DISCONTINUED + "=?, " + COMPUTER_COMPANY + "=? WHERE "
+                                                               + COMPUTER_ID + "=? ";
     private static final String DELETE_COMPUTER = " DELETE FROM " + COMPUTER_TABLE + " WHERE id=?";
     private static final String DELETE_COMPUTERS = " DELETE FROM " + COMPUTER_TABLE + " WHERE ";
 
@@ -67,6 +84,10 @@ public class ComputerDAO {
         int retour = 0;
         if (c.getName() == null) {
             c.setName("default");
+        }
+        if (c.toComputer().checkDates()) {
+            c.setIntroduced(null);
+            c.setDiscontinued(null);
         }
         PreparedStatement ps = null;
         try {
@@ -173,17 +194,18 @@ public class ComputerDAO {
      */
     public int update(ComputerDTO c) throws ComputerDAOException {
         Connection connection = null;
+        boolean check = c.toComputer().checkDates();
         int retour = 0;
         if (c.getName() != null) {
             try {
                 connection = getConnexion();
 
-                PreparedStatement ps = connection.prepareStatement(UPDATE_COMPUTER);
+                PreparedStatement ps = connection.prepareStatement(check ? UPDATE_COMPUTER_FULL : UPDATE_COMPUTER_NOT_DATES);
                 ps.setString(1, c.getName());
                 ps.setString(2, c.getIntroduced());
                 ps.setString(3, c.getDiscontinued());
-                ps.setString(4, c.getCompanyId());
-                ps.setString(5, c.getId());
+                ps.setString(check ? 4 : 2, c.getCompanyId());
+                ps.setString(check ? 5 : 3, c.getId());
 
                 retour = ps.executeUpdate();
                 connection.commit();
@@ -227,10 +249,10 @@ public class ComputerDAO {
         try {
             connection = getConnexion();
             PreparedStatement ps = connection.prepareStatement(COUNT
-                                                                                + ((searchName || searchCompany) ? " WHERE " : "")
-                                                                                + ((searchCompany) ? companies.toString() : "")
-                                                                                + ((searchName && searchCompany) ? " AND " : "")
-                                                                                + ((searchName) ? nameLike : ""));
+                                                                       + ((searchName || searchCompany) ? " WHERE " : "")
+                                                                       + ((searchCompany) ? companies.toString() : "")
+                                                                       + ((searchName && searchCompany) ? " AND " : "")
+                                                                       + ((searchName) ? nameLike : ""));
             ResultSet rs = ps.executeQuery();
             rs.next();
             int retour = rs.getInt("count(*)");
@@ -264,7 +286,8 @@ public class ComputerDAO {
             connection.commit();
             connection.close();
             return c;
-        } catch (SQLException | CompanyDAOException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
             try {
                 connection.close();
             } catch (SQLException e1) {
@@ -296,26 +319,23 @@ public class ComputerDAO {
         if (params.getSize() < 1) {
             params.setSize(1);
         }
-        Connection connection = null;
+        Connection connection = MyThreadLocal.get().getConnection();
         PreparedStatement ps = null;
         try {
-            connection = getConnexion();
             ps = connection.prepareStatement(SELECT
-                                                                       + ((searchName || searchCompany) ? " WHERE " : "")
-                                                                       + ((searchCompany) ? companies.toString() : "")
-                                                                       + ((searchName && searchCompany) ? " AND " : "")
-                                                                       + ((searchName) ? nameLike : "")
-                                                                       + " LIMIT " + params.getSize() + " OFFSET " + params.getSize() * params.getPage()
-                                                                       + sorted(params));
+                                                     + ((searchName || searchCompany) ? " WHERE " : "")
+                                                     + ((searchCompany) ? companies.toString() : "")
+                                                     + ((searchName && searchCompany) ? " AND " : "")
+                                                     + ((searchName) ? nameLike : "")
+                                                     + sorted(params)
+                                                     + " LIMIT " + params.getSize() + " OFFSET " + params.getSize() * params.getPage());
             retour = ComputerMapper.map2Object(ps.executeQuery());
             connection.commit();
-            connection.close();
             return retour;
-        } catch (SQLException | CompanyDAOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             try {
                 connection.rollback();
-                connection.close();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             } finally {
@@ -338,22 +358,22 @@ public class ComputerDAO {
             retour.append(SORT_BY);
             switch (params.getTrierPar()) {
                 case ID :
-                    retour.append(COMPUTER_ID);
+                    retour.append(COMPUTER_TABLE + "." + COMPUTER_ID);
                     break;
                 case NAME:
-                    retour.append(COMPUTER_NAME);
+                    retour.append(COMPUTER_TABLE + "." + COMPUTER_NAME);
                     break;
                 case INTRODUCED:
-                    retour.append(COMPUTER_INTRODUCED);
+                    retour.append(COMPUTER_TABLE + "." + COMPUTER_INTRODUCED);
                     break;
                 case DISCONTINUED:
-                    retour.append(COMPUTER_DISCONTINUED);
+                    retour.append(COMPUTER_TABLE + "." + COMPUTER_DISCONTINUED);
                     break;
                 case COMPANY:
-                    retour.append(COMPUTER_COMPANY);
+                    retour.append(COMPUTER_TABLE + "." + COMPUTER_COMPANY);
                     break;
                 default:
-                    retour.append(COMPUTER_ID);
+                    retour.append(COMPUTER_TABLE + "." + COMPUTER_ID);
                     break;
             }
         }
@@ -413,7 +433,7 @@ public class ComputerDAO {
         String nameLike = null;
         if (params.getName() != null) {
             if (!params.getName().contains("%") && !params.getName().contains("'")) {
-                nameLike = " name LIKE '%" + params.getName() + "%' ";
+                nameLike = " " + COMPUTER_TABLE + "." + "name LIKE '%" + params.getName() + "%' ";
             }
         }
         return nameLike;
