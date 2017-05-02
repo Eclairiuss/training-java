@@ -112,13 +112,7 @@ public class ComputerManager {
             commit();
         } catch (ComputerDAOException | SQLException e) {
             e.printStackTrace();
-            try {
-                rollback();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                throw new ComputerDAOException(e.getMessage());
-            }
+            throw new ComputerDAOException(e.getMessage());
         }
         return retour;
     }

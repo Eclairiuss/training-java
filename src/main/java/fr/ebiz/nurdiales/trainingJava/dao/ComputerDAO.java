@@ -92,6 +92,7 @@ public class ComputerDAO {
         PreparedStatement ps = null;
         try {
             connection = getConnexion();
+            connection.setAutoCommit(false);
             ps = connection.prepareStatement(INSERT_COMPUTER);
             ps.setString(1, c.getName());
             ps.setString(2, c.getIntroduced());
@@ -101,13 +102,7 @@ public class ComputerDAO {
             connection.commit();
             connection.close();
         } catch (SQLException e) {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                throw new ComputerDAOException(e.getMessage());
-            }
+            rollback(connection, e);
         }
         return retour;
     }
@@ -126,19 +121,14 @@ public class ComputerDAO {
         int retour = 0;
         try {
             connection = getConnexion();
+            connection.setAutoCommit(false);
             PreparedStatement ps = connection.prepareStatement(DELETE_COMPUTER);
             ps.setInt(1, id);
             retour = ps.executeUpdate();
             connection.commit();
             connection.close();
         } catch (SQLException e) {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                throw new ComputerDAOException(e.getMessage());
-            }
+            rollback(connection, e);
         }
         return retour;
     }
@@ -167,18 +157,13 @@ public class ComputerDAO {
         }
         try {
             connection = getConnexion();
+            connection.setAutoCommit(false);
             System.out.println(idsSB.toString());
             retour = connection.prepareStatement(DELETE_COMPUTERS + idsSB.toString()).executeUpdate();
             connection.commit();
             connection.close();
         } catch (SQLException e) {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                throw new ComputerDAOException(e.getMessage());
-            }
+            rollback(connection, e);
         }
         return retour;
     }
@@ -199,6 +184,7 @@ public class ComputerDAO {
         if (c.getName() != null) {
             try {
                 connection = getConnexion();
+                connection.setAutoCommit(false);
 
                 PreparedStatement ps = connection.prepareStatement(check ? UPDATE_COMPUTER_FULL : UPDATE_COMPUTER_NOT_DATES);
                 ps.setString(1, c.getName());
@@ -212,13 +198,7 @@ public class ComputerDAO {
                 ps.close();
                 connection.close();
             } catch (SQLException e) {
-                try {
-                    connection.close();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                } finally {
-                    throw new ComputerDAOException(e.getMessage());
-                }
+                rollback(connection, e);
             }
         }
         return retour;
@@ -447,6 +427,23 @@ public class ComputerDAO {
     public Connection getConnexion() throws SQLException {
         JDBCSingleton connection = JDBCSingleton.getInstance();
         return connection.getDataSource().getConnection();
+    }
+
+    /**
+     * Connection must rollback and close.
+     * @param connection to rollback and close.
+     * @param e exception who direct to rollback.
+     * @throws ComputerDAOException Error in CompanyDAO SQL.
+     */
+    public void rollback(Connection connection, Exception e) throws ComputerDAOException {
+        try {
+            connection.rollback();
+            connection.close();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        } finally {
+            throw new ComputerDAOException(e.getMessage());
+        }
     }
 
     /**

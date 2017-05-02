@@ -49,7 +49,9 @@ public class ServletCreateComputer extends HttpServlet {
             computer.setIntroduced(request.getParameter(INTRODUCED));
             computer.setDiscontinued(request.getParameter(DISCONTINUED));
             computer.setCompany(company);
-            computerManager.add(computer);
+            if (computer.getName() != null && !computer.getName().equals("")) {
+                computerManager.add(computer);
+            }
             response.sendRedirect(DASHBOARD_REDIRECTION);
         } catch (CompanyDAOException | ComputerDAOException e) {
             e.printStackTrace();
