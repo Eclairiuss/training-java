@@ -13,8 +13,8 @@
  * t0+38 = t10+1 - Project presentation to sales & tech audience
 
 # t1
-## TOVERIFY - Base Architecture.
-## DONE - CLI.
+** TOVERIFY - Base Architecture.
+** DONE - CLI.
  * DONE - List computers.
  * DONE - List companies.
  * DONE - Show computer details (the detailed information of only one computer).
@@ -22,34 +22,34 @@
  * DONE - Update a computer.
  * DONE - Delete a computer.
  * DONE - Pages.
-## DONE - Javedoc.
-## W.I.P. - Logging.
+** DONE - Javedoc.
+** W.I.P. - Logging.
 
 # t2 + t3
-## W.I.P. - Web UI.
-### DONE - Create new computer.
-### DONE - Update already existing computer.
-### W.I.P. - Dashboard.
-#### DONE - print all computers.
-#### DONE - select page.
-#### W.I.P. - search options.
+** W.I.P. - Web UI.
+*** DONE - Create new computer.
+*** DONE - Update already existing computer.
+*** W.I.P. - Dashboard.
+**** DONE - print all computers.
+**** DONE - select page.
+**** W.I.P. - search options.
  * DONE - just name search
  * TODO - name and company name search
-#### DONE - delete computer(s).
-#### DONE - select size of page.
-#### DONE - OrderBy
-## DONE - Logging.
-## W.I.P. - Unit Tests.
-## W.I.P. - jQuery Validation.
-## W.I.P. - Backend Validation.
-## DONE - Taglib.
-## W.I.P. - tested using Selenium.
-## DONE - Pass to IntelliJ.
-## DONE - Transactions
-## DONE - Connection-Poom
+**** DONE - delete computer(s).
+**** DONE - select size of page.
+**** DONE - OrderBy
+** DONE - Logging.
+** W.I.P. - Unit Tests.
+** W.I.P. - jQuery Validation.
+** W.I.P. - Backend Validation.
+** DONE - Taglib.
+** W.I.P. - tested using Selenium.
+** DONE - Pass to IntelliJ.
+** DONE - Transactions
+** DONE - Connection-Poom
 
 # t4
-## TODO - Docker
-## TODO - Dockerhub
-## TODO - Glazer
-## TODO - Jenkins
+ * TODO - Docker
+ * TODO - Dockerhub
+ * TODO - Glazer
+ * TODO - Jenkins
