@@ -50,6 +50,7 @@
 			<li>DONE - select size of page.</li>
 			<li>DONE - OrderBy</li>
 		</ul>
+	</ul>
 	<li>DONE - Logging.</li>
 	<li>W.I.P. - Unit Tests.</li>
 	<li>W.I.P. - jQuery Validation.</li>
@@ -59,14 +60,13 @@
 	<li>DONE - Pass to IntelliJ.</li>
 	<li>DONE - Transactions</li>
 	<li>DONE - Connection-Poom</li>
-	</ul>
 </ul>
 # t4
 <ul>
-<li>TODO - Docker</li>
-<li>TODO - Dockerhub</li>
-<li>TODO - Glazer</li>
-<li>TODO - Jenkins</li>
+	<li>TODO - Docker</li>
+	<li>TODO - Dockerhub</li>
+	<li>TODO - Glazer</li>
+	<li>TODO - Jenkins</li>
 </ul>
 
 
