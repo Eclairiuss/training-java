@@ -63,10 +63,34 @@
 </ul>
 # t4
 <ul>
-	<li>TODO - Docker</li>
-	<li>TODO - Dockerhub</li>
+	<li>W.I.P - Docker</li>
+	<ul>
+		<li>DONE - Doing Dockerfiles</li>
+		<li>DONE - Doing Network</li>
+		<li>TODO - Include in the main project</li>
+		<li>TODO - Jenkins Image for server</li>
+	</ul>
+	<li>DONE - Dockerhub</li>
+	<ul>
+		<li>DONE - Add github project who contains Dockerfiles</li>
+		<li>DONE - Autobuild if update</li>
+	</ul>
 	<li>TODO - Glazer</li>
-	<li>TODO - Jenkins</li>
+	<li>W.I.P - Jenkins</li>
+	<ul>
+		<li>DONE - Configure Jenkins</li>
+		<ul>
+			<li>DONE - Git</li>
+			<li>DONE - Maven</li>
+		</ul>
+		<li>DONE - Configure Project</li>
+		<ul>
+			<li>DONE - Link to git</li>
+			<li>DONE - Verify if new push in focus branch on git</li>
+			<li>DONE - Auto-build when push on git</li>
+		</ul>
+		<li>TODO - Autoconfig in a docker</li>
+	</ul>
 </ul>
 
 
