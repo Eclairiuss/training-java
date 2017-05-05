@@ -13,21 +13,6 @@ import javax.sql.DataSource;
 public class JDBCSingleton {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCSingleton.class);
     private static DataSource datasource;
-    private String DB_URL;
-    private String DB_USERNAME;
-    private String DB_PASSWORD;
-    private int Max_Pool_Size;
-
-    /**
-     * Constructor of JDBCSingleton who init all value and connect to DataBase.
-     */
-    public JDBCSingleton() {
-        DB_URL = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false";
-        DB_USERNAME = "admincdb";
-        DB_PASSWORD = "qwerty1234";
-
-        Max_Pool_Size = 10;
-    }
 
     /**
      *  .
@@ -35,15 +20,7 @@ public class JDBCSingleton {
      */
     public DataSource getDataSource() {
         if (datasource == null) {
-            HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(DB_URL);
-            config.setUsername(DB_USERNAME);
-            config.setPassword(DB_PASSWORD);
-            config.setMaximumPoolSize(Max_Pool_Size);
-            config.setAutoCommit(false);
-            config.addDataSourceProperty("cachePrepStmts", "true");
-            config.addDataSourceProperty("prepStmtCacheSize", "250");
-            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+            HikariConfig config = new HikariConfig("/hikari.properties");
             datasource = new HikariDataSource(config);
         }
         return datasource;
