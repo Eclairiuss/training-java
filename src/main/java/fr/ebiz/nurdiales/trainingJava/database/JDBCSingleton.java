@@ -1,5 +1,7 @@
 package fr.ebiz.nurdiales.trainingJava.database;
 
+// import java.io.FileInputStream;
+// import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -21,6 +23,11 @@ public class JDBCSingleton {
     public DataSource getDataSource() {
         if (datasource == null) {
             HikariConfig config = new HikariConfig("/hikari.properties");
+            // try {
+            //     config.getDataSourceProperties().load(new FileInputStream("/hikari2.properties"));
+            // } catch (IOException e) {
+            //     e.printStackTrace();
+            // }
             datasource = new HikariDataSource(config);
         }
         return datasource;
