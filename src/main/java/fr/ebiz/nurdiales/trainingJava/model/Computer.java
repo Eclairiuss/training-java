@@ -1,16 +1,16 @@
-package fr.ebiz.nurdiales.trainingJava;
+package fr.ebiz.nurdiales.trainingJava.model;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Computer {
-    private static final Date NEVER_BEFORE = Date.valueOf("1970-01-01");
+    private static final LocalDate NEVER_BEFORE = stringToDate("1970-01-01");
 
     private int id;
     private String name;
-    private Date introduced;
-    private Date discontinued;
+    private LocalDate introduced;
+    private LocalDate discontinued;
     private Company company;
 
     /**
@@ -21,7 +21,7 @@ public class Computer {
      * @param discontinued Date of discontinued of Computer.
      * @param company Company who have make the computer.
      */
-    public Computer(int id, String name, Date introduced, Date discontinued, Company company) {
+    public Computer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
         this.id = id;
         this.name = name;
         this.introduced = introduced;
@@ -52,12 +52,12 @@ public class Computer {
         this.name = (!name.contains("%") && !name.contains("'")) ? name : this.name;
     }
 
-    public Date getIntroduced() {
+    public LocalDate getIntroduced() {
         return introduced;
     }
 
-    public void setIntroduced(Date introduced) {
-        this.introduced = (introduced != null) ? (introduced.before(NEVER_BEFORE) ? this.introduced : introduced)
+    public void setIntroduced(LocalDate introduced) {
+        this.introduced = (introduced != null) ? (introduced.isBefore(NEVER_BEFORE) ? this.introduced : introduced)
                                   : null;
     }
     /**
@@ -65,18 +65,18 @@ public class Computer {
      * @param introduced Date with format "AAAA-MM-JJ"
      */
     public void setIntroduced(String introduced) {
-        Date intro = stringToDate(introduced);
+        LocalDate intro = stringToDate(introduced);
         this.introduced = (intro != null)
-                                    ? (intro.before(NEVER_BEFORE) ? this.introduced : intro) : null;
+                                    ? (intro.isBefore(NEVER_BEFORE) ? this.introduced : intro) : null;
     }
 
-    public Date getDiscontinued() {
+    public LocalDate getDiscontinued() {
         return discontinued;
     }
 
-    public void setDiscontinued(Date discontinued) {
+    public void setDiscontinued(LocalDate discontinued) {
         this.discontinued = (discontinued != null)
-                                    ? (discontinued.before(NEVER_BEFORE) ? this.discontinued : discontinued) : null;
+                                    ? (discontinued.isBefore(NEVER_BEFORE) ? this.discontinued : discontinued) : null;
     }
 
     /**
@@ -84,9 +84,9 @@ public class Computer {
      * @param discontinued Date with format "AAAA-MM-JJ"
      */
     public void setDiscontinued(String discontinued) {
-        Date discont = stringToDate(discontinued);
+        LocalDate discont = stringToDate(discontinued);
         this.discontinued = (discont != null)
-                                    ? (discont.before(NEVER_BEFORE) ? this.discontinued : discont) : null;
+                                    ? (discont.isBefore(NEVER_BEFORE) ? this.discontinued : discont) : null;
     }
 
     public Company getCompany() {
@@ -112,12 +112,15 @@ public class Computer {
      * @param s Date in string.
      * @return Date from the param
      */
-    private Date stringToDate(String s) {
+    private static LocalDate stringToDate(String s) {
         if (s == null || s.equals("")) {
             return null;
         }
-
-        return Date.valueOf(LocalDate.parse(s, DateTimeFormatter.ISO_LOCAL_DATE));
+        try {
+            return LocalDate.parse(s.split(" ")[0], DateTimeFormatter.ISO_LOCAL_DATE);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
     }
 
     /**
@@ -128,6 +131,6 @@ public class Computer {
         if (introduced == null || discontinued == null) {
             return true;
         }
-        return introduced.before(discontinued);
+        return introduced.isBefore(discontinued);
     }
 }

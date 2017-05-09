@@ -1,6 +1,7 @@
 package fr.ebiz.nurdiales.trainingJava.dto;
 
-import fr.ebiz.nurdiales.trainingJava.Computer;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
 
 public class ComputerDTO {
     private String id;
@@ -15,13 +16,20 @@ public class ComputerDTO {
      * @param computer computer to translate.
      */
     public ComputerDTO(Computer computer) {
-        this.id = "" + computer.getId();
-        this.name = computer.getName();
-        introduced = computer.getIntroduced() == null ? null : computer.getIntroduced().toString();
-        discontinued = computer.getDiscontinued() == null ? null : computer.getDiscontinued().toString();
-        companyId = computer.getCompany() == null ? null : "" + computer.getCompany().getId();
-        companyName = computer.getCompany() == null ? null : computer.getCompany().getName();
+        if (computer != null) {
+            this.id = "" + computer.getId();
+            this.name = computer.getName();
+            introduced = computer.getIntroduced() == null ? null : computer.getIntroduced().toString();
+            discontinued = computer.getDiscontinued() == null ? null : computer.getDiscontinued().toString();
+            companyId = computer.getCompany() == null ? null : "" + computer.getCompany().getId();
+            companyName = computer.getCompany() == null ? null : computer.getCompany().getName();
+        }
     }
+
+    /**
+     * default constructor.
+     */
+    public ComputerDTO() { }
 
     public String getId() {
         return id;
@@ -69,6 +77,28 @@ public class ComputerDTO {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    /**
+     * Create the computer corresponding to the dto.
+     * @return Computer.
+     */
+    public Computer toComputer() {
+        Computer c = new Computer();
+        try {
+            c.setId(Integer.parseInt(id));
+            c.setName(name);
+            c.setIntroduced(introduced);
+            c.setDiscontinued(discontinued);
+            if (companyId != null) {
+                c.setCompany(new Company(Integer.parseInt(companyId), companyName));
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(id);
+            System.out.println(companyId);
+            e.printStackTrace();
+        }
+        return c;
     }
 
     @Override

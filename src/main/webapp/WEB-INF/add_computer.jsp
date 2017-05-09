@@ -13,11 +13,6 @@
 <body>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-<script src="js/computerCheck.js"></script>
-
 <header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <a class="navbar-brand" href="./"> Application - Computer Database </a>
@@ -36,11 +31,11 @@
                             <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name">
                         </div>
                         <div class="form-group">
-                            <label>Introduced date</label>
+                            <label for="datepicker1">Introduced date</label>
                             <input type="text" class="form-control" id="datepicker1" name="introduced" placeholder="Discontinued date">
                         </div>
                         <div class="form-group">
-                            <label>Discontinued date</label>
+                            <label for="datepicker2">Discontinued date</label>
                             <input type="text" class="form-control" id="datepicker2" name="discontinued" placeholder="Discontinued date">
                         </div>
                         <div class="form-group">
@@ -63,5 +58,10 @@
         </div>
     </div>
 </section>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-datepicker.js"></script>
+<script src="js/bootstrapValidator.min.js"></script>
+<script src="<c:url value="/js/computerCheck.js" />" ></script>
 </body>
 </html>
