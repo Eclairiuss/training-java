@@ -1,6 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.dto;
-
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+package fr.ebiz.nurdiales.trainingJava.model;
 
 public class CompanyDTO {
     private Integer id;

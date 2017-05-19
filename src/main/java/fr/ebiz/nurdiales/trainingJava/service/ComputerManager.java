@@ -1,28 +1,34 @@
 package fr.ebiz.nurdiales.trainingJava.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-
-import fr.ebiz.nurdiales.trainingJava.dao.ComputerDAO;
-import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
-import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
+import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.DAOException;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
-import fr.ebiz.nurdiales.trainingJava.util.Context;
-import fr.ebiz.nurdiales.trainingJava.util.MyThreadLocal;
+import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
+import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+@Service
 public class ComputerManager {
     // private static Logger logger =
     // LoggerFactory.getLogger(ComputerManager.class);
+    @Autowired
     private ComputerDAO computerDAO;
+    @Autowired
+    private CompanyDAO companyDAO;
 
     /**
      * Constructor of ComputerManager, create the computerDAO.
      */
     public ComputerManager() {
-        this.computerDAO = new ComputerDAO();
+
     }
 
     /**
@@ -35,6 +41,7 @@ public class ComputerManager {
      *         returns nothing, such as a DDL statement.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
+    @Transactional(rollbackFor = {DAOException.class})
     public int add(Computer c) throws ComputerDAOException {
         return computerDAO.add(new ComputerDTO(c));
     }
@@ -48,6 +55,7 @@ public class ComputerManager {
      *         returns nothing, such as a DDL statement.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
+    @Transactional(rollbackFor = {DAOException.class})
     public int delete(int id) throws ComputerDAOException {
         return computerDAO.delete(id);
     }
@@ -61,6 +69,7 @@ public class ComputerManager {
      *         returns nothing, such as a DDL statement.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
+    @Transactional(rollbackFor = {DAOException.class})
     public int delete(int[] ids) throws ComputerDAOException {
         return computerDAO.delete(ids);
     }
@@ -74,6 +83,7 @@ public class ComputerManager {
      *         returns nothing, such as a DDL statement.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
+    @Transactional(rollbackFor = {DAOException.class})
     public int update(Computer c) throws ComputerDAOException {
         return computerDAO.update(new ComputerDTO(c));
     }
@@ -84,8 +94,10 @@ public class ComputerManager {
      * @return the researched computer.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
+    @Transactional(rollbackFor = {DAOException.class})
     public Computer get(int id) throws ComputerDAOException {
-        return computerDAO.getById(id);
+        Computer retour = computerDAO.getById(id);
+        return retour;
     }
 
     /**
@@ -93,9 +105,13 @@ public class ComputerManager {
      * @param params contains all search arguments.
      * @return int corresponding to number of computers in the DB.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @throws CompanyDAOException Error in the CompanyDAO SQL.
      */
-    public int getCount(Parameters params) throws ComputerDAOException {
-        return computerDAO.getCount(params);
+    @Transactional(rollbackFor = {DAOException.class})
+    public int getCount(Parameters params) throws ComputerDAOException, CompanyDAOException {
+        List<Company> list = companyDAO.allCompanies();
+        int retour = computerDAO.getCount(params, list);
+        return retour;
     }
 
     /**
@@ -103,47 +119,13 @@ public class ComputerManager {
      * @param params contains all search arguments.
      * @return list of corresponding Computer.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
+     * @throws CompanyDAOException Error in the CompanyDAO SQL.
      */
-    public List<Computer> getAll(Parameters params) throws ComputerDAOException {
+    @Transactional(rollbackFor = {DAOException.class})
+    public List<Computer> getAll(Parameters params) throws ComputerDAOException, CompanyDAOException {
+        List<Company> list = companyDAO.allCompanies();
         List<Computer> retour = null;
-        try {
-            setConnection();
-            retour = computerDAO.getAll(params);
-            commit();
-        } catch (ComputerDAOException | SQLException e) {
-            e.printStackTrace();
-            throw new ComputerDAOException(e.getMessage());
-        }
+        retour = computerDAO.getAll(params, list);
         return retour;
-    }
-
-    /**
-     * .
-     * @throws SQLException .
-     */
-    private void setConnection() throws  SQLException {
-        Context context = new Context();
-        context.setConnection(JDBCSingleton.getInstance().getDataSource().getConnection());
-        MyThreadLocal.set(context);
-    }
-
-    /**
-     * .
-     * @throws SQLException .
-     */
-    private void commit() throws SQLException {
-        Connection connection = MyThreadLocal.get().getConnection();
-        connection.commit();
-        connection.close();
-    }
-
-    /**
-     * .
-     * @throws SQLException .
-     */
-    private void rollback() throws SQLException {
-        Connection connection = MyThreadLocal.get().getConnection();
-        connection.rollback();
-        connection.close();
     }
 }

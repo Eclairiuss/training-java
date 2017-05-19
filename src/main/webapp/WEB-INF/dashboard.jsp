@@ -61,11 +61,11 @@
 
                 <th class="editMode" style="width: 60px; height: 22px;">
                     <input type="checkbox" id="selectall" />
-                    <span style="vertical-align: top;">
-                                 -  <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();">
-                                        <i class="fa fa-trash-o fa-lg"></i>
-                                    </a>
-                            </span>
+                    <span style="display: none">
+                        <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();">
+                            <i class="fa fa-trash-o fa-lg"></i>
+                        </a>
+                    </span>
                 </th>
 
                 <th>
@@ -98,7 +98,7 @@
             <c:forEach var="computer" items="${computers}">
                 <tr>
                     <td class="editMode">
-                        <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
+                        <input type="checkbox" name="cb" class="cb" value="${computer.getId()}" style="display: none">
                     </td>
                     <td>
                         <a href="edit_computer?id=${computer.getId()}" onclick="">

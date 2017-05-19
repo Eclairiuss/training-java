@@ -1,36 +1,35 @@
 package fr.ebiz.nurdiales.trainingJava.database;
 
-// import java.io.FileInputStream;
-// import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
-public class JDBCSingleton {
+public class JDBCSingleton extends DataSourceTransactionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCSingleton.class);
-    private static DataSource datasource;
-
+    private static JDBCSingleton singleton = new JDBCSingleton();
     /**
      *  .
      * @return .
      */
     public DataSource getDataSource() {
-        if (datasource == null) {
+        if (singleton.getDataSource() == null) {
             HikariConfig config = new HikariConfig("/hikari.properties");
             // try {
             //     config.getDataSourceProperties().load(new FileInputStream("/hikari2.properties"));
             // } catch (IOException e) {
             //     e.printStackTrace();
             // }
-            datasource = new HikariDataSource(config);
+            singleton.setDataSource(new HikariDataSource(config));
         }
-        return datasource;
+        return singleton.getDataSource();
     }
 
     /**
@@ -39,19 +38,12 @@ public class JDBCSingleton {
      */
     private Connection connectToDB() {
         try {
-            Connection conn = getDataSource().getConnection();
+            Connection conn = singleton.getDataSource().getConnection();
             return conn;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;
         }
-    }
-
-    /**
-     * @author eclairiuss
-     */
-    private static class JDBCSingletonManagerHolder {
-        private static final JDBCSingleton INSTANCE = new JDBCSingleton();
     }
 
     /**
@@ -61,7 +53,7 @@ public class JDBCSingleton {
     public static JDBCSingleton getInstance() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            return JDBCSingletonManagerHolder.INSTANCE;
+            return singleton;
         } catch (ExceptionInInitializerError | ClassNotFoundException e) {
             e.printStackTrace();
         }

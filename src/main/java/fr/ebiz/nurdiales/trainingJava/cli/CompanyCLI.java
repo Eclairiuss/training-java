@@ -1,15 +1,14 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-import java.util.List;
-import java.util.Scanner;
-
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Scanner;
 
 public class CompanyCLI extends PageCLI {
     private static Logger logger = LoggerFactory.getLogger(CompanyCLI.class);
@@ -55,7 +54,7 @@ public class CompanyCLI extends PageCLI {
     protected void delete(String tmp) {
         try {
             companyManager.delete(Integer.parseInt(tmp));
-        } catch (ComputerDAOException e) {
+        } catch (CompanyDAOException e) {
             e.printStackTrace();
         }
     }

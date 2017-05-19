@@ -3,8 +3,9 @@ package fr.ebiz.nurdiales.trainingJava.cli;
 import java.util.List;
 import java.util.Scanner;
 
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
-import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
+import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,7 @@ public class ComputerCLI extends PageCLI {
     }
 
     @Override
-    public void printEntities(Scanner sc) throws ComputerDAOException {
+    public void printEntities(Scanner sc) throws ComputerDAOException, CompanyDAOException {
         LOGGER.debug("start of printComputers");
         params = new Parameters.Builder().size(10).build();
         boolean exitWanted = false;

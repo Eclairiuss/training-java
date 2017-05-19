@@ -54,7 +54,8 @@ public class ComputerMapperTest {
      */
     @Test
     public void testGetById() throws SQLException {
-        Computer c = ComputerMapper.makeComputer(resultSet);
+        ComputerMapper computerMapper = new ComputerMapper();
+        Computer c = computerMapper.makeComputer(resultSet);
         assertTrue(true);
     }
 
