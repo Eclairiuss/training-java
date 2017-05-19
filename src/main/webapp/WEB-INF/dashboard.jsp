@@ -2,6 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
 
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,7 +13,7 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="css/font-awesome.css" rel="stylesheet" media="screen">
-    <link href="css/main.css" rel="stylesheet"dashboard media="screen">
+    <link href="css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 <header class="navbar navbar-inverse navbar-fixed-top">
@@ -26,6 +27,7 @@
         <h1 id="homeTitle">
             ${numberComputers} Computer(s) found
         </h1>
+
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
                 <form id="searchForm" action="./" method="GET" class="form-inline">
@@ -59,9 +61,9 @@
                 <!-- Variable declarations for passing labels as parameters -->
                 <!-- Table header for Computer Name -->
 
-                <th class="editMode" style="width: 60px; height: 22px;">
+                <th class="editMode" style="width: 60px; height: 22px; display: none">
                     <input type="checkbox" id="selectall" />
-                    <span style="display: none">
+                    <span style="vertical-align: top; ">
                         <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();">
                             <i class="fa fa-trash-o fa-lg"></i>
                         </a>
@@ -97,8 +99,8 @@
 
             <c:forEach var="computer" items="${computers}">
                 <tr>
-                    <td class="editMode">
-                        <input type="checkbox" name="cb" class="cb" value="${computer.getId()}" style="display: none">
+                    <td class="editMode" style="display: none">
+                        <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
                     </td>
                     <td>
                         <a href="edit_computer?id=${computer.getId()}" onclick="">
@@ -111,7 +113,7 @@
                     </td>
                     <td> ${computer.getIntroduced()}</td>
                     <td> ${computer.getDiscontinued()}</td>
-                    <td><c:if test="${computer.getCompany() != null}"> ${computer.getCompanyName()}</c:if></td>
+                    <td> ${computer.getCompanyName()}</td>
                 </tr>
             </c:forEach>
             </tbody>

@@ -1,11 +1,12 @@
 package fr.ebiz.nurdiales.trainingJava.service;
 
-import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
 import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
@@ -32,85 +33,55 @@ public class ComputerManager {
     }
 
     /**
-     * Method to add a new computer in the database.
-     * @param c Computer to add in the database, id don't need because the
+     * Method to create a new listComputers in the database.
+     * @param c Computer to create in the database, id don't need because the
      *            database generate it.
-     * @return Executes the SQL statement in this PreparedStatement object,
-     *         which must be an SQL Data Manipulation Language (DML) statement,
-     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
-     *         returns nothing, such as a DDL statement.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public int add(Computer c) throws ComputerDAOException {
-        return computerDAO.add(new ComputerDTO(c));
+    public void add(Computer c) throws ComputerDAOException {
+        computerDAO.create(new ComputerDTO(c));
     }
 
     /**
-     * Methode to delete a computer in the database by his id.
-     * @param id Id of the computer to delete.
-     * @return Executes the SQL statement in this PreparedStatement object,
-     *         which must be an SQL Data Manipulation Language (DML) statement,
-     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
-     *         returns nothing, such as a DDL statement.
+     * Methode to delete a listComputers in the database by his id.
+     * @param id Id of the listComputers to delete.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public int delete(int id) throws ComputerDAOException {
-        return computerDAO.delete(id);
+    public void delete(int id) throws ComputerDAOException {
+        computerDAO.delete(id);
     }
 
     /**
-     * Methode to delete a computer in the database by his id.
+     * Methode to delete a listComputers in the database by his id.
      * @param ids List of Ids of computers to delete.
-     * @return Executes the SQL statement in this PreparedStatement object,
-     *         which must be an SQL Data Manipulation Language (DML) statement,
-     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
-     *         returns nothing, such as a DDL statement.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public int delete(int[] ids) throws ComputerDAOException {
-        return computerDAO.delete(ids);
+    public void delete(Integer[] ids) throws ComputerDAOException {
+        computerDAO.delete(ids);
     }
 
     /**
-     * Method to update a computer in the database.
+     * Method to update a listComputers in the database.
      * @param c Computer to update in the database, the id of c must be in DB.
-     * @return Executes the SQL statement in this PreparedStatement object,
-     *         which must be an SQL Data Manipulation Language (DML) statement,
-     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
-     *         returns nothing, such as a DDL statement.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public int update(Computer c) throws ComputerDAOException {
-        return computerDAO.update(new ComputerDTO(c));
+    public void update(Computer c) throws ComputerDAOException {
+        computerDAO.update(new ComputerDTO(c));
     }
 
     /**
-     * Method to find a computer in the database by his id.
-     * @param id of the researched computer.
-     * @return the researched computer.
+     * Method to find a listComputers in the database by his id.
+     * @param id of the researched listComputers.
+     * @return ComputerDTO corresponding to the id.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public Computer get(int id) throws ComputerDAOException {
-        Computer retour = computerDAO.getById(id);
-        return retour;
-    }
-
-    /**
-     * Method to get the number of computers in the database.
-     * @param params contains all search arguments.
-     * @return int corresponding to number of computers in the DB.
-     * @throws ComputerDAOException Error in the ComputerDAO SQL.
-     * @throws CompanyDAOException Error in the CompanyDAO SQL.
-     */
-    @Transactional(rollbackFor = {DAOException.class})
-    public int getCount(Parameters params) throws ComputerDAOException, CompanyDAOException {
-        List<Company> list = companyDAO.allCompanies();
-        int retour = computerDAO.getCount(params, list);
+    public ComputerDTO get(int id) throws ComputerDAOException {
+        ComputerDTO retour = computerDAO.getComputer(id);
         return retour;
     }
 
@@ -122,10 +93,16 @@ public class ComputerManager {
      * @throws CompanyDAOException Error in the CompanyDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public List<Computer> getAll(Parameters params) throws ComputerDAOException, CompanyDAOException {
-        List<Company> list = companyDAO.allCompanies();
-        List<Computer> retour = null;
-        retour = computerDAO.getAll(params, list);
-        return retour;
+    public Page getAll(Parameters params) throws ComputerDAOException, CompanyDAOException {
+        List<CompanyDTO> list = companyDAO.listCompanies();
+        Page page = computerDAO.listComputers(params, list);
+        for (CompanyDTO company : list) {
+            for (ComputerDTO computer : page.getComputers()) {
+                if (company.getId().equals(computer.getCompanyId())) {
+                    computer.setCompanyName(company.getName());
+                }
+            }
+        }
+        return page;
     }
 }

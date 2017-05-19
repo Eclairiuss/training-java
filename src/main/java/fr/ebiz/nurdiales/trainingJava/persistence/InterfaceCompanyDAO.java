@@ -1,8 +1,9 @@
 package fr.ebiz.nurdiales.trainingJava.persistence;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 /**
@@ -11,20 +12,41 @@ import java.util.List;
 public interface InterfaceCompanyDAO {
 
     /**
-     * Method for get in data base a company corresponding to a id, if no match
-     * return null.
-     * @param id Id of the company to search in the database.
-     * @return The company corresponding to the id.
-     * @throws CompanyDAOException Error in SQL.
+     * TODO.
+     * @param datasource TODO.
      */
-    Company companyById(int id) throws CompanyDAOException;
+    void setDatasource(DataSource datasource);
 
     /**
-     * Method for get all companies in database, dangerous if many.
-     * @return All companies in DB.
-     * @throws CompanyDAOException Error in SQL.
+     * create a company in the database, from a name.
+     * @param name of the new company.
      */
-    List<Company> allCompanies() throws CompanyDAOException;
+    void create(String name);
+
+    /**
+     * Get a company from an id.
+     * @param id of the company.
+     * @return the company corresponding.
+     */
+    CompanyDTO getCompany(Integer id);
+
+    /**
+     * Get the list of all companies.
+     * @return the list of all companies.
+     */
+    List<CompanyDTO> listCompanies();
+
+    /**
+     * Delete the company corresponding to the given id.
+     * @param id of the company to delete.
+     */
+    void delete(Integer id);
+
+    /**
+     * Update the name of company with the given id and set it's name with the given name.
+     * @param company to update.
+     */
+    void update(CompanyDTO company);
 
     /**
      * Method for get pageSize companies,
@@ -34,18 +56,15 @@ public interface InterfaceCompanyDAO {
      * @return pageSize companies in the page's page.
      * @throws CompanyDAOException Error in SQL.
      */
-    List<Company> allCompanies(int page, int pageSize) throws CompanyDAOException;
+    List<CompanyDTO> listCompanies(Integer page, Integer pageSize);
 
     /**
-     * Methode to delete a company in the database by his id.
-     * @param i Id of company to delete.
-     * @return Executes the SQL statement in this PreparedStatement object,
-     *         which must be an SQL Data Manipulation Language (DML) statement,
-     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
-     *         returns nothing, such as a DDL statement.
-     * @throws CompanyDAOException Error in the CompanyDAO SQL.
+     * Method for get all companies who have name look like the parameter, not
+     * case sensitive.
+     * @param name String who must be contain in wanted companies.
+     * @return The list of companies who the name contains the parameter.
      */
-    int delete(int i) throws CompanyDAOException;
+    List<CompanyDTO> listCompanies(String name);
 
     /**
      * Method for get pageSize companies who have name look like the parameter,
@@ -54,16 +73,7 @@ public interface InterfaceCompanyDAO {
      * @param page Number of the current page.
      * @param pageSize Size of the page.
      * @return The pageSize companies who the name contains the parameter.
-     * @throws CompanyDAOException Error in SQL.
      */
-    List<Company> allCompaniesByName(String name, int page, int pageSize) throws CompanyDAOException;
+    List<CompanyDTO> listCompanies(String name, Integer page, Integer pageSize);
 
-    /**
-     * Method for get all companies who have name look like the parameter, not
-     * case sensitive.
-     * @param name String who must be contain in wanted companies.
-     * @return The list of companies who the name contains the parameter.
-     * @throws CompanyDAOException Error in SQL.
-     */
-    List<Company> allCompaniesByName(String name) throws CompanyDAOException;
 }

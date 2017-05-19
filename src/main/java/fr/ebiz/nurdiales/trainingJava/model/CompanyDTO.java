@@ -5,12 +5,25 @@ public class CompanyDTO {
     private String name;
 
     /**
+     * Constructor.
+     */
+    public CompanyDTO() { }
+
+    /**
      * constructor to transform object to DTO.
      * @param company company to translate.
      */
     public CompanyDTO(Company company) {
         this.id = company.getId();
         this.name = company.getName();
+    }
+
+    /**
+     * Convert the DTO to Company.
+     * @return the corresponding Company.
+     */
+    public Company toCompany() {
+        return new Company(id, name);
     }
 
     public Integer getId() {

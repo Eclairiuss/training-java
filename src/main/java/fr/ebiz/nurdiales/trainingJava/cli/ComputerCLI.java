@@ -1,17 +1,15 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-import java.util.List;
-import java.util.Scanner;
-
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Parameters;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Page;
+import fr.ebiz.nurdiales.trainingJava.model.Parameters;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
+import java.util.Scanner;
 
 public class ComputerCLI extends PageCLI {
     private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
@@ -33,10 +31,10 @@ public class ComputerCLI extends PageCLI {
         boolean exitWanted = false;
         while (!exitWanted) {
             System.out.println("Page " + params.getPage() + " : ");
-            List<Computer> cl;
-            cl = computerManager.getAll(params);
-            for (Computer c : cl) {
-                System.out.println(new ComputerDTO(c));
+            Page page;
+            page = computerManager.getAll(params);
+            for (ComputerDTO c : page.getComputers()) {
+                System.out.println(c);
             }
             exitWanted = printChoicesAndGet(sc, true);
         }

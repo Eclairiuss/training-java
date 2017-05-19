@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import org.slf4j.Logger;
@@ -55,7 +56,7 @@ public class CLI {
                     switch (l[1].split(SEPARATOR2)[0]) {
                         case ID:
                             try {
-                                Computer computer = computerManager
+                                ComputerDTO computer = computerManager
                                                             .get(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
                                 System.out.println(computer);
                             } catch (Exception e) {
@@ -80,12 +81,12 @@ public class CLI {
     }
 
     /**
-     * Called when user want delete a computer. Ask the ID of computer to
+     * Called when user want delete a listComputers. Ask the ID of listComputers to
      * delete.
      * @param sc Scanner for the CLI output.
      */
     private void deleteComputer(Scanner sc) {
-        System.out.print("ID of computer to delete : ");
+        System.out.print("ID of listComputers to delete : ");
         String l = sc.nextLine();
         try {
             computerManager.delete(Integer.parseInt(l));
@@ -128,7 +129,7 @@ public class CLI {
         }
         System.out.print("Id of Company : ");
         try {
-            computer.setCompany(companyManager.get(Integer.parseInt(sc.nextLine())));
+            computer.setCompany(companyManager.get(Integer.parseInt(sc.nextLine())).toCompany());
         } catch (Exception e) {
             computer.setCompany(null);
         }
@@ -137,12 +138,12 @@ public class CLI {
     }
 
     /**
-     * Called when a user want change a computer. Ask first the computer id.
+     * Called when a user want change a listComputers. Ask first the listComputers id.
      * @param sc Scanner for the CLI output.
      * @throws ComputerDAOException ComputerDAO fails to execute a request.
      */
     private void updateComputer(Scanner sc) throws ComputerDAOException {
-        Computer computer = new Computer(0, "", null, null, null);
+        ComputerDTO computer = new ComputerDTO(new Computer(0, "", null, null, null));
         boolean isInteger = true;
         String s;
         while (computer.getId() == 0) {
@@ -177,10 +178,11 @@ public class CLI {
             }
             System.out.print("Id of Company : ");
             try {
-                computer.setCompany(companyManager.get(Integer.parseInt(sc.nextLine())));
+                computer.setCompanyId(Integer.parseInt(sc.nextLine()));
+                computer.setCompanyName(companyManager.get(computer.getCompanyId()).getName());
             } catch (Exception e) {
             }
-            computerManager.update(computer);
+            computerManager.update(computer.toComputer());
         }
     }
 
@@ -193,9 +195,9 @@ public class CLI {
         System.out.println();
         System.out.println("List of computers : " + ALLCOMPUTERS);
         System.out.println("List of companies : " + ALLCOMPANIES);
-        System.out.println("Show computer details : " + DETAILS + SEPARATOR + ID + SEPARATOR2 + ID);
-        System.out.println("Create a computer : " + NEW);
-        System.out.println("Update a computer : " + UPDATE);
+        System.out.println("Show listComputers details : " + DETAILS + SEPARATOR + ID + SEPARATOR2 + ID);
+        System.out.println("Create a listComputers : " + NEW);
+        System.out.println("Update a listComputers : " + UPDATE);
         System.out.println("Exit and close connexion : " + EXIT);
 
         return sc.nextLine();

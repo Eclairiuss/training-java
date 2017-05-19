@@ -1,9 +1,11 @@
 package fr.ebiz.nurdiales.trainingJava.service;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
 import fr.ebiz.nurdiales.trainingJava.persistence.CompanyDAO;
+import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,8 @@ public class CompanyManager {
     // LoggerFactory.getLogger(CompanyManager.class);
     @Autowired
     private CompanyDAO companyDAO;
+    @Autowired
+    private ComputerDAO computerDAO;
 
     /**
      * Constructor for CompanyManager.
@@ -32,10 +36,10 @@ public class CompanyManager {
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public Company get(int id) throws CompanyDAOException {
-        Company company = null;
+    public CompanyDTO get(int id) throws CompanyDAOException {
+        CompanyDTO company = null;
         if (id > 0) {
-            company = companyDAO.companyById(id);
+            company = companyDAO.getCompany(id);
         }
         return company;
     }
@@ -48,10 +52,10 @@ public class CompanyManager {
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public Company get(String sId) throws CompanyDAOException {
+    public CompanyDTO get(String sId) throws CompanyDAOException {
         try {
             int id = Integer.parseInt(sId);
-            return companyDAO.companyById(id);
+            return companyDAO.getCompany(id);
         } catch (NumberFormatException e) {
             return null;
         }
@@ -63,9 +67,9 @@ public class CompanyManager {
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public List<Company> getAll() throws CompanyDAOException {
-        List<Company> companies = null;
-        companies = companyDAO.allCompanies();
+    public List<CompanyDTO> getAll() throws CompanyDAOException {
+        List<CompanyDTO> companies = null;
+        companies = companyDAO.listCompanies();
         return companies;
     }
 
@@ -78,9 +82,9 @@ public class CompanyManager {
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public List<Company> getAll(int page, int pageSize) throws CompanyDAOException {
-        List<Company> companies = null;
-        companies = companyDAO.allCompanies(page, pageSize);
+    public List<CompanyDTO> getAll(int page, int pageSize) throws CompanyDAOException {
+        List<CompanyDTO> companies = null;
+        companies = companyDAO.listCompanies(page, pageSize);
         return companies;
     }
 
@@ -92,9 +96,9 @@ public class CompanyManager {
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public List<Company> getAll(String name) throws CompanyDAOException {
-        List<Company> companies = null;
-        companies = companyDAO.allCompaniesByName(name);
+    public List<CompanyDTO> getAll(String name) throws CompanyDAOException {
+        List<CompanyDTO> companies = null;
+        companies = companyDAO.listCompanies(name);
         return companies;
     }
 
@@ -108,23 +112,21 @@ public class CompanyManager {
      * @throws CompanyDAOException Error in CompanyDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public List<Company> getAll(String name, int page, int pageSize) throws CompanyDAOException {
-        List<Company> companies = null;
-        companies = companyDAO.allCompaniesByName(name, page, pageSize);
+    public List<CompanyDTO> getAll(String name, int page, int pageSize) throws CompanyDAOException {
+        List<CompanyDTO> companies = null;
+        companies = companyDAO.listCompanies(name, page, pageSize);
         return companies;
     }
 
     /**
      * Methode to delete a company in the database by his id.
      * @param i Id of company to delete.
-     * @return Executes the SQL statement in this PreparedStatement object,
-     *         which must be an SQL Data Manipulation Language (DML) statement,
-     *         such as INSERT, UPDATE or DELETE; or an SQL statement that
-     *         returns nothing, such as a DDL statement.
-     * @throws CompanyDAOException Error in the CompanyDAO SQL.
+     * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public int delete(int i) throws CompanyDAOException {
-        return companyDAO.delete(i);
+    public void delete(int i) throws ComputerDAOException {
+        computerDAO.deleteByCompany(i);
+        companyDAO.delete(new Integer(i));
     }
+
 }

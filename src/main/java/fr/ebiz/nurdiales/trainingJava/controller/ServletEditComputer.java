@@ -2,10 +2,12 @@ package fr.ebiz.nurdiales.trainingJava.controller;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -21,6 +23,7 @@ import java.util.List;
 
 @WebServlet("/edit_computer")
 public class ServletEditComputer extends HttpServlet {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServletEditComputer.class);
     @Autowired
     private ComputerManager computerManager;
     @Autowired
@@ -48,27 +51,35 @@ public class ServletEditComputer extends HttpServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
     /**
-     * BANANAExplication.
-     * @param request BANANARequest.
-     * @param response BANANAResponse.
-     * @throws javax.servlet.ServletException BANANAServletException.
-     * @throws IOException BANANAIOException.
+     * TODO.
+     * @param request TODO.
+     * @param response TODO.
+     * @throws javax.servlet.ServletException TODO.
+     * @throws IOException TODO.
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Computer computer = new Computer();
+        ComputerDTO computer = new ComputerDTO();
         String sId = request.getParameter(ID);
-        Company company = null;
+        CompanyDTO company = null;
+        request.getParameterMap().forEach((k, v) -> {
+            StringBuilder tmp = new StringBuilder();
+            for (String s : v) {
+                tmp.append(", " + s);
+            }
+            LOGGER.info(k + " : " + tmp.toString());
+        });
         try {
             company = companyManager.get(request.getParameter(COMPANY_ID));
             computer.setName(request.getParameter(NAME));
             computer.setIntroduced(request.getParameter(INTRODUCED));
             computer.setDiscontinued(request.getParameter(DISCONTINUED));
-            computer.setCompany(company);
+            computer.setCompanyId(company.getId());
+            computer.setCompanyName(company.getName());
             if (sId != null) {
                 computer.setId(Integer.parseInt(sId));
-                computerManager.update(computer);
+                computerManager.update(computer.toComputer());
             } else {
-                computerManager.add(computer);
+                computerManager.add(computer.toComputer());
             }
             response.sendRedirect(DASHBOARD_REDIRECTION);
         } catch (CompanyDAOException | ComputerDAOException e) {
@@ -78,24 +89,36 @@ public class ServletEditComputer extends HttpServlet {
     }
 
     /**
-     * BANANAExplication.
-     * @param request BANANARequest.
-     * @param response BANANAResponse.
-     * @throws javax.servlet.ServletException BANANAServletException.
-     * @throws IOException BANANAIOException.
+     * TODO.
+     * @param request TODO.
+     * @param response TODO.
+     * @throws javax.servlet.ServletException TODO.
+     * @throws IOException TODO.
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = 0;
         String sId = request.getParameter("id");
+        List<CompanyDTO> companies = null;
+        try {
+            companies = companyManager.getAll();
+        } catch (CompanyDAOException e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+        request.setAttribute("companies", companies);
         if (sId != null) {
             try {
                 id = Integer.parseInt(sId);
-                Computer computer = computerManager.get(id);
-                List<Company> companies = companyManager.getAll();
+                ComputerDTO computer = computerManager.get(id);
+                for (CompanyDTO company : companies) {
+                    if (company.getId().equals(computer.getCompanyId())) {
+                        computer.setCompanyName(company.getName());
+                        break;
+                    }
+                }
                 request.setAttribute("computer", computer);
-                request.setAttribute("companies", companies);
                 this.getServletContext().getRequestDispatcher(EDIT_COMPUTER_VIEW).forward(request, response);
-            } catch (NumberFormatException | ComputerDAOException | CompanyDAOException e) {
+            } catch (NumberFormatException | ComputerDAOException e) {
                 e.printStackTrace();
                 throw new IllegalStateException(e);
             }

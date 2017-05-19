@@ -15,6 +15,11 @@ public class Company {
         this.name = name;
     }
 
+    /**
+     * Constructor.
+     */
+    public Company() { }
+
     public int getId() {
         return id;
     }

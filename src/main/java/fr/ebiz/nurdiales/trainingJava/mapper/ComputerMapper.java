@@ -1,76 +1,29 @@
 package fr.ebiz.nurdiales.trainingJava.mapper;
 
-import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-/**
- * Created by ebiz on 20/04/17.
- */
 @Component
-public class ComputerMapper {
-    /**
-     * List of all computer in the rs.
-     * @param rs ResultSet form a search.
-     * @return Computers from rs.
-     * @throws SQLException Error in SQL.
-     */
-    public List<Computer> map2Object(ResultSet rs) throws SQLException {
-        List<Computer> retour = new ArrayList<Computer>();
-        while (rs.next()) {
-            retour.add(makeComputer(rs));
-        }
-        return retour;
-    }
-
-    /**
-     * Map a list of ComputerDTO from a list of Company.
-     * @param computers list of computer.
-     * @return list of ComputerDTO corresponding to computers.
-     */
-    public List<ComputerDTO> map2DTO(List<Computer> computers) {
-        List<ComputerDTO> list = computers.stream().map(c -> new ComputerDTO(c)).collect(Collectors.toList());
-        return list;
-    }
-
-
-    /**
-     * Get the first object from the ResultSet.
-     * @param rs ResultSet form a search.
-     * @return Computer corresponding to the first object from rs.
-     * @throws SQLException Error in SQL.
-     */
-    public Computer toObject(ResultSet rs) throws SQLException {
-        Computer c = null;
-        if (rs.next()) {
-            c = makeComputer(rs);
-        }
-        return c;
-    }
-
-    /**
-     * Get the first object from the ResultSet.
-     * @param rs ResultSet form a search already set on the next input.
-     * @return Computer corresponding to the first object from rs.
-     * @throws SQLException Error in SQL.
-     */
-    public Computer makeComputer(ResultSet rs) throws SQLException {
+public class ComputerMapper implements RowMapper<ComputerDTO> {
+    @Override
+    public ComputerDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
         ComputerDTO c = new ComputerDTO();
-
-        c.setId(rs.getString(ComputerDAO.COMPUTER_ID));
+        c.setId(rs.getInt(ComputerDAO.COMPUTER_ID));
         c.setName(rs.getString(ComputerDAO.COMPUTER_NAME));
         c.setIntroduced(rs.getString(ComputerDAO.COMPUTER_INTRODUCED));
+        if (c.getIntroduced() != null) {
+            c.setIntroduced(c.getIntroduced().split(" ")[0]);
+        }
         c.setDiscontinued(rs.getString(ComputerDAO.COMPUTER_DISCONTINUED));
-        c.setCompanyId(rs.getString(ComputerDAO.COMPUTER_COMPANY));
-        c.setCompanyName(rs.getString(ComputerDAO.NAME_COMPANY));
-
-        return c.toComputer();
+        if (c.getDiscontinued() != null) {
+            c.setDiscontinued(c.getDiscontinued().split(" ")[0]);
+        }
+        c.setCompanyId(rs.getInt(ComputerDAO.COMPUTER_COMPANY));
+        return c;
     }
 }
