@@ -1,7 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.dto;
-
-import fr.ebiz.nurdiales.trainingJava.model.Company;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+package fr.ebiz.nurdiales.trainingJava.model;
 
 public class ComputerDTO {
     private String id;

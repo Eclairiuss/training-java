@@ -1,11 +1,15 @@
-package fr.ebiz.nurdiales.trainingJava.servlet;
+package fr.ebiz.nurdiales.trainingJava.controller;
 
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import fr.ebiz.nurdiales.trainingJava.util.Trad;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +20,8 @@ import java.util.List;
 
 @WebServlet("")
 public class ServletListComputer extends HttpServlet {
-    private ComputerManager manager;
+    @Autowired
+    ComputerManager computerManager;
 
     private static final String ACTION = "ACTION";
     private static final String DELETE = "delete";
@@ -27,6 +32,25 @@ public class ServletListComputer extends HttpServlet {
     private static final String PAGE = "page";
     private static final String DELETESELECTED = "selection";
     private static final String LIST_COMPUTER_VIEW = "/WEB-INF/dashboard.jsp";
+
+    /**
+     * Constructor.
+     */
+    public ServletListComputer() { }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
+    public ComputerManager getComputerManager() {
+        return computerManager;
+    }
+
+    public void setComputerManager(ComputerManager computerManager) {
+        this.computerManager = computerManager;
+    }
 
     /**
      * BANANAExplication.
@@ -48,16 +72,11 @@ public class ServletListComputer extends HttpServlet {
         params.parseTri(sTri);
         int count = -1;
         List<Computer> listComputers = null;
-        manager = new ComputerManager();
 
         try {
-            listComputers = manager.getAll(params);
-        } catch (ComputerDAOException e) {
-            e.printStackTrace();
-        }
-        try {
-            count = manager.getCount(params);
-        } catch (ComputerDAOException e) {
+            listComputers = computerManager.getAll(params);
+            count = computerManager.getCount(params);
+        } catch (ComputerDAOException | CompanyDAOException e) {
             e.printStackTrace();
         }
 
@@ -86,7 +105,7 @@ public class ServletListComputer extends HttpServlet {
                 for (int i = 0; i < idsString.length; ++i) {
                     ids[i] = Integer.parseInt(idsString[i]);
                 }
-                manager.delete(ids);
+                computerManager.delete(ids);
             } catch (ComputerDAOException | IllegalArgumentException e) {
                 e.printStackTrace();
                 throw new IllegalStateException(e);

@@ -1,8 +1,9 @@
 package fr.ebiz.nurdiales.trainingJava.mapper;
 
-import fr.ebiz.nurdiales.trainingJava.dao.ComputerDAO;
-import fr.ebiz.nurdiales.trainingJava.dto.ComputerDTO;
+import fr.ebiz.nurdiales.trainingJava.persistence.ComputerDAO;
+import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 /**
  * Created by ebiz on 20/04/17.
  */
+@Component
 public class ComputerMapper {
     /**
      * List of all computer in the rs.
@@ -20,7 +22,7 @@ public class ComputerMapper {
      * @return Computers from rs.
      * @throws SQLException Error in SQL.
      */
-    public static List<Computer> map2Object(ResultSet rs) throws SQLException {
+    public List<Computer> map2Object(ResultSet rs) throws SQLException {
         List<Computer> retour = new ArrayList<Computer>();
         while (rs.next()) {
             retour.add(makeComputer(rs));
@@ -33,7 +35,7 @@ public class ComputerMapper {
      * @param computers list of computer.
      * @return list of ComputerDTO corresponding to computers.
      */
-    public static List<ComputerDTO> map2DTO(List<Computer> computers) {
+    public List<ComputerDTO> map2DTO(List<Computer> computers) {
         List<ComputerDTO> list = computers.stream().map(c -> new ComputerDTO(c)).collect(Collectors.toList());
         return list;
     }
@@ -45,7 +47,7 @@ public class ComputerMapper {
      * @return Computer corresponding to the first object from rs.
      * @throws SQLException Error in SQL.
      */
-    public static Computer toObject(ResultSet rs) throws SQLException {
+    public Computer toObject(ResultSet rs) throws SQLException {
         Computer c = null;
         if (rs.next()) {
             c = makeComputer(rs);
@@ -59,7 +61,7 @@ public class ComputerMapper {
      * @return Computer corresponding to the first object from rs.
      * @throws SQLException Error in SQL.
      */
-    public static Computer makeComputer(ResultSet rs) throws SQLException {
+    public Computer makeComputer(ResultSet rs) throws SQLException {
         ComputerDTO c = new ComputerDTO();
 
         c.setId(rs.getString(ComputerDAO.COMPUTER_ID));
