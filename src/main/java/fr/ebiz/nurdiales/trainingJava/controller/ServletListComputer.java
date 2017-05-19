@@ -2,7 +2,7 @@ package fr.ebiz.nurdiales.trainingJava.controller;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import fr.ebiz.nurdiales.trainingJava.util.Trad;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("")
 public class ServletListComputer extends HttpServlet {
@@ -64,24 +63,25 @@ public class ServletListComputer extends HttpServlet {
         String sPage = request.getParameter(PAGE);
         String sSearch = request.getParameter(SEARCH);
         String sTri = request.getParameter(ORDER);
+
         Parameters params = (new Parameters.Builder())
                                     .page(Trad.stringToInt(sPage) - 1)
                                     .size(Trad.stringToInt(sSize))
                                     .name(sSearch)
                                     .build();
         params.parseTri(sTri);
-        int count = -1;
-        List<Computer> listComputers = null;
+
+        Page page;
 
         try {
-            listComputers = computerManager.getAll(params);
-            count = computerManager.getCount(params);
+            page = computerManager.getAll(params);
         } catch (ComputerDAOException | CompanyDAOException e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
 
-        request.setAttribute("numberComputers", count);
-        request.setAttribute("computers", listComputers);
+        request.setAttribute("numberComputers", page.getQuantity());
+        request.setAttribute("computers", page.getComputers());
         request.setAttribute(PAGE, params.getPage() + 1);
         request.setAttribute(SIZE, params.getSize());
         request.setAttribute(SEARCH, sSearch);
@@ -100,7 +100,7 @@ public class ServletListComputer extends HttpServlet {
         String difference = request.getParameter(ACTION);
         if (difference.equals(DELETE)) {
             String[] idsString = request.getParameter(DELETESELECTED).split(",");
-            int[] ids = new int[idsString.length];
+            Integer[] ids = new Integer[idsString.length];
             try {
                 for (int i = 0; i < idsString.length; ++i) {
                     ids[i] = Integer.parseInt(idsString[i]);

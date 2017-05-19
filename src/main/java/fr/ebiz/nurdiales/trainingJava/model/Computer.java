@@ -1,10 +1,14 @@
 package fr.ebiz.nurdiales.trainingJava.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Computer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Computer.class);
     private static final LocalDate NEVER_BEFORE = stringToDate("1970-01-01");
 
     private int id;
@@ -14,12 +18,12 @@ public class Computer {
     private Company company;
 
     /**
-     * Constructor for computer, who takes all arguments.
-     * @param id Id of the computer.
-     * @param name Name of the computer.
+     * Constructor for listComputers, who takes all arguments.
+     * @param id Id of the listComputers.
+     * @param name Name of the listComputers.
      * @param introduced Date of introduced of Computer.
      * @param discontinued Date of discontinued of Computer.
-     * @param company Company who have make the computer.
+     * @param company Company who have make the listComputers.
      */
     public Computer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
         this.id = id;
@@ -56,18 +60,36 @@ public class Computer {
         return introduced;
     }
 
+    /**
+     * TODO.
+     * @param introduced TODO.
+     */
     public void setIntroduced(LocalDate introduced) {
+        if (this.introduced != null) {
+            LOGGER.info(this.introduced.toString());
+        }
+
         this.introduced = (introduced != null) ? (introduced.isBefore(NEVER_BEFORE) ? this.introduced : introduced)
                                   : null;
+
+        if (this.introduced != null) {
+            LOGGER.info(this.introduced.toString());
+        }
     }
     /**
      * Setter for introduced who parse a string.
      * @param introduced Date with format "AAAA-MM-JJ"
      */
     public void setIntroduced(String introduced) {
+        if (this.introduced != null) {
+            LOGGER.info(this.introduced.toString());
+        }
         LocalDate intro = stringToDate(introduced);
         this.introduced = (intro != null)
                                     ? (intro.isBefore(NEVER_BEFORE) ? this.introduced : intro) : null;
+        if (this.introduced != null) {
+            LOGGER.info(this.introduced.toString());
+        }
     }
 
     public LocalDate getDiscontinued() {
@@ -119,6 +141,7 @@ public class Computer {
         try {
             return LocalDate.parse(s.split(" ")[0], DateTimeFormatter.ISO_LOCAL_DATE);
         } catch (DateTimeParseException e) {
+            LOGGER.info("ERROR StringToDate.");
             return null;
         }
     }

@@ -1,8 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.model;
 
 public class ComputerDTO {
-    private String id;
-    private String companyId;
+    private Integer id;
+    private Integer companyId;
     private String name;
     private String introduced;
     private String discontinued;
@@ -10,15 +10,15 @@ public class ComputerDTO {
 
     /**
      * constructor to transform object to DTO.
-     * @param computer computer to translate.
+     * @param computer listComputers to translate.
      */
     public ComputerDTO(Computer computer) {
         if (computer != null) {
-            this.id = "" + computer.getId();
+            this.id = computer.getId();
             this.name = computer.getName();
             introduced = computer.getIntroduced() == null ? null : computer.getIntroduced().toString();
             discontinued = computer.getDiscontinued() == null ? null : computer.getDiscontinued().toString();
-            companyId = computer.getCompany() == null ? null : "" + computer.getCompany().getId();
+            companyId = computer.getCompany().getId();
             companyName = computer.getCompany() == null ? null : computer.getCompany().getName();
         }
     }
@@ -28,19 +28,19 @@ public class ComputerDTO {
      */
     public ComputerDTO() { }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getCompanyId() {
+    public Integer getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
 
@@ -77,18 +77,20 @@ public class ComputerDTO {
     }
 
     /**
-     * Create the computer corresponding to the dto.
+     * Create the listComputers corresponding to the dto.
      * @return Computer.
      */
     public Computer toComputer() {
         Computer c = new Computer();
         try {
-            c.setId(Integer.parseInt(id));
+            if (id != null) {
+                c.setId(id);
+            }
             c.setName(name);
             c.setIntroduced(introduced);
             c.setDiscontinued(discontinued);
             if (companyId != null) {
-                c.setCompany(new Company(Integer.parseInt(companyId), companyName));
+                c.setCompany(new Company(companyId, companyName));
             }
         } catch (IllegalArgumentException e) {
             System.out.println(id);

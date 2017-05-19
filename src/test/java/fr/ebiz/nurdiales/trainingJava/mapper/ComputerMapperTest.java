@@ -1,7 +1,7 @@
 package fr.ebiz.nurdiales.trainingJava.mapper;
 
 import fr.ebiz.nurdiales.trainingJava.model.Company;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -44,18 +44,17 @@ public class ComputerMapperTest {
         when(resultSet.getString(anyString())).thenReturn(ID).thenReturn(NAME).thenReturn(INTRODUCED).thenReturn(DISCONTINUED).thenReturn(ID_COMPANY).thenReturn(NAME_COMPANY);
 
 //        setFinalStatic(ComputerMapper.class.getDeclaredField("COMPANY_MANAGER"), companyManager);
-
 //        when(companyManager.get(anyInt())).thenReturn(COMPANY);
     }
 
     /**
-     * test for the method getById.
+     * test for the method getComputer.
      * @throws SQLException Because.
      */
     @Test
     public void testGetById() throws SQLException {
         ComputerMapper computerMapper = new ComputerMapper();
-        Computer c = computerMapper.makeComputer(resultSet);
+        ComputerDTO c = computerMapper.mapRow(resultSet, 0);
         assertTrue(true);
     }
 

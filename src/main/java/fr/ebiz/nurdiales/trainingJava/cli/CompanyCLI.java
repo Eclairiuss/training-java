@@ -1,7 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import org.slf4j.Logger;
@@ -30,13 +31,13 @@ public class CompanyCLI extends PageCLI {
         while (!exitWanted) {
             System.out.println("Page " + params.getPage() + " : ");
 
-            List<Company> cl;
+            List<CompanyDTO> cl;
             if (params.getNameCompany() == null) {
                 cl = companyManager.getAll(params.getPage(), params.getSize());
             } else {
                 cl = companyManager.getAll(params.getNameCompany(), params.getPage(), params.getSize());
             }
-            for (Company c : cl) {
+            for (CompanyDTO c : cl) {
                 System.out.println(c);
             }
             exitWanted = printChoicesAndGet(sc, false);
@@ -54,7 +55,7 @@ public class CompanyCLI extends PageCLI {
     protected void delete(String tmp) {
         try {
             companyManager.delete(Integer.parseInt(tmp));
-        } catch (CompanyDAOException e) {
+        } catch (ComputerDAOException e) {
             e.printStackTrace();
         }
     }

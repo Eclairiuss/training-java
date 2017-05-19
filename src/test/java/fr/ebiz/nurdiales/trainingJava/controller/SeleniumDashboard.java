@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingJava.servlet;
+package fr.ebiz.nurdiales.trainingJava.controller;
 
 //import com.thoughtworks.selenium.Selenium;
 //import org.junit.After;

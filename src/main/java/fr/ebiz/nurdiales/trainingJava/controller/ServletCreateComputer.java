@@ -2,8 +2,8 @@ package fr.ebiz.nurdiales.trainingJava.controller;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.Company;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,16 +57,17 @@ public class ServletCreateComputer extends HttpServlet {
      * @throws IOException BANANAIOException.
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Computer computer = new Computer();
-        Company company = null;
+        ComputerDTO computer = new ComputerDTO();
+        CompanyDTO company = null;
         try {
             company = companyManager.get(request.getParameter(COMPANY_ID));
             computer.setName(request.getParameter(NAME));
             computer.setIntroduced(request.getParameter(INTRODUCED));
             computer.setDiscontinued(request.getParameter(DISCONTINUED));
-            computer.setCompany(company);
+            computer.setCompanyId(company.getId());
+            computer.setCompanyName(company.getName());
             if (computer.getName() != null && !computer.getName().equals("")) {
-                computerManager.add(computer);
+                computerManager.add(computer.toComputer());
             }
             response.sendRedirect(DASHBOARD_REDIRECTION);
         } catch (CompanyDAOException | ComputerDAOException e) {
@@ -84,7 +85,7 @@ public class ServletCreateComputer extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<Company> companies = companyManager.getAll();
+            List<CompanyDTO> companies = companyManager.getAll();
             request.setAttribute("companies", companies);
         } catch (CompanyDAOException e) {
             e.printStackTrace();
