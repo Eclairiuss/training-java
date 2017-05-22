@@ -11,14 +11,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="css/font-awesome.css" rel="stylesheet" media="screen">
-    <link href="css/main.css" rel="stylesheet" media="screen">
+    <link href="<c:url value="/resources/css/main.css"/>" rel="stylesheet" >
+    <link href="<c:url value="/resources/css/font-awesome.css"/>" rel="stylesheet" >
+    <link href="<c:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet" >
 </head>
+
 <body>
 <header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="./"> Application - Computer Database </a>
+        <a class="navbar-brand" href="./dashboard"> Application - Computer Database </a>
     </div>
 </header>
 
@@ -30,7 +31,7 @@
 
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
-                <form id="searchForm" action="./" method="GET" class="form-inline">
+                <form id="searchForm" action="./dashboard" method="GET" class="form-inline">
                     <input type="hidden" name="ACTION" value="search">
                     <input type="hidden" name="size" value="${size}">
                     <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
@@ -45,7 +46,7 @@
         </div>
     </div>
 
-    <form id="deleteForm" action="./" method="POST">
+    <form id="deleteForm" action="./dashboard" method="POST">
         <input type="hidden" name="ACTION" value="delete">
         <input type="hidden" name="size" value="${size}">
         <input type="hidden" name="page" value="${page}">
@@ -72,25 +73,25 @@
 
                 <th>
                     Computer name
-                    <a href="./?size=${size}&search=${search}&order=nu" class="fa fa-arrow-up" aria-hidden="true"></a>
-                    <a href="./?size=${size}&search=${search}&order=nd" class="fa fa-arrow-down" aria-hidden="true"></a>
+                    <a href="./dashboard?size=${size}&search=${search}&order=nu" class="fa fa-arrow-up" aria-hidden="true"></a>
+                    <a href="./dashboard?size=${size}&search=${search}&order=nd" class="fa fa-arrow-down" aria-hidden="true"></a>
                 </th>
                 <th>
                     Introduced date
-                    <a href="./?size=${size}&search=${search}&order=iu" class="fa fa-arrow-up" aria-hidden="true"></a>
-                    <a href="./?size=${size}&search=${search}&order=id" class="fa fa-arrow-down" aria-hidden="true"></a>
+                    <a href="./dashboard?size=${size}&search=${search}&order=iu" class="fa fa-arrow-up" aria-hidden="true"></a>
+                    <a href="./dashboard?size=${size}&search=${search}&order=id" class="fa fa-arrow-down" aria-hidden="true"></a>
                 </th>
                 <!-- Table header for Discontinued Date -->
                 <th>
                     Discontinued date
-                    <a href="./?size=${size}&search=${search}&order=du" class="fa fa-arrow-up" aria-hidden="true"></a>
-                    <a href="./?size=${size}&search=${search}&order=dd" class="fa fa-arrow-down" aria-hidden="true"></a>
+                    <a href="./dashboard?size=${size}&search=${search}&order=du" class="fa fa-arrow-up" aria-hidden="true"></a>
+                    <a href="./dashboard?size=${size}&search=${search}&order=dd" class="fa fa-arrow-down" aria-hidden="true"></a>
                 </th>
                 <!-- Table header for Company -->
                 <th>
                     Company
-                    <a href="./?size=${size}&search=${search}&order=cu" class="fa fa-arrow-up" aria-hidden="true"></a>
-                    <a href="./?size=${size}&search=${search}&order=cd" class="fa fa-arrow-down" aria-hidden="true"></a>
+                    <a href="./dashboard?size=${size}&search=${search}&order=cu" class="fa fa-arrow-up" aria-hidden="true"></a>
+                    <a href="./dashboard?size=${size}&search=${search}&order=cd" class="fa fa-arrow-down" aria-hidden="true"></a>
                 </th>
             </tr>
             </thead>
@@ -123,12 +124,12 @@
 
 <footer class="navbar-fixed-bottom">
     <div class="container text-center">
-        <mylib:pagination redirection="./" numberComputers="${numberComputers}" page="${page}" size="${size}" search="${search}" order="${order}" />
+        <mylib:pagination redirection="./dashboard" numberComputers="${numberComputers}" page="${page}" size="${size}" search="${search}" order="${order}" />
     </div>
 </footer>
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="<c:url value="/resources/js/jquery.min.js"/>"></script>
+<script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+<script src="<c:url value="/resources/js/dashboard.js"/>"></script>
 
 </body>
 </html>

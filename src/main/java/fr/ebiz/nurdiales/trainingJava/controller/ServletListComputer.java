@@ -7,21 +7,22 @@ import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import fr.ebiz.nurdiales.trainingJava.util.Trad;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
-@WebServlet("")
-public class ServletListComputer extends HttpServlet {
+@Controller
+public class ServletListComputer {
     @Autowired
     ComputerManager computerManager;
 
+    private static final String PAGE_NAME = "/dashboard";
     private static final String ACTION = "ACTION";
     private static final String DELETE = "delete";
     private static final String SEARCH = "search";
@@ -30,18 +31,6 @@ public class ServletListComputer extends HttpServlet {
     private static final String SIZE = "size";
     private static final String PAGE = "page";
     private static final String DELETESELECTED = "selection";
-    private static final String LIST_COMPUTER_VIEW = "/WEB-INF/dashboard.jsp";
-
-    /**
-     * Constructor.
-     */
-    public ServletListComputer() { }
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-    }
 
     public ComputerManager getComputerManager() {
         return computerManager;
@@ -51,18 +40,13 @@ public class ServletListComputer extends HttpServlet {
         this.computerManager = computerManager;
     }
 
-    /**
-     * BANANAExplication.
-     * @param request  BANANARequest.
-     * @param response BANANAResponse.
-     * @throws javax.servlet.ServletException BANANAServletException.
-     * @throws IOException                    BANANAIOException.
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String sSize = request.getParameter(SIZE);
-        String sPage = request.getParameter(PAGE);
-        String sSearch = request.getParameter(SEARCH);
-        String sTri = request.getParameter(ORDER);
+    @RequestMapping(value = {"", "/", PAGE_NAME}, method = RequestMethod.GET)
+    protected ModelAndView doGet(@RequestParam Map<String, String> request) throws ServletException, IOException {
+        ModelAndView mav = new ModelAndView();
+        String sSize = request.get(SIZE);
+        String sPage = request.get(PAGE);
+        String sSearch = request.get(SEARCH);
+        String sTri = request.get(ORDER);
 
         Parameters params = (new Parameters.Builder())
                                     .page(Trad.stringToInt(sPage) - 1)
@@ -80,26 +64,22 @@ public class ServletListComputer extends HttpServlet {
             throw new IllegalStateException(e);
         }
 
-        request.setAttribute("numberComputers", page.getQuantity());
-        request.setAttribute("computers", page.getComputers());
-        request.setAttribute(PAGE, params.getPage() + 1);
-        request.setAttribute(SIZE, params.getSize());
-        request.setAttribute(SEARCH, sSearch);
-        request.setAttribute(ORDER, sTri);
-        this.getServletContext().getRequestDispatcher(LIST_COMPUTER_VIEW).forward(request, response);
+        mav.addObject("numberComputers", page.getQuantity());
+        mav.addObject("computers", page.getComputers());
+        mav.addObject(PAGE, params.getPage() + 1);
+        mav.addObject(SIZE, params.getSize());
+        mav.addObject(SEARCH, sSearch);
+        mav.addObject(ORDER, sTri);
+        mav.setViewName(PAGE_NAME);
+        return mav;
     }
 
-    /**
-     * BANANAExplication.
-     * @param request  BANANARequest.
-     * @param response BANANAResponse.
-     * @throws javax.servlet.ServletException BANANAServletException.
-     * @throws IOException                    BANANAIOException.
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String difference = request.getParameter(ACTION);
+
+    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
+    protected ModelAndView doPost(@RequestParam Map<String, String> request) throws ServletException, IOException {
+        String difference = request.get(ACTION);
         if (difference.equals(DELETE)) {
-            String[] idsString = request.getParameter(DELETESELECTED).split(",");
+            String[] idsString = request.get(DELETESELECTED).split(",");
             Integer[] ids = new Integer[idsString.length];
             try {
                 for (int i = 0; i < idsString.length; ++i) {
@@ -111,9 +91,6 @@ public class ServletListComputer extends HttpServlet {
                 throw new IllegalStateException(e);
             }
         }
-        response.sendRedirect("./?" + ORDER + "=" + request.getParameter(ORDER)
-                                      + "&"  + SIZE + "=" + request.getParameter(SIZE)
-                                      + "&"  + PAGE + "=" + request.getParameter(PAGE)
-                                      + "&"  + SEARCH + "=" + request.getParameter(SEARCH));
+        return doGet(request);
     }
 }

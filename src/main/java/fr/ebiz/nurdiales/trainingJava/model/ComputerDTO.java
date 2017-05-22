@@ -18,7 +18,7 @@ public class ComputerDTO {
             this.name = computer.getName();
             introduced = computer.getIntroduced() == null ? null : computer.getIntroduced().toString();
             discontinued = computer.getDiscontinued() == null ? null : computer.getDiscontinued().toString();
-            companyId = computer.getCompany().getId();
+            companyId = computer.getCompany() == null ? null : computer.getCompany().getId();
             companyName = computer.getCompany() == null ? null : computer.getCompany().getName();
         }
     }

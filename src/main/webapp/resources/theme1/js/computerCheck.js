@@ -1,7 +1,7 @@
 $(document).ready(
     // Date Picker
     function() {
-        $('#datepicker1').datepicker({
+        $('#introduced').datepicker({
             format : 'yyyy-mm-dd'
         }).on(
             'changeDate',
@@ -9,7 +9,7 @@ $(document).ready(
                 $('#ComputerForm').bootstrapValidator(
                     'revalidateField', 'introduced');
             });
-        $('#datepicker2').datepicker({
+        $('#discontinued').datepicker({
             format : 'yyyy-mm-dd'
         }).on(
             'changeDate',
@@ -27,7 +27,7 @@ $(document).ready(
                     validating : 'glyphicon glyphicon-refresh'
                 },
                 fields : {
-                    computerName : {
+                    name : {
                         validators : {
                             notEmpty : {
                                 message : 'The name is required'

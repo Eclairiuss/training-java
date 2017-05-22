@@ -53,7 +53,7 @@ public class Computer {
     }
 
     public void setName(String name) {
-        this.name = (!name.contains("%") && !name.contains("'")) ? name : this.name;
+        this.name = (name == null) ? null : (!name.contains("%") && !name.contains("'")) ? name : this.name;
     }
 
     public LocalDate getIntroduced() {
