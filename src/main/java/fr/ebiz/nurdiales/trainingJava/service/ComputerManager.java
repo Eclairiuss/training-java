@@ -39,7 +39,7 @@ public class ComputerManager {
      */
     @Transactional(rollbackFor = {DAOException.class})
     public void add(ComputerDTO c) throws ComputerDAOException {
-        computerDAO.create(c);
+        computerDAO.create(c.toComputer());
     }
 
     /**
@@ -69,7 +69,7 @@ public class ComputerManager {
      */
     @Transactional(rollbackFor = {DAOException.class})
     public void update(ComputerDTO c) throws ComputerDAOException {
-        computerDAO.update(c);
+        computerDAO.update(c.toComputer());
     }
 
     /**

@@ -115,6 +115,10 @@ public class Computer {
         return company;
     }
 
+    public String getCompanyId() {
+        return (company != null) ? "" + company.getId()  : null;
+    }
+
     public String getCompanyName() {
         return (company != null) ? company.getName() : "";
     }

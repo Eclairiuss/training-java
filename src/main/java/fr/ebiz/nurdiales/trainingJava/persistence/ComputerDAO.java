@@ -3,6 +3,7 @@ package fr.ebiz.nurdiales.trainingJava.persistence;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.mapper.ComputerMapper;
 import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
@@ -33,8 +34,8 @@ public class ComputerDAO implements InterfaceComputerDAO {
     private static final String COUNT = " SELECT COUNT(*) FROM " + COMPUTER_TABLE;
 
     private static final String BY_ID = SELECT + " WHERE " + COMPUTER_ID + "=?";
-    private static final String INSERT = " INSERT INTO " + COMPUTER_TABLE + "(" + COMPUTER_NAME + " , "
-                                                          + COMPUTER_INTRODUCED + " , " + COMPUTER_DISCONTINUED + " , " + COMPUTER_COMPANY + ") values (?,?,?,?)";
+    private static final String INSERT = " INSERT INTO " + COMPUTER_TABLE + " ( " + COMPUTER_NAME + " , "
+                                                          + COMPUTER_INTRODUCED + " , " + COMPUTER_DISCONTINUED + " , " + COMPUTER_COMPANY + " ) values ( ? , ? , ? , ? )";
     private static final String UPDATE_NOT_DATES = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_NAME + "=?, "
                                                                     + COMPUTER_COMPANY + "=? WHERE "
                                                                     + COMPUTER_ID + "=? ";
@@ -69,10 +70,9 @@ public class ComputerDAO implements InterfaceComputerDAO {
     }
 
     @Override
-    public void create(ComputerDTO computer) throws ComputerDAOException {
-        if (computer != null) {
-            ComputerDTO c = new ComputerDTO(computer.toComputer());
-            jdbcTemplate.update(INSERT, new Object[] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompanyId()});
+    public void create(Computer c) throws ComputerDAOException {
+        if (c != null) {
+            jdbcTemplate.update(INSERT, new Object[] {c.getName(), (c.getIntroduced() != null) ? c.getIntroduced().toString() : null, (c.getDiscontinued() != null) ? c.getDiscontinued().toString() : null, c.getCompanyId()});
         }
     }
 
@@ -102,10 +102,9 @@ public class ComputerDAO implements InterfaceComputerDAO {
 
 
     @Override
-    public void update(ComputerDTO computer) throws ComputerDAOException {
-        if (computer != null) {
-            ComputerDTO c = new ComputerDTO(computer.toComputer());
-            boolean check = c.toComputer().checkDates();
+    public void update(Computer c) throws ComputerDAOException {
+        if (c != null) {
+            boolean check = c.checkDates();
             if (check) {
                 jdbcTemplate.update(UPDATE_FULL, c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompanyId(), c.getId());
             } else {

@@ -24,6 +24,7 @@ public class ServletListComputer {
 
     private static final String PAGE_NAME = "/dashboard";
     private static final String ACTION = "ACTION";
+    private static final String LANGUAGE = "language";
     private static final String DELETE = "delete";
     private static final String SEARCH = "search";
     private static final String ORDER = "order";
@@ -47,6 +48,11 @@ public class ServletListComputer {
         String sPage = request.get(PAGE);
         String sSearch = request.get(SEARCH);
         String sTri = request.get(ORDER);
+        String sLanguage = request.get(LANGUAGE);
+
+        if (sLanguage == null) {
+            sLanguage = "fr";
+        }
 
         Parameters params = (new Parameters.Builder())
                                     .page(Trad.stringToInt(sPage) - 1)
@@ -70,6 +76,7 @@ public class ServletListComputer {
         mav.addObject(SIZE, params.getSize());
         mav.addObject(SEARCH, sSearch);
         mav.addObject(ORDER, sTri);
+        mav.addObject(LANGUAGE, sLanguage);
         mav.setViewName(PAGE_NAME);
         return mav;
     }

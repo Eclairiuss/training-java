@@ -33,6 +33,7 @@ public class ServletEditComputer {
     private static final String DASHBOARD_REDIRECTION = "redirect:./dashboard";
     private static final String CREATE_COMPUTER_REDIRECTION = "./add_computer";
 
+    private static final String LANGUAGE = "language";
     private static final String ID = "id";
     private static final String NAME = "computerName";
     private static final String INTRODUCED = "introduced";
@@ -40,8 +41,9 @@ public class ServletEditComputer {
     private static final String COMPANY_ID = "companyId";
 
     @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
-    protected ModelAndView doPost(@RequestParam Map<String, String> request) throws ServletException, IOException {
+    protected ModelAndView doPost(@RequestParam Map<String, String> request, String language) throws ServletException, IOException {
         ModelAndView mav = new ModelAndView(DASHBOARD_REDIRECTION);
+        mav.addObject(LANGUAGE, language);
         ComputerDTO computer = new ComputerDTO();
         String sId = request.get(ID);
         CompanyDTO company = null;
@@ -99,6 +101,7 @@ public class ServletEditComputer {
         } else {
             mav.setViewName(CREATE_COMPUTER_REDIRECTION);
         }
+        mav.addObject(LANGUAGE, request.get(LANGUAGE));
         return mav;
     }
 }

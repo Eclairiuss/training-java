@@ -89,7 +89,7 @@ public class ComputerDTO {
             c.setName(name);
             c.setIntroduced(introduced);
             c.setDiscontinued(discontinued);
-            if (companyId != null) {
+            if (companyId != null && companyId != 0) {
                 c.setCompany(new Company(companyId, companyName));
             }
         } catch (IllegalArgumentException e) {
