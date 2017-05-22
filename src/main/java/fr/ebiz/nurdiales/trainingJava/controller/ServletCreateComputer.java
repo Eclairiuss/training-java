@@ -7,28 +7,24 @@ import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
-/**
- * Created by ebiz on 20/04/17.
- */
-@Service
-@WebServlet("/add_computer")
-public class ServletCreateComputer extends HttpServlet {
-    private static final String DASHBOARD_REDIRECTION = "./";
-    private static final String CREATE_COMPUTER_VIEW = "/WEB-INF/add_computer.jsp";
 
-    private static final String NAME = "computerName";
+@Controller
+public class ServletCreateComputer {
+    private static final String DASHBOARD_REDIRECTION = "redirect:./dashboard";
+    private static final String PAGE_NAME = "/add_computer";
+    private static final String NAME = "name";
     private static final String INTRODUCED = "introduced";
     private static final String DISCONTINUED = "discontinued";
     private static final String COMPANY_ID = "companyId";
@@ -38,60 +34,31 @@ public class ServletCreateComputer extends HttpServlet {
     @Autowired
     private CompanyManager companyManager;
 
-    /**
-     * Constructor.
-     */
-    public ServletCreateComputer() { }
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-    }
-
-    /**
-     * BANANAExplication.
-     * @param request BANANARequest.
-     * @param response BANANAResponse.
-     * @throws javax.servlet.ServletException BANANAServletException.
-     * @throws IOException BANANAIOException.
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ComputerDTO computer = new ComputerDTO();
-        CompanyDTO company = null;
+    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
+    @ResponseBody
+    protected ModelAndView doPost(ComputerDTO computer) throws ServletException, IOException {
+        ModelAndView mav = new ModelAndView(DASHBOARD_REDIRECTION);
         try {
-            company = companyManager.get(request.getParameter(COMPANY_ID));
-            computer.setName(request.getParameter(NAME));
-            computer.setIntroduced(request.getParameter(INTRODUCED));
-            computer.setDiscontinued(request.getParameter(DISCONTINUED));
-            computer.setCompanyId(company.getId());
-            computer.setCompanyName(company.getName());
-            if (computer.getName() != null && !computer.getName().equals("")) {
-                computerManager.add(computer.toComputer());
-            }
-            response.sendRedirect(DASHBOARD_REDIRECTION);
-        } catch (CompanyDAOException | ComputerDAOException e) {
+            computerManager.add(computer);
+        } catch (ComputerDAOException e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
         }
+        return mav;
     }
 
-    /**
-     * BANANAExplication.
-     * @param request BANANARequest.
-     * @param response BANANAResponse.
-     * @throws javax.servlet.ServletException BANANAServletException.
-     * @throws IOException BANANAIOException.
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.GET)
+    protected ModelAndView doGet(@RequestParam Map<String, String> request) throws ServletException, IOException {
+        ModelAndView mav = new ModelAndView();
         try {
             List<CompanyDTO> companies = companyManager.getAll();
-            request.setAttribute("companies", companies);
+            mav.addObject("companies", companies);
         } catch (CompanyDAOException e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
         }
-        this.getServletContext().getRequestDispatcher(CREATE_COMPUTER_VIEW).forward(request, response);
+        mav.setViewName(PAGE_NAME);
+        return mav;
     }
 
     public void setComputerManager(ComputerManager computerManager) {

@@ -9,28 +9,28 @@ import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
-@WebServlet("/edit_computer")
-public class ServletEditComputer extends HttpServlet {
+@Controller
+public class ServletEditComputer {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServletEditComputer.class);
     @Autowired
     private ComputerManager computerManager;
     @Autowired
     private CompanyManager companyManager;
 
-    private static final String DASHBOARD_REDIRECTION = "./";
-    private static final String EDIT_COMPUTER_VIEW = "/WEB-INF/edit_computer.jsp";
+    private static final String PAGE_NAME = "/edit_computer";
+    private static final String DASHBOARD_REDIRECTION = "redirect:./dashboard";
     private static final String CREATE_COMPUTER_REDIRECTION = "./add_computer";
 
     private static final String ID = "id";
@@ -39,65 +39,39 @@ public class ServletEditComputer extends HttpServlet {
     private static final String DISCONTINUED = "discontinued";
     private static final String COMPANY_ID = "companyId";
 
-    /**
-     * Constructor.
-     */
-    public ServletEditComputer() {
-    }
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-    }
-    /**
-     * TODO.
-     * @param request TODO.
-     * @param response TODO.
-     * @throws javax.servlet.ServletException TODO.
-     * @throws IOException TODO.
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
+    protected ModelAndView doPost(@RequestParam Map<String, String> request) throws ServletException, IOException {
+        ModelAndView mav = new ModelAndView(DASHBOARD_REDIRECTION);
         ComputerDTO computer = new ComputerDTO();
-        String sId = request.getParameter(ID);
+        String sId = request.get(ID);
         CompanyDTO company = null;
-        request.getParameterMap().forEach((k, v) -> {
-            StringBuilder tmp = new StringBuilder();
-            for (String s : v) {
-                tmp.append(", " + s);
-            }
-            LOGGER.info(k + " : " + tmp.toString());
-        });
         try {
-            company = companyManager.get(request.getParameter(COMPANY_ID));
-            computer.setName(request.getParameter(NAME));
-            computer.setIntroduced(request.getParameter(INTRODUCED));
-            computer.setDiscontinued(request.getParameter(DISCONTINUED));
-            computer.setCompanyId(company.getId());
-            computer.setCompanyName(company.getName());
+            company = companyManager.get(request.get(COMPANY_ID));
+            computer.setName(request.get(NAME));
+            computer.setIntroduced(request.get(INTRODUCED));
+            computer.setDiscontinued(request.get(DISCONTINUED));
+            if (company != null) {
+                computer.setCompanyId(company.getId());
+                computer.setCompanyName(company.getName());
+            }
             if (sId != null) {
                 computer.setId(Integer.parseInt(sId));
-                computerManager.update(computer.toComputer());
+                computerManager.update(computer);
             } else {
-                computerManager.add(computer.toComputer());
+                computerManager.add(computer);
             }
-            response.sendRedirect(DASHBOARD_REDIRECTION);
         } catch (CompanyDAOException | ComputerDAOException e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
         }
+        return mav;
     }
 
-    /**
-     * TODO.
-     * @param request TODO.
-     * @param response TODO.
-     * @throws javax.servlet.ServletException TODO.
-     * @throws IOException TODO.
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.GET)
+    protected ModelAndView doGet(@RequestParam Map<String, String> request) throws ServletException, IOException {
+        ModelAndView mav = new ModelAndView();
         int id = 0;
-        String sId = request.getParameter("id");
+        String sId = request.get("id");
         List<CompanyDTO> companies = null;
         try {
             companies = companyManager.getAll();
@@ -105,7 +79,7 @@ public class ServletEditComputer extends HttpServlet {
             e.printStackTrace();
             throw new IllegalStateException(e);
         }
-        request.setAttribute("companies", companies);
+        mav.addObject("companies", companies);
         if (sId != null) {
             try {
                 id = Integer.parseInt(sId);
@@ -116,14 +90,15 @@ public class ServletEditComputer extends HttpServlet {
                         break;
                     }
                 }
-                request.setAttribute("computer", computer);
-                this.getServletContext().getRequestDispatcher(EDIT_COMPUTER_VIEW).forward(request, response);
+                mav.addObject("computer", computer);
+                mav.setViewName(PAGE_NAME);
             } catch (NumberFormatException | ComputerDAOException e) {
                 e.printStackTrace();
                 throw new IllegalStateException(e);
             }
         } else {
-            response.sendRedirect(CREATE_COMPUTER_REDIRECTION);
+            mav.setViewName(CREATE_COMPUTER_REDIRECTION);
         }
+        return mav;
     }
 }

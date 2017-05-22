@@ -4,7 +4,6 @@ import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOException;
 import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
@@ -39,8 +38,8 @@ public class ComputerManager {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public void add(Computer c) throws ComputerDAOException {
-        computerDAO.create(new ComputerDTO(c));
+    public void add(ComputerDTO c) throws ComputerDAOException {
+        computerDAO.create(c);
     }
 
     /**
@@ -69,8 +68,8 @@ public class ComputerManager {
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
     @Transactional(rollbackFor = {DAOException.class})
-    public void update(Computer c) throws ComputerDAOException {
-        computerDAO.update(new ComputerDTO(c));
+    public void update(ComputerDTO c) throws ComputerDAOException {
+        computerDAO.update(c);
     }
 
     /**

@@ -1,17 +1,16 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-import java.sql.Date;
-import java.util.Scanner;
-
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
-import fr.ebiz.nurdiales.trainingJava.model.Computer;
+import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+
+import java.sql.Date;
+import java.util.Scanner;
 
 public class CLI {
     private static Logger logger = LoggerFactory.getLogger(CLI.class);
@@ -110,7 +109,7 @@ public class CLI {
      * @throws ComputerDAOException ComputerDAO fails to execute a request.
      */
     private void newComputer(Scanner sc) throws ComputerDAOException {
-        Computer computer = new Computer(0, "", null, null, null);
+        ComputerDTO computer = new ComputerDTO();
         while (computer.getName().equals("")) {
             System.out.print("Name : ");
             computer.setName(sc.nextLine());
@@ -128,11 +127,8 @@ public class CLI {
             logger.debug("Date of Introduced is invalid");
         }
         System.out.print("Id of Company : ");
-        try {
-            computer.setCompany(companyManager.get(Integer.parseInt(sc.nextLine())).toCompany());
-        } catch (Exception e) {
-            computer.setCompany(null);
-        }
+        computer.setCompanyId(Integer.parseInt(sc.nextLine()));
+
         logger.debug(computer.toString());
         computerManager.add(computer);
     }
@@ -143,7 +139,7 @@ public class CLI {
      * @throws ComputerDAOException ComputerDAO fails to execute a request.
      */
     private void updateComputer(Scanner sc) throws ComputerDAOException {
-        ComputerDTO computer = new ComputerDTO(new Computer(0, "", null, null, null));
+        ComputerDTO computer = new ComputerDTO();
         boolean isInteger = true;
         String s;
         while (computer.getId() == 0) {
@@ -179,10 +175,10 @@ public class CLI {
             System.out.print("Id of Company : ");
             try {
                 computer.setCompanyId(Integer.parseInt(sc.nextLine()));
-                computer.setCompanyName(companyManager.get(computer.getCompanyId()).getName());
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
+                logger.debug("CompanyID is invalid");
             }
-            computerManager.update(computer.toComputer());
+            computerManager.update(computer);
         }
     }
 

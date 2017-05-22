@@ -1,6 +1,5 @@
 package fr.ebiz.nurdiales.trainingJava.persistence;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.mapper.ComputerMapper;
 import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
@@ -9,13 +8,9 @@ import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.ID;
@@ -28,38 +23,26 @@ public class ComputerDAO implements InterfaceComputerDAO {
     public static final String COMPUTER_INTRODUCED = COMPUTER_TABLE + "." + "introduced";
     public static final String COMPUTER_DISCONTINUED = COMPUTER_TABLE + "." + "discontinued";
     public static final String COMPUTER_COMPANY = COMPUTER_TABLE + "." + "company_id";
-//    public static final String NAME_COMPANY = "company_name";
+    public static final String COMPANY_NAME = "company_name";
 
 
     private static final String SELECT = "SELECT "
-//            + "(" + COMPUTER_ID
-//            + ", " + COMPUTER_NAME
-//            + ", " + COMPUTER_INTRODUCED
-//            + ", " + COMPUTER_DISCONTINUED
-//            + ", " + COMPUTER_COMPANY
-//            + ", " + CompanyDAO.COMPANY_NAME
-//            + ")"
-//            + " as "
-//            + NAME_COMPANY
-            + "* FROM " + COMPUTER_TABLE
-//            + " LEFT JOIN " + CompanyDAO.COMPANY_TABLE
-//            + " ON " + CompanyDAO.COMPANY_ID
-//            + "=" + COMPUTER_COMPANY
-            + "";
+                                                 + COMPUTER_ID + " , " + COMPUTER_NAME + " , " + COMPUTER_INTRODUCED + " , " + COMPUTER_DISCONTINUED + " , " + COMPUTER_COMPANY + " , " + CompanyDAO.COMPANY_NAME + " as " + COMPANY_NAME
+                                                 + " FROM computer LEFT JOIN company on " + COMPUTER_COMPANY + " = " + CompanyDAO.COMPANY_ID;
 
     private static final String COUNT = " SELECT COUNT(*) FROM " + COMPUTER_TABLE;
 
     private static final String BY_ID = SELECT + " WHERE " + COMPUTER_ID + "=?";
-    private static final String INSERT_COMPUTER = " INSERT INTO " + COMPUTER_TABLE + "(" + COMPUTER_NAME + ","
-                                                          + COMPUTER_INTRODUCED + "," + COMPUTER_DISCONTINUED + "," + COMPUTER_COMPANY + ") values (?,?,?,?)";
-    private static final String UPDATE_COMPUTER_NOT_DATES = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_NAME + "=?, "
+    private static final String INSERT = " INSERT INTO " + COMPUTER_TABLE + "(" + COMPUTER_NAME + " , "
+                                                          + COMPUTER_INTRODUCED + " , " + COMPUTER_DISCONTINUED + " , " + COMPUTER_COMPANY + ") values (?,?,?,?)";
+    private static final String UPDATE_NOT_DATES = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_NAME + "=?, "
                                                                     + COMPUTER_COMPANY + "=? WHERE "
                                                                     + COMPUTER_ID + "=? ";
-    private static final String UPDATE_COMPUTER_FULL = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_NAME + "=?, "
+    private static final String UPDATE_FULL = " UPDATE " + COMPUTER_TABLE + " SET " + COMPUTER_NAME + "=?, "
                                                                + COMPUTER_INTRODUCED + "=?, " + COMPUTER_DISCONTINUED + "=?, " + COMPUTER_COMPANY + "=? WHERE "
                                                                + COMPUTER_ID + "=? ";
-    private static final String DELETE_COMPUTER = " DELETE FROM " + COMPUTER_TABLE + " WHERE id=?";
-    private static final String DELETE_COMPUTERS = " DELETE FROM " + COMPUTER_TABLE + " WHERE ";
+    private static final String DELETE_MANY = " DELETE FROM " + COMPUTER_TABLE + " WHERE ";
+    private static final String DELETE = DELETE_MANY + " id = ? ";
 
     private static final String SORT_BY = " ORDER BY ";
     private static final String INVERT = " DESC ";
@@ -86,13 +69,18 @@ public class ComputerDAO implements InterfaceComputerDAO {
     }
 
     @Override
-    public void create(ComputerDTO c) throws ComputerDAOException {
-        jdbcTemplate.update(INSERT_COMPUTER, new Object[] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompanyId()});
+    public void create(ComputerDTO computer) throws ComputerDAOException {
+        if (computer != null) {
+            ComputerDTO c = new ComputerDTO(computer.toComputer());
+            jdbcTemplate.update(INSERT, new Object[] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompanyId()});
+        }
     }
 
     @Override
     public void delete(Integer id) throws ComputerDAOException {
-        jdbcTemplate.update(DELETE_COMPUTER, id);
+        if (id != null) {
+            jdbcTemplate.update(DELETE, id);
+        }
     }
 
     @Override
@@ -105,49 +93,33 @@ public class ComputerDAO implements InterfaceComputerDAO {
 
     @Override
     public void deleteByCompany(Integer i) throws ComputerDAOException {
-        Connection connection = null;
-        StringBuffer idsSB = new StringBuffer();
-        int retour = 0;
-        boolean isntFirst = false;
-        idsSB.append("(" + COMPUTER_COMPANY + "=" + i + ")");
-        try {
-            connection = getConnexion();
-            connection.setAutoCommit(false);
-            System.out.println(idsSB.toString());
-            retour = connection.prepareStatement(DELETE_COMPUTERS + idsSB.toString()).executeUpdate();
-        } catch (SQLException e) {
-            throw new ComputerDAOException(e.getMessage());
+        if (i != null) {
+            StringBuffer idsSB = new StringBuffer();
+            idsSB.append("( " + COMPUTER_COMPANY + " = ? )");
+            jdbcTemplate.update(DELETE_MANY + idsSB.toString(), i);
         }
     }
 
 
     @Override
-    public void update(ComputerDTO c) throws ComputerDAOException {
-        Connection connection = null;
-        boolean check = c.toComputer().checkDates();
-        int retour = 0;
-        if (c.getName() != null) {
-            try {
-                connection = getConnexion();
-                connection.setAutoCommit(false);
-
-                PreparedStatement ps = connection.prepareStatement(check ? UPDATE_COMPUTER_FULL : UPDATE_COMPUTER_NOT_DATES);
-                ps.setString(1, c.getName());
-                ps.setString(2, c.getIntroduced());
-                ps.setString(3, c.getDiscontinued());
-                ps.setInt(check ? 4 : 2, c.getCompanyId());
-                ps.setInt(check ? 5 : 3, c.getId());
-
-                retour = ps.executeUpdate();
-            } catch (SQLException e) {
-                throw new ComputerDAOException(e.getMessage());
+    public void update(ComputerDTO computer) throws ComputerDAOException {
+        if (computer != null) {
+            ComputerDTO c = new ComputerDTO(computer.toComputer());
+            boolean check = c.toComputer().checkDates();
+            if (check) {
+                jdbcTemplate.update(UPDATE_FULL, c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompanyId(), c.getId());
+            } else {
+                jdbcTemplate.update(UPDATE_NOT_DATES, c.getName(), c.getCompanyId(), c.getId());
             }
         }
     }
 
     @Override
     public ComputerDTO getComputer(Integer id) throws ComputerDAOException {
-        ComputerDTO c = jdbcTemplate.queryForObject(BY_ID, new Object[] {id}, new ComputerMapper());
+        ComputerDTO c = null;
+        if (id != null) {
+            c = jdbcTemplate.queryForObject(BY_ID, new Object[] {id}, computerMapper);
+        }
         return c;
     }
 
@@ -174,7 +146,7 @@ public class ComputerDAO implements InterfaceComputerDAO {
                 + ((searchName && searchCompany) ? " AND " : "")
                 + ((searchName) ? nameLike : "")
                 + sorted(params)
-                + " LIMIT " + params.getSize() + " OFFSET " + params.getSize() * params.getPage(), new ComputerMapper()));
+                + " LIMIT " + params.getSize() + " OFFSET " + params.getSize() * params.getPage(), computerMapper));
 
         retour.setQuantity(jdbcTemplate.queryForObject(COUNT
                 + ((searchName || searchCompany) ? " WHERE " : "")
@@ -192,7 +164,7 @@ public class ComputerDAO implements InterfaceComputerDAO {
      */
     private String sorted(Parameters params) {
         StringBuffer retour = new StringBuffer();
-        if (params == null || params.getTrierPar() == null) {
+        if (params == null || (params.getTrierPar() == null && !params.isReversed())) {
             return retour.toString();
         }
         if (params.isReversed() || params.getTrierPar() != ID) {
@@ -211,7 +183,7 @@ public class ComputerDAO implements InterfaceComputerDAO {
                     retour.append(COMPUTER_DISCONTINUED);
                     break;
                 case COMPANY:
-                    retour.append(COMPUTER_COMPANY);
+                    retour.append(COMPANY_NAME);
                     break;
                 default:
                     retour.append(COMPUTER_ID);
@@ -275,25 +247,5 @@ public class ComputerDAO implements InterfaceComputerDAO {
             }
         }
         return nameLike;
-    }
-
-    /**
-     * Method who create a PreparedStatement with a String who connais instructions.
-     * @return preparedStatement with q sql request.
-     * @throws SQLException Exception of sql request.
-     */
-    public Connection getConnexion() throws SQLException {
-        return DataSourceUtils.getConnection(datasource);
-    }
-
-    /**
-     * Method who get the first object from PreparedStatement.
-     * @param ps PreparedStatement.
-     * @return Computer.
-     * @throws SQLException Exception of sql request.
-     * @throws CompanyDAOException Error in CompanyDAO SQL.
-     */
-    public ComputerDTO preparedStatementToObject(PreparedStatement ps) throws SQLException, CompanyDAOException {
-        return computerMapper.mapRow(ps.executeQuery(), 0);
     }
 }

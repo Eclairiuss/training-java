@@ -37,6 +37,8 @@ public class CompanyDAO implements InterfaceCompanyDAO {
     private List<CompanyDTO> companies = null;
 
     @Autowired
+    private CompanyMapper companyMapper;
+    @Autowired
     private DataSource datasource;
 
     private JdbcTemplate jdbcTemplate;
@@ -63,14 +65,17 @@ public class CompanyDAO implements InterfaceCompanyDAO {
 
     @Override
     public CompanyDTO getCompany(Integer id) {
-        CompanyDTO company = jdbcTemplate.queryForObject(BY_ID, new Object[]{id}, new CompanyMapper());
+        CompanyDTO company = null;
+        if (id != null && id != 0) {
+            company = jdbcTemplate.queryForObject(BY_ID, new Object[]{id}, companyMapper);
+        }
         return company;
     }
 
     @Override
     public List<CompanyDTO> listCompanies() {
         if (companies == null) {
-            companies = jdbcTemplate.query(SELECT, new CompanyMapper());
+            companies = jdbcTemplate.query(SELECT, companyMapper);
         }
         return companies;
     }
@@ -87,19 +92,19 @@ public class CompanyDAO implements InterfaceCompanyDAO {
 
     @Override
     public List<CompanyDTO> listCompanies(Integer page, Integer size) {
-        List<CompanyDTO> list = jdbcTemplate.query(SELECT_WITH_LIMIT_OFFSET, new Object[]{page, size}, new CompanyMapper());
+        List<CompanyDTO> list = jdbcTemplate.query(SELECT_WITH_LIMIT_OFFSET, new Object[]{page, size}, companyMapper);
         return list;
     }
 
     @Override
     public List<CompanyDTO> listCompanies(String name) {
-        List<CompanyDTO> list = jdbcTemplate.query(BY_NAME, new Object[]{name}, new CompanyMapper());
+        List<CompanyDTO> list = jdbcTemplate.query(BY_NAME, new Object[]{name}, companyMapper);
         return list;
     }
 
     @Override
     public List<CompanyDTO> listCompanies(String name, Integer page, Integer size) {
-        List<CompanyDTO> list = jdbcTemplate.query(BY_NAME_WITH_LIMIT_OFFSET, new Object[]{name, page, size}, new CompanyMapper());
+        List<CompanyDTO> list = jdbcTemplate.query(BY_NAME_WITH_LIMIT_OFFSET, new Object[]{name, page, size}, companyMapper);
         return list;
     }
 }
