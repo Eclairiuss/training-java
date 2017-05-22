@@ -2,6 +2,7 @@ package fr.ebiz.nurdiales.trainingJava.persistence;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
@@ -18,11 +19,11 @@ public interface InterfaceComputerDAO {
 
     /**
      * Methode to create a new listComputers in the database.
-     * @param c Computer to create in the database, id don't need because the
+     * @param computer Computer to create in the database, id don't need because the
      *            database generate it.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    void create(ComputerDTO c) throws ComputerDAOException;
+    void create(Computer computer) throws ComputerDAOException;
 
     /**
      * Methode to delete a listComputers in the database by his id.
@@ -47,10 +48,10 @@ public interface InterfaceComputerDAO {
 
     /**
      * Method to update a listComputers in the database.
-     * @param c Computer to update in the database, the id of c must be in DB.
+     * @param computer Computer to update in the database, the id of c must be in DB.
      * @throws ComputerDAOException Error in the ComputerDAO SQL.
      */
-    void update(ComputerDTO c) throws ComputerDAOException;
+    void update(Computer computer) throws ComputerDAOException;
 
     /**
      * Method to find a listComputers in the database by his id.

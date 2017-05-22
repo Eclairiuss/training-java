@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletException;
@@ -25,6 +24,7 @@ public class ServletCreateComputer {
     private static final String DASHBOARD_REDIRECTION = "redirect:./dashboard";
     private static final String PAGE_NAME = "/add_computer";
     private static final String NAME = "name";
+    private static final String LANGUAGE = "language";
     private static final String INTRODUCED = "introduced";
     private static final String DISCONTINUED = "discontinued";
     private static final String COMPANY_ID = "companyId";
@@ -35,9 +35,9 @@ public class ServletCreateComputer {
     private CompanyManager companyManager;
 
     @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
-    @ResponseBody
-    protected ModelAndView doPost(ComputerDTO computer) throws ServletException, IOException {
+    protected ModelAndView doPost(ComputerDTO computer, String language) throws ServletException, IOException {
         ModelAndView mav = new ModelAndView(DASHBOARD_REDIRECTION);
+        mav.addObject(LANGUAGE, language);
         try {
             computerManager.add(computer);
         } catch (ComputerDAOException e) {
@@ -57,6 +57,7 @@ public class ServletCreateComputer {
             e.printStackTrace();
             throw new IllegalStateException(e);
         }
+        mav.addObject(LANGUAGE, request.get(LANGUAGE));
         mav.setViewName(PAGE_NAME);
         return mav;
     }
