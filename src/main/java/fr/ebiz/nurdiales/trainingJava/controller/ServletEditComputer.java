@@ -1,107 +1,114 @@
 package fr.ebiz.nurdiales.trainingJava.controller;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
-import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
-import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
+import fr.ebiz.nurdiales.trainingJava.service.CompanyService;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerService;
+import fr.ebiz.nurdiales.trainingJava.validator.ComputerDTOValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 
 @Controller
 public class ServletEditComputer {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServletEditComputer.class);
-    @Autowired
-    private ComputerManager computerManager;
-    @Autowired
-    private CompanyManager companyManager;
-
     private static final String PAGE_NAME = "/edit_computer";
-    private static final String DASHBOARD_REDIRECTION = "redirect:./dashboard";
-    private static final String CREATE_COMPUTER_REDIRECTION = "./add_computer";
+    private static final String DASHBOARD_REDIRECT = "redirect:./dashboard";
+    private static final String CREATE_COMPUTER = "redirect:./add_computer";
 
-    private static final String LANGUAGE = "language";
     private static final String ID = "id";
-    private static final String NAME = "computerName";
-    private static final String INTRODUCED = "introduced";
-    private static final String DISCONTINUED = "discontinued";
-    private static final String COMPANY_ID = "companyId";
 
-    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
-    protected ModelAndView doPost(@RequestParam Map<String, String> request, String language) throws ServletException, IOException {
-        ModelAndView mav = new ModelAndView(DASHBOARD_REDIRECTION);
-        mav.addObject(LANGUAGE, language);
-        ComputerDTO computer = new ComputerDTO();
-        String sId = request.get(ID);
-        CompanyDTO company = null;
-        try {
-            company = companyManager.get(request.get(COMPANY_ID));
-            computer.setName(request.get(NAME));
-            computer.setIntroduced(request.get(INTRODUCED));
-            computer.setDiscontinued(request.get(DISCONTINUED));
-            if (company != null) {
-                computer.setCompanyId(company.getId());
-                computer.setCompanyName(company.getName());
-            }
-            if (sId != null) {
-                computer.setId(Integer.parseInt(sId));
-                computerManager.update(computer);
-            } else {
-                computerManager.add(computer);
-            }
-        } catch (CompanyDAOException | ComputerDAOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e);
-        }
-        return mav;
+    private static final String FORM = "formComputer";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServletEditComputer.class);
+
+    private ComputerService computerService;
+    private CompanyService companyService;
+    private ComputerDTOValidator computerDTOValidator;
+
+    /**
+     * Default constructor.
+     * @param computerService .
+     * @param companyService .
+     * @param computerDTOValidator .
+     */
+    public ServletEditComputer(ComputerService computerService, CompanyService companyService, ComputerDTOValidator computerDTOValidator) {
+        this.computerService = computerService;
+        this.companyService = companyService;
+        this.computerDTOValidator = computerDTOValidator;
     }
 
+    /**
+     * Inject validator for a computer.
+     * @param binder holder of validator.
+     */
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(computerDTOValidator);
+    }
+
+
+
     @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.GET)
-    protected ModelAndView doGet(@RequestParam Map<String, String> request) throws ServletException, IOException {
-        ModelAndView mav = new ModelAndView();
-        int id = 0;
-        String sId = request.get("id");
+    protected String doGet(ModelMap model, @RequestParam Map<String, String> request) {
+        ComputerDTO computer = null;
         List<CompanyDTO> companies = null;
-        try {
-            companies = companyManager.getAll();
-        } catch (CompanyDAOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e);
-        }
-        mav.addObject("companies", companies);
+        int id = 0;
+
+        String sId = request.get(ID);
+
+        companies = companyService.getAll();
+
+        model.addAttribute("companies", companies);
         if (sId != null) {
             try {
                 id = Integer.parseInt(sId);
-                ComputerDTO computer = computerManager.get(id);
+            } catch (IllegalArgumentException e) {
+                model.addAttribute("message", "Error : Id must be a integer");
+                return "500";
+            }
+            if (id > 0) {
+                computer = computerService.get(id);
                 for (CompanyDTO company : companies) {
                     if (company.getId().equals(computer.getCompanyId())) {
                         computer.setCompanyName(company.getName());
                         break;
                     }
                 }
-                mav.addObject("computer", computer);
-                mav.setViewName(PAGE_NAME);
-            } catch (NumberFormatException | ComputerDAOException e) {
-                e.printStackTrace();
-                throw new IllegalStateException(e);
+                model.addAttribute("computer", computer);
+            } else {
+                return CREATE_COMPUTER;
             }
         } else {
-            mav.setViewName(CREATE_COMPUTER_REDIRECTION);
+            return CREATE_COMPUTER;
         }
-        mav.addObject(LANGUAGE, request.get(LANGUAGE));
-        return mav;
+        model.addAttribute(FORM, computer);
+        return "." + PAGE_NAME;
+    }
+
+
+    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
+    protected String doPost(@ModelAttribute(FORM) @Validated ComputerDTO form, BindingResult result, ModelMap model) {
+        if (result.hasErrors()) {
+            return "false";
+        }
+        if (form.getId() != null && form.getId() > 0) {
+            computerService.update(form);
+        } else {
+            computerService.add(form);
+        }
+        return DASHBOARD_REDIRECT;
     }
 }

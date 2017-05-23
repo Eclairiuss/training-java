@@ -1,19 +1,28 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.DAOCompanyException;
 import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
-import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
+import fr.ebiz.nurdiales.trainingJava.service.CompanyServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class CompanyCLI extends PageCLI {
     private static Logger logger = LoggerFactory.getLogger(CompanyCLI.class);
-    private CompanyManager companyManager;
+    @Autowired
+    private CompanyServiceImpl companyServiceImpl;
+
+    public CompanyServiceImpl getCompanyServiceImpl() {
+        return companyServiceImpl;
+    }
+
+    public void setCompanyServiceImpl(CompanyServiceImpl companyServiceImpl) {
+        this.companyServiceImpl = companyServiceImpl;
+    }
 
     /**
      * Constructor of CompanyCLI, make a new Page for print companies.
@@ -21,11 +30,10 @@ public class CompanyCLI extends PageCLI {
     public CompanyCLI() {
         super();
         params  = (new Parameters.Builder()).page(0).size(10).build();
-        companyManager = new CompanyManager();
     }
 
     @Override
-    public void printEntities(Scanner sc) throws CompanyDAOException {
+    public void printEntities(Scanner sc) throws DAOCompanyException {
         logger.debug("start of printCompanies");
         boolean exitWanted = false;
         while (!exitWanted) {
@@ -33,9 +41,9 @@ public class CompanyCLI extends PageCLI {
 
             List<CompanyDTO> cl;
             if (params.getNameCompany() == null) {
-                cl = companyManager.getAll(params.getPage(), params.getSize());
+                cl = companyServiceImpl.getAll(params.getPage(), params.getSize());
             } else {
-                cl = companyManager.getAll(params.getNameCompany(), params.getPage(), params.getSize());
+                cl = companyServiceImpl.getAll(params.getNameCompany(), params.getPage(), params.getSize());
             }
             for (CompanyDTO c : cl) {
                 System.out.println(c);
@@ -53,11 +61,7 @@ public class CompanyCLI extends PageCLI {
 
     @Override
     protected void delete(String tmp) {
-        try {
-            companyManager.delete(Integer.parseInt(tmp));
-        } catch (ComputerDAOException e) {
-            e.printStackTrace();
-        }
+        companyServiceImpl.delete(Integer.parseInt(tmp));
     }
 
     @Override

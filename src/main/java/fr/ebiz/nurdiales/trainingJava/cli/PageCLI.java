@@ -1,7 +1,7 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.DAOCompanyException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.DAOComputerException;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,10 +36,10 @@ public abstract class PageCLI {
     /**
      * Default function for print entities that the page contains.
      * @param sc Scanner for the CLI output.
-     * @throws ComputerDAOException ComputerDAO fails to execute a request.
-     * @throws CompanyDAOException CompanyDAO fails to execute a request.
+     * @throws DAOComputerException ComputerDAO fails to execute a request.
+     * @throws DAOCompanyException CompanyDAO fails to execute a request.
      */
-    public abstract void printEntities(Scanner sc) throws ComputerDAOException, CompanyDAOException;
+    public abstract void printEntities(Scanner sc) throws DAOComputerException, DAOCompanyException;
 
     /**
      * Default function for get companies who have similar name if it's

@@ -1,13 +1,14 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.DAOCompanyException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.DAOComputerException;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
-import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
-import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
+import fr.ebiz.nurdiales.trainingJava.service.CompanyServiceImpl;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
 import java.util.Scanner;
@@ -20,21 +21,21 @@ public class CLI {
             DATE_OF_INTRODUCED = "date_of_introduced", SEPARATOR = " ", DATE_FORMA = "AAAA-MM-JJ", SEPARATOR2 = "=";
     private static Scanner sc;
     private static PageCLI p;
-    private static ComputerManager computerManager;
-    private static CompanyManager companyManager;
+    @Autowired
+    private static ComputerServiceImpl computerServiceImpl;
+    @Autowired
+    private static CompanyServiceImpl companyServiceImpl;
 
     /**
      * Main function with main loop for the CLI.
-     * @throws ComputerDAOException ComputerDAO fails to execute a request.
-     * @throws CompanyDAOException CompanyDAO fails to execute a request.
+     * @throws DAOComputerException ComputerDAO fails to execute a request.
+     * @throws DAOCompanyException CompanyDAO fails to execute a request.
      */
-    public void mainCLI() throws ComputerDAOException, CompanyDAOException {
+    public void mainCLI() throws DAOComputerException, DAOCompanyException {
 
         JDBCSingleton connection = JDBCSingleton.getInstance();
 
         sc = new Scanner(System.in);
-        computerManager = new ComputerManager();
-        companyManager = new CompanyManager();
 
         boolean wantContinue = true;
         while (wantContinue) {
@@ -55,7 +56,7 @@ public class CLI {
                     switch (l[1].split(SEPARATOR2)[0]) {
                         case ID:
                             try {
-                                ComputerDTO computer = computerManager
+                                ComputerDTO computer = computerServiceImpl
                                                             .get(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
                                 System.out.println(computer);
                             } catch (Exception e) {
@@ -87,11 +88,7 @@ public class CLI {
     private void deleteComputer(Scanner sc) {
         System.out.print("ID of listComputers to delete : ");
         String l = sc.nextLine();
-        try {
-            computerManager.delete(Integer.parseInt(l));
-        } catch (ComputerDAOException e) {
-            e.printStackTrace();
-        }
+        computerServiceImpl.delete(Integer.parseInt(l));
     }
 
     /**
@@ -106,9 +103,9 @@ public class CLI {
     /**
      * Called when user want create a new user.
      * @param sc Scanner for the CLI output.
-     * @throws ComputerDAOException ComputerDAO fails to execute a request.
+     * @throws DAOComputerException ComputerDAO fails to execute a request.
      */
-    private void newComputer(Scanner sc) throws ComputerDAOException {
+    private void newComputer(Scanner sc) throws DAOComputerException {
         ComputerDTO computer = new ComputerDTO();
         while (computer.getName().equals("")) {
             System.out.print("Name : ");
@@ -130,15 +127,15 @@ public class CLI {
         computer.setCompanyId(Integer.parseInt(sc.nextLine()));
 
         logger.debug(computer.toString());
-        computerManager.add(computer);
+        computerServiceImpl.add(computer);
     }
 
     /**
      * Called when a user want change a listComputers. Ask first the listComputers id.
      * @param sc Scanner for the CLI output.
-     * @throws ComputerDAOException ComputerDAO fails to execute a request.
+     * @throws DAOComputerException ComputerDAO fails to execute a request.
      */
-    private void updateComputer(Scanner sc) throws ComputerDAOException {
+    private void updateComputer(Scanner sc) throws DAOComputerException {
         ComputerDTO computer = new ComputerDTO();
         boolean isInteger = true;
         String s;
@@ -146,7 +143,7 @@ public class CLI {
             System.out.print("Id : ");
             s = sc.nextLine();
             try {
-                computer = computerManager.get(Integer.parseInt(s));
+                computer = computerServiceImpl.get(Integer.parseInt(s));
             } catch (IllegalArgumentException e) {
                 isInteger = false;
             }
@@ -178,7 +175,7 @@ public class CLI {
             } catch (IllegalArgumentException e) {
                 logger.debug("CompanyID is invalid");
             }
-            computerManager.update(computer);
+            computerServiceImpl.update(computer);
         }
     }
 

@@ -1,6 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.persistence;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
+import fr.ebiz.nurdiales.trainingJava.exceptions.DAOComputerException;
 import fr.ebiz.nurdiales.trainingJava.mapper.ComputerMapper;
 import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.List;
 
 import static fr.ebiz.nurdiales.trainingJava.model.Parameters.ElementTri.ID;
@@ -48,43 +49,40 @@ public class ComputerDAO implements InterfaceComputerDAO {
     private static final String SORT_BY = " ORDER BY ";
     private static final String INVERT = " DESC ";
 
-    @Autowired
     private ComputerMapper computerMapper;
-    @Autowired
-    private DataSource datasource;
     private JdbcTemplate jdbcTemplate;
 
     /**
-     * Constuctor.
-     * @param datasource form Spring.
+     * Default constructor.
+     * @param datasource from the database.
+     * @param computerMapper used for turning resultsSet into computerDTO.
      */
-    public ComputerDAO(DataSource datasource) {
-        setDatasource(datasource);
-    }
-
     @Autowired
-    @Override
-    public void setDatasource(DataSource datasource) {
-        this.datasource = datasource;
+    public ComputerDAO(DataSource datasource, ComputerMapper computerMapper) {
         this.jdbcTemplate = new JdbcTemplate(datasource);
+        this.computerMapper = computerMapper;
     }
 
     @Override
-    public void create(Computer c) throws ComputerDAOException {
+    public void create(Computer c) throws DAOComputerException {
         if (c != null) {
+            if (!c.checkDates()) {
+                c.setIntroduced((LocalDate) null);
+                c.setDiscontinued((LocalDate) null);
+            }
             jdbcTemplate.update(INSERT, new Object[] {c.getName(), (c.getIntroduced() != null) ? c.getIntroduced().toString() : null, (c.getDiscontinued() != null) ? c.getDiscontinued().toString() : null, c.getCompanyId()});
         }
     }
 
     @Override
-    public void delete(Integer id) throws ComputerDAOException {
+    public void delete(Integer id) throws DAOComputerException {
         if (id != null) {
             jdbcTemplate.update(DELETE, id);
         }
     }
 
     @Override
-    public void delete(Integer[] ids) throws ComputerDAOException {
+    public void delete(Integer[] ids) throws DAOComputerException {
         for (Integer i : ids) {
             delete(i);
         }
@@ -92,7 +90,7 @@ public class ComputerDAO implements InterfaceComputerDAO {
 
 
     @Override
-    public void deleteByCompany(Integer i) throws ComputerDAOException {
+    public void deleteByCompany(Integer i) throws DAOComputerException {
         if (i != null) {
             StringBuffer idsSB = new StringBuffer();
             idsSB.append("( " + COMPUTER_COMPANY + " = ? )");
@@ -102,7 +100,7 @@ public class ComputerDAO implements InterfaceComputerDAO {
 
 
     @Override
-    public void update(Computer c) throws ComputerDAOException {
+    public void update(Computer c) throws DAOComputerException {
         if (c != null) {
             boolean check = c.checkDates();
             if (check) {
@@ -114,16 +112,16 @@ public class ComputerDAO implements InterfaceComputerDAO {
     }
 
     @Override
-    public ComputerDTO getComputer(Integer id) throws ComputerDAOException {
+    public ComputerDTO getComputer(Integer id) throws DAOComputerException {
         ComputerDTO c = null;
-        if (id != null) {
+        if (id != null && id != 0) {
             c = jdbcTemplate.queryForObject(BY_ID, new Object[] {id}, computerMapper);
         }
         return c;
     }
 
     @Override
-    public Page listComputers(Parameters params, List<CompanyDTO> list) throws ComputerDAOException {
+    public Page listComputers(Parameters params, List<CompanyDTO> list) throws DAOComputerException {
         Page retour = new Page();
         StringBuilder companies = testCompany(params, list);
         String nameLike = testNameLike(params);
@@ -200,9 +198,8 @@ public class ComputerDAO implements InterfaceComputerDAO {
      * @param params parameters who must contain a string for nameCompany or a idCompany != 0, else return null.
      * @param list of companies.
      * @return null if no company searched.
-     * @throws ComputerDAOException Error in CompanyDAO SQL.
      */
-    private StringBuilder testCompany(Parameters params, List<CompanyDTO> list) throws ComputerDAOException {
+    private StringBuilder testCompany(Parameters params, List<CompanyDTO> list) {
         StringBuilder companies = new StringBuilder();
         boolean retour = false;
         if (params.getIdCompany() != 0) {

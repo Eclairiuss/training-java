@@ -1,80 +1,78 @@
 package fr.ebiz.nurdiales.trainingJava.controller;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
-import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
-import fr.ebiz.nurdiales.trainingJava.service.CompanyManager;
-import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import fr.ebiz.nurdiales.trainingJava.service.CompanyService;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerService;
+import fr.ebiz.nurdiales.trainingJava.validator.ComputerDTOValidator;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.ServletException;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 
 @Controller
 public class ServletCreateComputer {
-    private static final String DASHBOARD_REDIRECTION = "redirect:./dashboard";
+    private static final String DASHBOARD_REDIRECT = "redirect:./dashboard";
     private static final String PAGE_NAME = "/add_computer";
-    private static final String NAME = "name";
-    private static final String LANGUAGE = "language";
-    private static final String INTRODUCED = "introduced";
-    private static final String DISCONTINUED = "discontinued";
-    private static final String COMPANY_ID = "companyId";
 
-    @Autowired
-    private ComputerManager computerManager;
-    @Autowired
-    private CompanyManager companyManager;
+    private static final String LIST = "companies";
+    private static final String FORM = "formComputer";
 
-    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
-    protected ModelAndView doPost(ComputerDTO computer, String language) throws ServletException, IOException {
-        ModelAndView mav = new ModelAndView(DASHBOARD_REDIRECTION);
-        mav.addObject(LANGUAGE, language);
-        try {
-            computerManager.add(computer);
-        } catch (ComputerDAOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e);
-        }
-        return mav;
+    private ComputerService computerService;
+    private CompanyService companyService;
+    private ComputerDTOValidator computerDTOValidator;
+
+    /**
+     * Default constructor.
+     * @param computerService .
+     * @param companyService .
+     * @param computerDTOValidator .
+     */
+    public ServletCreateComputer(ComputerService computerService, CompanyService companyService, ComputerDTOValidator computerDTOValidator) {
+        this.computerService = computerService;
+        this.companyService = companyService;
+        this.computerDTOValidator = computerDTOValidator;
+    }
+    /**
+     * Inject validator for a computer.
+     * @param binder holder of validator.
+     */
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(computerDTOValidator);
     }
 
     @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.GET)
-    protected ModelAndView doGet(@RequestParam Map<String, String> request) throws ServletException, IOException {
-        ModelAndView mav = new ModelAndView();
-        try {
-            List<CompanyDTO> companies = companyManager.getAll();
-            mav.addObject("companies", companies);
-        } catch (CompanyDAOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e);
+    protected String doGet(ModelMap model) {
+        model.addAttribute(LIST, companyService.getAll());
+        model.addAttribute(FORM, new ComputerDTO());
+        return "." + PAGE_NAME;
+    }
+
+    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
+    protected String doPost(@ModelAttribute(FORM) @Validated ComputerDTO form, BindingResult result, ModelMap model) {
+        String error = null;
+        if (form == null) {
+            return "500";
         }
-        mav.addObject(LANGUAGE, request.get(LANGUAGE));
-        mav.setViewName(PAGE_NAME);
-        return mav;
-    }
-
-    public void setComputerManager(ComputerManager computerManager) {
-        this.computerManager = computerManager;
-    }
-
-    public ComputerManager getComputerManager() {
-        return computerManager;
-    }
-
-    public void setCompanyManager(CompanyManager companyManager) {
-        this.companyManager = companyManager;
-    }
-
-    public CompanyManager getCompanyManager() {
-        return companyManager;
+        // Insert or Update if there are no id for the computer
+        if (!result.hasErrors()) {
+            computerService.add(form);
+            return DASHBOARD_REDIRECT;
+        }
+        if (form.getName() == null || form.getName().trim().equals("")) {
+            model.addAttribute("NameError", true);
+        }
+        if (!form.toComputer().checkDates()) {
+            model.addAttribute("DatesError", true);
+        }
+        model.addAttribute(FORM, form);
+        model.addAttribute(LIST, companyService.getAll());
+        return "." + PAGE_NAME;
     }
 }

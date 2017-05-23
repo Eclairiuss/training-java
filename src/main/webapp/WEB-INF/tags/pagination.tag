@@ -42,6 +42,7 @@
 
 <div class="btn-group btn-group-sm pull-right" role="group" >
     <button type="button" onclick="window.location.href='${redirection}?language=${language}&page=0&size=10&search=${search}&order=${order}'" <c:choose><c:when test="${size == 10}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>10</button>
+    <button type="button" onclick="window.location.href='${redirection}?language=${language}&page=0&size=20&search=${search}&order=${order}'" <c:choose><c:when test="${size == 20}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>20</button>
     <button type="button" onclick="window.location.href='${redirection}?language=${language}&page=0&size=50&search=${search}&order=${order}'" <c:choose><c:when test="${size == 50}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>50</button>
     <button type="button" onclick="window.location.href='${redirection}?language=${language}&page=0&size=100&search=${search}&order=${order}'" <c:choose><c:when test="${size == 100}">class="btn active"</c:when><c:otherwise>class="btn btn-default"</c:otherwise></c:choose>>100</button>
 </div>

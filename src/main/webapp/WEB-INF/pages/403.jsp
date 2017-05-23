@@ -1,3 +1,6 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,18 +11,16 @@
 	<link href="css/font-awesome.css" rel="stylesheet" media="screen">
 	<link href="css/main.css" rel="stylesheet" media="screen">
 </head>
-<body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href="dashboard.jsp"> Application - Computer Database </a>
-		</div>
-	</header>
 
+
+<body>
+	<mylib:header redirection="./dashboard" id="0" search="${search}" order="${order}" size="${size}" page="${page}"/>
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
 				Error 403: Access denied!
 				<br/>
+				<c:if test="${not empty message}">${message}</c:if>
 				<!-- stacktrace -->
 			</div>
 		</div>
@@ -28,6 +29,5 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/dashboard.js"></script>
-
 </body>
 </html>
