@@ -1,10 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.controller;
 
-import fr.ebiz.nurdiales.trainingJava.exceptions.CompanyDAOException;
-import fr.ebiz.nurdiales.trainingJava.exceptions.ComputerDAOException;
 import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
-import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerService;
 import fr.ebiz.nurdiales.trainingJava.util.Trad;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,12 +17,10 @@ import java.util.Map;
 
 @Controller
 public class ServletListComputer {
-    @Autowired
-    ComputerManager computerManager;
+    ComputerService computerService;
 
     private static final String PAGE_NAME = "/dashboard";
     private static final String ACTION = "ACTION";
-    private static final String LANGUAGE = "language";
     private static final String DELETE = "delete";
     private static final String SEARCH = "search";
     private static final String ORDER = "order";
@@ -33,26 +29,22 @@ public class ServletListComputer {
     private static final String PAGE = "page";
     private static final String DELETESELECTED = "selection";
 
-    public ComputerManager getComputerManager() {
-        return computerManager;
-    }
-
-    public void setComputerManager(ComputerManager computerManager) {
-        this.computerManager = computerManager;
+    /**
+     * Default constructor.
+     * @param computerService .
+     */
+    @Autowired
+    public ServletListComputer(ComputerService computerService) {
+        this.computerService = computerService;
     }
 
     @RequestMapping(value = {"", "/", PAGE_NAME}, method = RequestMethod.GET)
-    protected ModelAndView doGet(@RequestParam Map<String, String> request) throws ServletException, IOException {
+    public ModelAndView doGet(@RequestParam Map<String, String> request) throws ServletException, IOException {
         ModelAndView mav = new ModelAndView();
         String sSize = request.get(SIZE);
         String sPage = request.get(PAGE);
         String sSearch = request.get(SEARCH);
         String sTri = request.get(ORDER);
-        String sLanguage = request.get(LANGUAGE);
-
-        if (sLanguage == null) {
-            sLanguage = "fr";
-        }
 
         Parameters params = (new Parameters.Builder())
                                     .page(Trad.stringToInt(sPage) - 1)
@@ -63,12 +55,7 @@ public class ServletListComputer {
 
         Page page;
 
-        try {
-            page = computerManager.getAll(params);
-        } catch (ComputerDAOException | CompanyDAOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e);
-        }
+        page = computerService.getAll(params);
 
         mav.addObject("numberComputers", page.getQuantity());
         mav.addObject("computers", page.getComputers());
@@ -76,27 +63,21 @@ public class ServletListComputer {
         mav.addObject(SIZE, params.getSize());
         mav.addObject(SEARCH, sSearch);
         mav.addObject(ORDER, sTri);
-        mav.addObject(LANGUAGE, sLanguage);
         mav.setViewName(PAGE_NAME);
         return mav;
     }
 
 
     @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
-    protected ModelAndView doPost(@RequestParam Map<String, String> request) throws ServletException, IOException {
+    public ModelAndView doPost(@RequestParam Map<String, String> request) throws ServletException, IOException {
         String difference = request.get(ACTION);
         if (difference.equals(DELETE)) {
             String[] idsString = request.get(DELETESELECTED).split(",");
             Integer[] ids = new Integer[idsString.length];
-            try {
-                for (int i = 0; i < idsString.length; ++i) {
-                    ids[i] = Integer.parseInt(idsString[i]);
-                }
-                computerManager.delete(ids);
-            } catch (ComputerDAOException | IllegalArgumentException e) {
-                e.printStackTrace();
-                throw new IllegalStateException(e);
+            for (int i = 0; i < idsString.length; ++i) {
+                ids[i] = Integer.parseInt(idsString[i]);
             }
+            computerService.delete(ids);
         }
         return doGet(request);
     }

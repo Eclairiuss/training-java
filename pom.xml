@@ -12,19 +12,35 @@
         <deployment-url>http://localhost:8080</deployment-url>
         <deployment-path>ComputerDatabase</deployment-path>
         <open-browser-at>${deployment-url}/${deployment-path}</open-browser-at>
+        <shouldSkipTests>false</shouldSkipTests>
+        <war-name>${project.artifactId}-${project.version}</war-name>
 
+        <version.dbcp>2.1.1</version.dbcp>
+        <version.hibernate-validator>4.2.0.Final</version.hibernate-validator>
         <version.hikari>2.6.1</version.hikari>
-        <version.mysql>6.0.6</version.mysql>
-        <version.slf4j>1.7.25</version.slf4j>
-        <version.logback>LATEST</version.logback>
-        <version.servlet-api>3.1.0</version.servlet-api>
+        <version.java>1.8</version.java>
+        <version.jspapi>2.2</version.jspapi>
         <version.jstl>1.2</version.jstl>
-        <version.selenium>3.3.1</version.selenium>
-        <version.mockito>1.9.5</version.mockito>
         <version.junit>4.12</version.junit>
-        <version.spring.core>4.3.8.RELEASE</version.spring.core>
-
+        <version.logback>1.0.7</version.logback>
+        <version.mockito>1.9.5</version.mockito>
+        <version.mysql>6.0.6</version.mysql>
+        <!--<version.querydsl>4.1.4</version.querydsl>-->
+        <version.selenium>3.3.1</version.selenium>
+        <version.servlet-api>3.1.0</version.servlet-api>
+        <version.slf4j>1.7.25</version.slf4j>
+        <version.spring>4.3.8.RELEASE</version.spring>
+        <version.taglibs>1.1.2</version.taglibs>
     </properties>
+
+    <!-- For no common-logging-->
+    <repositories>
+        <repository>
+            <id>version99</id>
+            <!-- highly available repository serving empty artifacts -->
+            <url>http://version99.qos.ch/</url>
+        </repository>
+    </repositories>
 
 
     <profiles>
@@ -63,60 +79,86 @@
             </activation>
             <properties>
                 <envName>prod</envName>
+                <shouldSkipTests>true</shouldSkipTests>
             </properties>
         </profile>
     </profiles>
 
 
     <dependencies>
-
+        <!-- ################### -->
+        <!-- Hibernate Validator -->
+        <!-- ################### -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${version.spring.core}</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${version.hibernate-validator}</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.querydsl</groupId>-->
+            <!--<artifactId>querydsl-apt</artifactId>-->
+            <!--<version>${version.querydsl}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.querydsl</groupId>-->
+            <!--<artifactId>querydsl-jpa</artifactId>-->
+            <!--<version>${version.querydsl}</version>-->
+        <!--</dependency>-->
+
+
+        <!-- ###### -->
+        <!-- Spring -->
+        <!-- ###### -->
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${version.spring.core}</version>
+            <artifactId>spring-context</artifactId>
+            <version>${version.spring}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${version.spring.core}</version>
+            <version>${version.spring}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>${version.spring.core}</version>
+            <version>${version.spring}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${version.spring.core}</version>
+            <artifactId>spring-test</artifactId>
+            <version>${version.spring}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${version.spring.core}</version>
+            <artifactId>spring-web</artifactId>
+            <version>${version.spring}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${version.spring.core}</version>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${version.spring}</version>
         </dependency>
 
-        <!-- -->
+
+        <!-- ##### -->
+        <!-- dbcp2 -->
+        <!-- ##### -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>${version.dbcp}</version>
+        </dependency>
+
+
+        <!-- ############# -->
         <!-- DB Connection -->
-        <!-- -->
-        <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+        <!-- ############# -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${version.hikari}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -125,77 +167,90 @@
         </dependency>
 
 
-        <!-- -->
+        <!-- ####### -->
         <!-- Logging -->
-        <!-- -->
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${version.slf4j}</version>
-            <scope>compile</scope>
-        </dependency>
-
+        <!-- ####### -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${version.logback}</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${version.slf4j}</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- For no commons-logging -->
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>99-empty</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.8.0-alpha2</version>
+        </dependency>
 
 
-        <!-- -->
+        <!-- #### -->
         <!-- j2ee -->
-        <!-- -->
-
+        <!-- #### -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${version.servlet-api}</version>
+            <scope>provided</scope>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/jstl/jstl -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>${version.jstl}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>${version.jspapi}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>${version.taglibs}</version>
+            <scope>provided</scope>
         </dependency>
 
 
-        <!-- -->
+        <!-- ##### -->
         <!-- Tests -->
-        <!-- -->
-
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>${version.selenium}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${version.mockito}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <!-- ##### -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${version.mockito}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${version.selenium}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
+
+
     <build>
-
-
-        <directory>${project.basedir}/target/war</directory>
+        <directory>${project.basedir}/target/</directory>
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
         <finalName>${project.artifactId}-${project.version}</finalName>
         <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
@@ -217,6 +272,7 @@
             </resource>
         </resources>
 
+
         <testResources>
             <testResource>
                 <directory>${project.basedir}/src/test/resources</directory>
@@ -225,16 +281,16 @@
 
 
         <plugins>
-
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${version.java}</source>
+                    <target>${version.java}</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+
 
             <!-- Build war -->
             <plugin>
@@ -245,6 +301,7 @@
                     <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
             </plugin>
+
 
             <!-- Checkstyle -->
             <plugin>
@@ -265,24 +322,8 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-            <plugin>
-                <artifactId>exec-maven-plugin</artifactId>
-                <groupId>org.codehaus.mojo</groupId>
-                <executions>
-                    <execution>
-                        <id>Launch catalina</id>
-                        <phase>clean</phase>
-                        <configuration>
-                            <executable>${basedir}/scripts/run-catalina.sh</executable>
-                        </configuration>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
+
+
             <!-- War deployment -->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
@@ -294,18 +335,10 @@
                     <path>/${deployment-path}</path>
                     <username>root</username>
                     <password>root</password>
+                    <warFile>${project.build.directory}/${war-name}.war</warFile>
                     <contextReloadable>true</contextReloadable>
                     <update>true</update>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>tomcat-deploy</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <!-- Exclude selenium test because it needs the app to be deployed-->
@@ -314,39 +347,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.17</version>
                 <configuration>
+                    <skipTests>${shouldSkipTests}</skipTests>
                     <excludes>
                         <exclude>**/selenium/*.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
-
-            <!-- Open browser after deploying the war-->
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>Run URL in system browser.</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <exec executable="start" vmlauncher="false">
-                                    <arg line="${open-browser-at}"/>
-                                </exec>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
-
-
         </plugins>
     </build>
-
 </project>

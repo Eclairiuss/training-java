@@ -10,25 +10,23 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
+
     <bean id="localeResolver"
-          class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+          class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
         <property name="defaultLocale" value="fr" />
     </bean>
-
     <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-            <property name="paramName" value="language" />
+            <property name="paramName" value="lang" />
         </bean>
     </mvc:interceptors>
-
-    <!--<mvc:annotation-driven />-->
-    <!--<mvc:default-servlet-handler />-->
 
     <context:component-scan base-package = "fr.ebiz.nurdiales.trainingJava.controller" />
 
     <bean id="messageSource"
           class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="resources.theme1.language.dashboard" />
+        <property name="defaultEncoding" value="UTF-8"/>
     </bean>
 
     <bean class = "org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -39,6 +37,7 @@
     <mvc:resources mapping="/resources/**" location="/resources/theme1/"
                    cache-period="31556926"/>
 
-    <mvc:annotation-driven />
+    <mvc:default-servlet-handler />
+    <mvc:annotation-driven validator="computerDTOValidator" />
 
 </beans>

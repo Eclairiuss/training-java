@@ -1,6 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.controller;
 
-import fr.ebiz.nurdiales.trainingJava.service.ComputerManager;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +50,7 @@ public class SeleniumCreateComputer {
      */
     @Test
     public void testAddFullComputer() throws Exception {
-        ComputerManager manager = new ComputerManager();
+        ComputerServiceImpl manager = new ComputerServiceImpl();
 
         name.click();
         name.sendKeys("nameTestSelenium");
