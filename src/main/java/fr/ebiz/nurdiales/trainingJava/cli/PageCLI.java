@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Date;
 import java.util.Scanner;
 
-
 public abstract class PageCLI {
     private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
     protected int idComputer;

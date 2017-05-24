@@ -50,7 +50,7 @@
                             <form:errors path="discontinued" cssClass="text-danger" element="div"/>
                         </div>
                         <div class="form-group">
-                            <label for="companyId"><spring:message code="computer.company" text="default text" /></label>
+                            <form:label path="companyId" for="companyId"><spring:message code="computer.company" text="default text" /></form:label>
                             <form:select path="companyId" class="form-control" id="companyId" name="companyId">
                                 <option value="0" selected>--</option>
                                 <c:forEach var="company" items="${companies}">
@@ -62,7 +62,7 @@
                     </fieldset>
                     <div class="actions pull-right">
                         <input type="submit" id="validate" value="<spring:message code="add.simple" text="default text" />" class="btn btn-primary">
-                        or
+                        <spring:message code="or"/>
                         <a href="./dashboard" id="cancel" class="btn btn-default"><spring:message code="cancel" text="default text" /></a>
                     </div>
                 </form:form>

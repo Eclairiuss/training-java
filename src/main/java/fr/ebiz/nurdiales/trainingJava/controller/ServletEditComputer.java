@@ -31,6 +31,7 @@ public class ServletEditComputer {
     private static final String ID = "id";
 
     private static final String FORM = "formComputer";
+    private static final String LIST = "companies";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServletEditComputer.class);
 
@@ -71,7 +72,7 @@ public class ServletEditComputer {
 
         companies = companyService.getAll();
 
-        model.addAttribute("companies", companies);
+        model.addAttribute(LIST, companies);
         if (sId != null) {
             try {
                 id = Integer.parseInt(sId);
@@ -101,14 +102,16 @@ public class ServletEditComputer {
 
     @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
     protected String doPost(@ModelAttribute(FORM) @Validated ComputerDTO form, BindingResult result, ModelMap model) {
-        if (result.hasErrors()) {
-            return "false";
+        if (!result.hasErrors()) {
+            if (form.getId() != null && form.getId() > 0) {
+                computerService.update(form);
+            } else {
+                computerService.add(form);
+            }
+            return DASHBOARD_REDIRECT;
         }
-        if (form.getId() != null && form.getId() > 0) {
-            computerService.update(form);
-        } else {
-            computerService.add(form);
-        }
-        return DASHBOARD_REDIRECT;
+        model.addAttribute(FORM, form);
+        model.addAttribute(LIST, companyService.getAll());
+        return "." + PAGE_NAME;
     }
 }

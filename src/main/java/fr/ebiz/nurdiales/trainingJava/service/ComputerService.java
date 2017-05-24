@@ -4,9 +4,6 @@ import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 
-/**
- * Created by eclairiuss on 24/05/17.
- */
 public interface ComputerService {
     /**
      * Method to create a new listComputers in the database.

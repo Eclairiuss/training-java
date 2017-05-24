@@ -1,8 +1,5 @@
 package fr.ebiz.nurdiales.trainingJava.model;
 
-/**
- * Created by ebiz on 20/04/17.
- */
 public class Parameters {
     public enum ElementTri {
         ID,

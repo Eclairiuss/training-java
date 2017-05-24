@@ -68,7 +68,7 @@ public class ServletListComputer {
     }
 
 
-    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
+    @RequestMapping(value = {"", "/", PAGE_NAME}, method = RequestMethod.POST)
     public ModelAndView doPost(@RequestParam Map<String, String> request) throws ServletException, IOException {
         String difference = request.get(ACTION);
         if (difference.equals(DELETE)) {
