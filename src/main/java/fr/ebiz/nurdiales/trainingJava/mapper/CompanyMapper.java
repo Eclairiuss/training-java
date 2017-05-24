@@ -8,9 +8,6 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Created by ebiz on 20/04/17.
- */
 @Component
 public class CompanyMapper implements RowMapper<CompanyDTO> {
     @Override

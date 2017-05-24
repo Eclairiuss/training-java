@@ -42,7 +42,7 @@
                             <form:errors path="name" cssClass="text-danger" element="div"/>
                         </div>
                         <div class="form-group">
-                            <form:label path="name" for="introduced"><spring:message code="computer.introduced" text="default text" /></form:label>
+                            <form:label path="introduced" for="introduced"><spring:message code="computer.introduced" text="default text" /></form:label>
                             <c:if test="${computer.getIntroduced() != null}">
                                 <c:set var="valueIntroduced" value="${computer.getIntroduced()}"/>
                             </c:if>
@@ -50,7 +50,7 @@
                             <form:errors path="introduced" cssClass="text-danger" element="div"/>
                         </div>
                         <div class="form-group">
-                            <label for="discontinued"><spring:message code="computer.discontinued" text="default text" /></label>
+                            <form:label path="discontinued" for="discontinued"><spring:message code="computer.discontinued" text="default text" /></form:label>
                             <c:if test="${computer.getDiscontinued() != null}">
                                 <c:set var="valueDiscontinued" value="${computer.getDiscontinued()}"/>
                             </c:if>
@@ -58,7 +58,7 @@
                             <form:errors path="discontinued" cssClass="text-danger" element="div"/>
                         </div>
                         <div class="form-group">
-                            <label for="companyId"><spring:message code="computer.company" text="default text" /></label>
+                            <form:label path="companyId" for="companyId"><spring:message code="computer.company" text="default text" /></form:label>
                             <form:select path="companyId" class="form-control" id="companyId" name="companyId">
                                 <option value="0" <c:if test="${computer.getCompanyId() == null}">selected</c:if>">--</option>
                                 <c:forEach var="company" items="${companies}">

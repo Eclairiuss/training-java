@@ -5,9 +5,6 @@ import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
 
 import java.util.List;
 
-/**
- * Created by eclairiuss on 18/05/17.
- */
 public interface InterfaceCompanyDAO {
     /**
      * create a company in the database, from a name.
