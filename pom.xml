@@ -4,7 +4,7 @@
     <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
     <artifactId>computer-database</artifactId>
     <packaging>war</packaging>
-    <version>0.7.0-REALEASE</version>
+    <version>0.8.0-SNAPSHOT</version>
     <name>Computer Database</name>
 
     <properties>
