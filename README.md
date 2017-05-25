@@ -28,23 +28,23 @@
 		<li>DONE - Pages.</li>
 	</ul>
 	<li>DONE - Javedoc.</li>
-	<li>W.I.P. - Logging.</li>
+	<li>DONE - Logging.</li>
 </ul>
 
 # t2 + t3
 <ul>
-	<li>W.I.P. - Web UI.</li>
+	<li>DONE - Web UI.</li>
 	<ul>
 		<li>DONE - Create new computer.</li>
 		<li>DONE - Update already existing computer.</li>
-		<li>W.I.P. - Dashboard.</li>
+		<li>DONE - Dashboard.</li>
 		<ul>
 			<li>DONE - print all computers.</li>
 			<li>DONE - select page.</li>
-			<li>W.I.P. - search options.</li>
+			<li>DONE - search options.</li>
 			<ul>
 				<li>DONE - just name search</li>
-				<li>TODO - name and company name search</li>
+				<li>DONE - name and company name search</li>
 			</ul>
 			<li>DONE - delete computer(s).</li>
 			<li>DONE - select size of page.</li>
@@ -53,7 +53,7 @@
 	</ul>
 	<li>DONE - Logging.</li>
 	<li>W.I.P. - Unit Tests.</li>
-	<li>W.I.P. - jQuery Validation.</li>
+	<li>DONE - jQuery Validation.</li>
 	<li>W.I.P. - Backend Validation.</li>
 	<li>DONE - Taglib.</li>
 	<li>W.I.P. - tested using Selenium.</li>
@@ -61,14 +61,15 @@
 	<li>DONE - Transactions</li>
 	<li>DONE - Connection-Poom</li>
 </ul>
+
 # t4
 <ul>
 	<li>W.I.P - Docker</li>
 	<ul>
 		<li>DONE - Doing Dockerfiles</li>
 		<li>DONE - Doing Network</li>
-		<li>TODO - Include in the main project</li>
-		<li>TODO - Jenkins Image for server</li>
+		<li>W.I.P. - Include in the main project</li>
+		<li>W.I.P. - Jenkins Image for server</li>
 	</ul>
 	<li>DONE - Dockerhub</li>
 	<ul>
@@ -93,4 +94,62 @@
 	</ul>
 </ul>
 
+# t5
+<ul>
+	<li>DONE - Threadlocal</li>
+	<ul>
+		<li>DONE - Hikari</li>
+		<li>DONE - ThreadLocal Implementation</li>
+	</ul>
+	<li>W.I.P. - Java Performance contest</li>
+	<ul>
+		<li>W.I.P. - Monitoring</li>
+		<li>W.I.P. - Gatling</li>
+	</ul>
+</ul>
+
+# t6
+<ul>
+	<li>Spring integration</li>
+	<ul>
+		<li>DONE - Services</li>
+		<li>DONE - Components</li>
+		<li>W.I.P. - Config</li>
+		<ul>
+			<li>DONE - Autowired</li>
+			<li>DONE - Datasource</li>
+			<li>DONE - DAO</li>
+		</ul>
+	</ul>
+</ul>
+
+# t7
+<ul>
+	<li>W.I.P. - Spring MVC integration</li>
+		<ul>
+			<li>DONE - Controllers</li>
+			<li>DONE - Validators</li>
+		</ul>
+	<li>DONE - JDBC Template</li>
+		<ul>
+			<li>DONE - DAO</li>
+		</ul>
+	<li>DONE - i18n</li>
+		<ul>
+			<li>DONE - Cookies</li>
+			<li>DONE - Dashboard</li>
+			<li>DONE - Create</li>
+			<li>DONE - Edit</li>
+			<li>DONE - French</li>
+			<li>DONE - English</li>
+			<li>DONE - Spanish</li>
+		</ul>
+</ul>
+
+# t8
+<ul>
+	<li>TODO - Maven Multi-modules</li>
+	<li>TODO - Spring Security</li>
+	<li>TODO - Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)</li>
+</ul>
 
