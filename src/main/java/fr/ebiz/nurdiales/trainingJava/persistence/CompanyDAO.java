@@ -2,7 +2,7 @@ package fr.ebiz.nurdiales.trainingJava.persistence;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOCompanyException;
 import fr.ebiz.nurdiales.trainingJava.mapper.CompanyMapper;
-import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class CompanyDAO implements InterfaceCompanyDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 
-    private List<CompanyDTO> companies = null;
+    private List<Company> companies = null;
 
     private CompanyMapper companyMapper;
     private DataSource datasource;
@@ -59,8 +59,8 @@ public class CompanyDAO implements InterfaceCompanyDAO {
     }
 
     @Override
-    public CompanyDTO getCompany(Integer id) throws DAOCompanyException {
-        CompanyDTO company = null;
+    public Company getCompany(Integer id) throws DAOCompanyException {
+        Company company = null;
         if (id != null && id != 0) {
             company = jdbcTemplate.queryForObject(BY_ID, new Object[]{id}, companyMapper);
         }
@@ -68,7 +68,7 @@ public class CompanyDAO implements InterfaceCompanyDAO {
     }
 
     @Override
-    public List<CompanyDTO> listCompanies() throws DAOCompanyException {
+    public List<Company> listCompanies() throws DAOCompanyException {
         if (companies == null) {
             companies = jdbcTemplate.query(SELECT, companyMapper);
         }
@@ -81,25 +81,25 @@ public class CompanyDAO implements InterfaceCompanyDAO {
     }
 
     @Override
-    public void update(CompanyDTO company) throws DAOCompanyException {
+    public void update(Company company) throws DAOCompanyException {
         jdbcTemplate.update(UPDATE, company.getName(), company.getId());
     }
 
     @Override
-    public List<CompanyDTO> listCompanies(Integer page, Integer size) throws DAOCompanyException {
-        List<CompanyDTO> list = jdbcTemplate.query(SELECT_WITH_LIMIT_OFFSET, new Object[]{page, size}, companyMapper);
+    public List<Company> listCompanies(Integer page, Integer size) throws DAOCompanyException {
+        List<Company> list = jdbcTemplate.query(SELECT_WITH_LIMIT_OFFSET, new Object[]{page, size}, companyMapper);
         return list;
     }
 
     @Override
-    public List<CompanyDTO> listCompanies(String name) throws DAOCompanyException {
-        List<CompanyDTO> list = jdbcTemplate.query(BY_NAME, new Object[]{name}, companyMapper);
+    public List<Company> listCompanies(String name) throws DAOCompanyException {
+        List<Company> list = jdbcTemplate.query(BY_NAME, new Object[]{name}, companyMapper);
         return list;
     }
 
     @Override
-    public List<CompanyDTO> listCompanies(String name, Integer page, Integer size) throws DAOCompanyException {
-        List<CompanyDTO> list = jdbcTemplate.query(BY_NAME_WITH_LIMIT_OFFSET, new Object[]{name, page, size}, companyMapper);
+    public List<Company> listCompanies(String name, Integer page, Integer size) throws DAOCompanyException {
+        List<Company> list = jdbcTemplate.query(BY_NAME_WITH_LIMIT_OFFSET, new Object[]{name, page, size}, companyMapper);
         return list;
     }
 }

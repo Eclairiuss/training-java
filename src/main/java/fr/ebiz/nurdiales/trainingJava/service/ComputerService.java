@@ -1,5 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.service;
 
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
@@ -28,14 +29,14 @@ public interface ComputerService {
      * Method to update a listComputers in the database.
      * @param c Computer to update in the database, the id of c must be in DB.
      */
-    void update(ComputerDTO c);
+    void update(Computer c);
 
     /**
      * Method to find a listComputers in the database by his id.
      * @param id of the researched listComputers.
      * @return ComputerDTO corresponding to the id.
      */
-    ComputerDTO get(int id);
+    Computer get(int id);
 
     /**
      * Général method for get all computers corresponding to parameters.

@@ -2,7 +2,7 @@ package fr.ebiz.nurdiales.trainingJava.cli;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOCompanyException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOComputerException;
-import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerServiceImpl;
@@ -33,8 +33,8 @@ public class ComputerCLI extends PageCLI {
             System.out.println("Page " + params.getPage() + " : ");
             Page page;
             page = computerServiceImpl.getAll(params);
-            for (ComputerDTO c : page.getComputers()) {
-                System.out.println(c);
+            for (Computer c : page.getComputers()) {
+                System.out.println(c.toString());
             }
             exitWanted = printChoicesAndGet(sc, true);
         }

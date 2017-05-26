@@ -1,6 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.controller;
 
-import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyService;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerService;
@@ -65,7 +65,7 @@ public class ServletEditComputer {
     @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.GET)
     protected String doGet(ModelMap model, @RequestParam Map<String, String> request) {
         ComputerDTO computer = null;
-        List<CompanyDTO> companies = null;
+        List<Company> companies = null;
         int id = 0;
 
         String sId = request.get(ID);
@@ -81,9 +81,9 @@ public class ServletEditComputer {
                 return "500";
             }
             if (id > 0) {
-                computer = computerService.get(id);
-                for (CompanyDTO company : companies) {
-                    if (company.getId().equals(computer.getCompanyId())) {
+                computer = new ComputerDTO(computerService.get(id));
+                for (Company company : companies) {
+                    if (company.getId() == computer.getCompanyId()) {
                         computer.setCompanyName(company.getName());
                         break;
                     }
@@ -104,7 +104,7 @@ public class ServletEditComputer {
     protected String doPost(@ModelAttribute(FORM) @Validated ComputerDTO form, BindingResult result, ModelMap model) {
         if (!result.hasErrors()) {
             if (form.getId() != null && form.getId() > 0) {
-                computerService.update(form);
+                computerService.update(form.toComputer());
             } else {
                 computerService.add(form);
             }

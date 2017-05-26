@@ -3,6 +3,7 @@ package fr.ebiz.nurdiales.trainingJava.cli;
 import fr.ebiz.nurdiales.trainingJava.database.JDBCSingleton;
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOCompanyException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOComputerException;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.service.CompanyServiceImpl;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerServiceImpl;
@@ -56,7 +57,7 @@ public class CLI {
                     switch (l[1].split(SEPARATOR2)[0]) {
                         case ID:
                             try {
-                                ComputerDTO computer = computerServiceImpl
+                                Computer computer = computerServiceImpl
                                                             .get(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
                                 System.out.println(computer);
                             } catch (Exception e) {
@@ -136,7 +137,7 @@ public class CLI {
      * @throws DAOComputerException ComputerDAO fails to execute a request.
      */
     private void updateComputer(Scanner sc) throws DAOComputerException {
-        ComputerDTO computer = new ComputerDTO();
+        Computer computer = new Computer();
         boolean isInteger = true;
         String s;
         while (computer.getId() == 0) {

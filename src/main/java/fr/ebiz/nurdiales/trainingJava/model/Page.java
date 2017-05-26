@@ -3,14 +3,14 @@ package fr.ebiz.nurdiales.trainingJava.model;
 import java.util.List;
 
 public class Page {
-    private List<ComputerDTO> computers;
+    private List<Computer> computers;
     private int quantity;
 
-    public List<ComputerDTO> getComputers() {
+    public List<Computer> getComputers() {
         return computers;
     }
 
-    public void setComputers(List<ComputerDTO> computers) {
+    public void setComputers(List<Computer> computers) {
         this.computers = computers;
     }
 

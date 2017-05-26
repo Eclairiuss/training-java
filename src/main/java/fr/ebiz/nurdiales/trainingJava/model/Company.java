@@ -6,6 +6,11 @@ public class Company {
     private String name;
 
     /**
+     * Constructor.
+     */
+    public Company() { }
+
+    /**
      * Constructor with all arguments.
      * @param id Id of the company.
      * @param name Name of the company.
@@ -14,11 +19,6 @@ public class Company {
         this.id = id;
         this.name = name;
     }
-
-    /**
-     * Constructor.
-     */
-    public Company() { }
 
     public int getId() {
         return id;

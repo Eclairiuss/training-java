@@ -2,9 +2,8 @@ package fr.ebiz.nurdiales.trainingJava.persistence;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOComputerException;
 import fr.ebiz.nurdiales.trainingJava.mapper.ComputerMapper;
-import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,8 +111,8 @@ public class ComputerDAO implements InterfaceComputerDAO {
     }
 
     @Override
-    public ComputerDTO getComputer(Integer id) throws DAOComputerException {
-        ComputerDTO c = null;
+    public Computer getComputer(Integer id) throws DAOComputerException {
+        Computer c = null;
         if (id != null && id != 0) {
             c = jdbcTemplate.queryForObject(BY_ID, new Object[] {id}, computerMapper);
         }
@@ -121,7 +120,7 @@ public class ComputerDAO implements InterfaceComputerDAO {
     }
 
     @Override
-    public Page listComputers(Parameters params, List<CompanyDTO> list) throws DAOComputerException {
+    public Page listComputers(Parameters params, List<Company> list) throws DAOComputerException {
         Page retour = new Page();
         StringBuilder companies = testCompany(params, list);
         String nameLike = testNameLike(params);
@@ -199,19 +198,19 @@ public class ComputerDAO implements InterfaceComputerDAO {
      * @param list of companies.
      * @return null if no company searched.
      */
-    private StringBuilder testCompany(Parameters params, List<CompanyDTO> list) {
+    private StringBuilder testCompany(Parameters params, List<Company> list) {
         StringBuilder companies = new StringBuilder();
         boolean retour = false;
         if (params.getIdCompany() != 0) {
             retour = true;
-            for (CompanyDTO c : list) {
+            for (Company c : list) {
                 if (c.getId() == params.getIdCompany()) {
                     companies.append(COMPUTER_COMPANY + "=" + c.getId());
                 }
             }
         } else if (params.getNameCompany() != null) {
             boolean isntFirst = false;
-            for (CompanyDTO c : list) {
+            for (Company c : list) {
                 if (c.getName().contains(params.getNameCompany())) {
                     if (isntFirst) {
                         companies.append(" OR ");

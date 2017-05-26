@@ -1,7 +1,7 @@
 package fr.ebiz.nurdiales.trainingJava.persistence;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOCompanyException;
-import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ public interface InterfaceCompanyDAO {
      * @return the company corresponding.
      * @throws DAOCompanyException TODO.
      */
-    CompanyDTO getCompany(Integer id) throws DAOCompanyException;
+    Company getCompany(Integer id) throws DAOCompanyException;
 
     /**
      * Get the list of all companies.
      * @return the list of all companies.
      * @throws DAOCompanyException TODO.
      */
-    List<CompanyDTO> listCompanies() throws DAOCompanyException;
+    List<Company> listCompanies() throws DAOCompanyException;
 
     /**
      * Delete the company corresponding to the given id.
@@ -40,7 +40,7 @@ public interface InterfaceCompanyDAO {
      * @param company to update.
      * @throws DAOCompanyException TODO.
      */
-    void update(CompanyDTO company) throws DAOCompanyException;
+    void update(Company company) throws DAOCompanyException;
 
     /**
      * Method for get pageSize companies,
@@ -50,7 +50,7 @@ public interface InterfaceCompanyDAO {
      * @return pageSize companies in the page's page.
      * @throws DAOCompanyException Error in SQL.
      */
-    List<CompanyDTO> listCompanies(Integer page, Integer pageSize) throws DAOCompanyException;
+    List<Company> listCompanies(Integer page, Integer pageSize) throws DAOCompanyException;
 
     /**
      * Method for get all companies who have name look like the parameter, not
@@ -59,7 +59,7 @@ public interface InterfaceCompanyDAO {
      * @return The list of companies who the name contains the parameter.
      * @throws DAOCompanyException TODO.
      */
-    List<CompanyDTO> listCompanies(String name) throws DAOCompanyException;
+    List<Company> listCompanies(String name) throws DAOCompanyException;
 
     /**
      * Method for get pageSize companies who have name look like the parameter,
@@ -70,6 +70,6 @@ public interface InterfaceCompanyDAO {
      * @return The pageSize companies who the name contains the parameter.
      * @throws DAOCompanyException TODO.
      */
-    List<CompanyDTO> listCompanies(String name, Integer page, Integer pageSize) throws DAOCompanyException;
+    List<Company> listCompanies(String name, Integer page, Integer pageSize) throws DAOCompanyException;
 
 }

@@ -115,8 +115,8 @@ public class Computer {
         return company;
     }
 
-    public String getCompanyId() {
-        return (company != null) ? "" + company.getId()  : null;
+    public Integer getCompanyId() {
+        return (company != null) ? company.getId() : null;
     }
 
     public String getCompanyName() {
@@ -159,5 +159,26 @@ public class Computer {
             return true;
         }
         return introduced.isBefore(discontinued);
+    }
+
+    /**
+     * Set the name of the company.
+     * @param name of the company
+     */
+    public void setCompanyName(String name) {
+        if (company != null) {
+            company.setName(name);
+        }
+    }
+
+    /**
+     * Set the name of the company.
+     * @param id of the company.
+     */
+    public void setCompanyId(int id) {
+        if (company == null) {
+            company = new Company(0, "");
+        }
+        company.setId(id);
     }
 }

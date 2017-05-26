@@ -2,7 +2,8 @@ package fr.ebiz.nurdiales.trainingJava.service;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOCompanyException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOComputerException;
-import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
@@ -67,9 +68,9 @@ public class ComputerServiceImpl implements ComputerService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void update(ComputerDTO c) {
+    public void update(Computer c) {
         try {
-            computerDAO.update(c.toComputer());
+            computerDAO.update(c);
         } catch (DAOComputerException e) {
             LOGGER.warn("ComputerServiceImpl : error while updating computer");
             throw new RuntimeException("ComputerServiceImpl : Impossible to update computer");
@@ -78,8 +79,8 @@ public class ComputerServiceImpl implements ComputerService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public ComputerDTO get(int id) {
-        ComputerDTO retour = null;
+    public Computer get(int id) {
+        Computer retour = null;
         try {
             retour = computerDAO.getComputer(id);
         } catch (DAOComputerException e) {
@@ -92,7 +93,7 @@ public class ComputerServiceImpl implements ComputerService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public Page getAll(Parameters params) {
-        List<CompanyDTO> list = null;
+        List<Company> list = null;
         try {
             list = companyDAO.listCompanies();
         } catch (DAOCompanyException e) {
@@ -106,9 +107,9 @@ public class ComputerServiceImpl implements ComputerService {
             LOGGER.warn("ComputerServiceImpl : error while get computers");
             throw new RuntimeException("ComputerServiceImpl : Impossible to get computers");
         }
-        for (CompanyDTO company : list) {
-            for (ComputerDTO computer : page.getComputers()) {
-                if (company.getId().equals(computer.getCompanyId())) {
+        for (Company company : list) {
+            for (Computer computer : page.getComputers()) {
+                if (company.getId() == computer.getCompanyId()) {
                     computer.setCompanyName(company.getName());
                 }
             }

@@ -3,7 +3,7 @@ package fr.ebiz.nurdiales.trainingJava.service;
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOCompanyException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOComputerException;
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOException;
-import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.persistence.InterfaceCompanyDAO;
 import fr.ebiz.nurdiales.trainingJava.persistence.InterfaceComputerDAO;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<CompanyDTO> getAll() {
+    public List<Company> getAll() {
         try {
             return companyDAO.listCompanies();
         } catch (DAOException e) {
@@ -51,7 +51,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<CompanyDTO> getAll(int page, int pageSize) {
+    public List<Company> getAll(int page, int pageSize) {
         try {
             return companyDAO.listCompanies(page, pageSize);
         } catch (DAOException e) {
@@ -61,7 +61,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<CompanyDTO> getAll(String name) {
+    public List<Company> getAll(String name) {
         try {
             return companyDAO.listCompanies(name);
         } catch (DAOException e) {
@@ -71,7 +71,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<CompanyDTO> getAll(String name, int page, int pageSize) {
+    public List<Company> getAll(String name, int page, int pageSize) {
         try {
             return companyDAO.listCompanies(name, page, pageSize);
         } catch (DAOException e) {
@@ -81,7 +81,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDTO get(int id) {
+    public Company get(int id) {
         try {
             return companyDAO.getCompany(id);
         } catch (DAOException e) {
@@ -91,7 +91,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDTO get(String sId) {
+    public Company get(String sId) {
         try {
             try {
                 int id = Integer.parseInt(sId);

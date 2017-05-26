@@ -1,9 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.persistence;
 
 import fr.ebiz.nurdiales.trainingJava.exceptions.DAOComputerException;
-import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 import fr.ebiz.nurdiales.trainingJava.model.Computer;
-import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.model.Page;
 import fr.ebiz.nurdiales.trainingJava.model.Parameters;
 
@@ -52,7 +51,7 @@ public interface InterfaceComputerDAO {
      * @return the researched listComputers.
      * @throws DAOComputerException TODO.
      */
-    ComputerDTO getComputer(Integer id) throws DAOComputerException;
+    Computer getComputer(Integer id) throws DAOComputerException;
 
     /**
      * Général method for get all computers corresponding to parameters.
@@ -61,5 +60,5 @@ public interface InterfaceComputerDAO {
      * @return list of corresponding Computer.
      * @throws DAOComputerException TODO.
      */
-    Page listComputers(Parameters params, List<CompanyDTO> list) throws DAOComputerException;
+    Page listComputers(Parameters params, List<Company> list) throws DAOComputerException;
 }

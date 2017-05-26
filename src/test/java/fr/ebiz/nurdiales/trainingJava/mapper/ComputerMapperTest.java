@@ -1,6 +1,7 @@
 package fr.ebiz.nurdiales.trainingJava.mapper;
 
 import fr.ebiz.nurdiales.trainingJava.model.Company;
+import fr.ebiz.nurdiales.trainingJava.model.Computer;
 import fr.ebiz.nurdiales.trainingJava.model.ComputerDTO;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +55,7 @@ public class ComputerMapperTest {
     @Test
     public void testGetById() throws SQLException {
         ComputerMapper computerMapper = new ComputerMapper();
-        ComputerDTO c = computerMapper.mapRow(resultSet, 0);
+        Computer c = computerMapper.mapRow(resultSet, 0);
         assertTrue(true);
     }
 

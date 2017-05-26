@@ -1,6 +1,6 @@
 package fr.ebiz.nurdiales.trainingJava.service;
 
-import fr.ebiz.nurdiales.trainingJava.model.CompanyDTO;
+import fr.ebiz.nurdiales.trainingJava.model.Company;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface CompanyService {
          * @param id Id of the company to search in the database.
          * @return The company corresponding to the id.
          */
-        CompanyDTO get(int id);
+        Company get(int id);
 
         /**
          * Method for get in data base a company corresponding to a id, if no match
@@ -19,13 +19,13 @@ public interface CompanyService {
          * @param sId Id of the company to search in the database.
          * @return The company corresponding to the id.
          */
-        CompanyDTO get(String sId);
+        Company get(String sId);
 
         /**
          * Method for get all companies in database, dangerous if many.
          * @return All companies in DB.
          */
-        List<CompanyDTO> getAll();
+        List<Company> getAll();
 
         /**
          * Method for get pageSize companies,
@@ -34,7 +34,7 @@ public interface CompanyService {
          * @param pageSize Number of entities wanted.
          * @return pageSize companies in the page's page.
          */
-        List<CompanyDTO> getAll(int page, int pageSize);
+        List<Company> getAll(int page, int pageSize);
 
         /**
          * Method for get all companies who have name look like the parameter, not
@@ -42,7 +42,7 @@ public interface CompanyService {
          * @param name String who must be contain in wanted companies.
          * @return The list of companies who the name contains the parameter.
          */
-        List<CompanyDTO> getAll(String name);
+        List<Company> getAll(String name);
 
         /**
          * Method for get pageSize companies who have name look like the parameter,
@@ -52,7 +52,7 @@ public interface CompanyService {
          * @param pageSize Size of the page.
          * @return The pageSize companies who the name contains the parameter.
          */
-        List<CompanyDTO> getAll(String name, int page, int pageSize);
+        List<Company> getAll(String name, int page, int pageSize);
 
         /**
          * Methode to delete a company in the database by his id.
