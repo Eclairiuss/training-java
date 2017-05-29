@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="fr.ebiz.nurdiales.trainingJava.persistence"/>
+
+    <!-- Datasource -->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="dataSourceClassName" value="${hibernate.hikari.dataSourceClassName}"/>
+        <property name="maximumPoolSize" value="${hibernate.hikari.maximumPoolSize}"/>
+
+        <property name="dataSourceProperties">
+            <props>
+                <prop key="url">${dataSource.url}</prop>
+                <prop key="user">${dataSource.user}</prop>
+                <prop key="password">${dataSource.password}</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <constructor-arg ref="hikariConfig"/>
+    </bean>
+
+    <!-- JpaVendorAdapter -->
+    <bean id="vendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+
+    <!-- EntityManagerFactory -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="packagesToScan" value="fr.ebiz.cdb.core"></property>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="jpaVendorAdapter" ref="vendorAdapter"/>
+    </bean>
+
+    <!-- Declare TransactionManager -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <context:annotation-config/>
+</beans>

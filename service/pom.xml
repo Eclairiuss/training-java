@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
+        <artifactId>computer-database</artifactId>
+        <version>0.8.0</version>
+    </parent>
+    <artifactId>service</artifactId>
+    <packaging>jar</packaging>
+
+
+    <dependencies>
+        <!-- ############### -->
+        <!-- Project modules -->
+        <!-- ############### -->
+        <dependency>
+            <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
+            <artifactId>binding</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
+            <artifactId>persistence</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- ###### -->
+        <!-- Spring -->
+        <!-- ###### -->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.security</groupId>-->
+            <!--<artifactId>spring-security-core</artifactId>-->
+            <!--<version>${org.springframework.security.version}</version>-->
+        <!--</dependency>-->
+    </dependencies>
+</project>

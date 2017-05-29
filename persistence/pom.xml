@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
+        <artifactId>computer-database</artifactId>
+        <version>0.8.0</version>
+    </parent>
+    <artifactId>persistence</artifactId>
+    <packaging>jar</packaging>
+
+
+    <dependencies>
+        <!-- ############### -->
+        <!-- Project modules -->
+        <!-- ############### -->
+        <dependency>
+            <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- ###### -->
+        <!-- Spring -->
+        <!-- ###### -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <!-- ######## -->
+        <!-- HikariCP -->
+        <!-- ######## -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${com.zaxxer.version}</version>
+        </dependency>
+
+        <!-- ##### -->
+        <!-- MySQL -->
+        <!-- ##### -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+
+        <!-- ############# -->
+        <!-- Hibernate JPA -->
+        <!-- ############# -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${org.hibernate.version}</version>
+        </dependency>
+
+        <!-- ######## -->
+        <!-- QueryDSL -->
+        <!-- ######## -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${com.querydsl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${com.querydsl.version}</version>
+        </dependency>
+    </dependencies>
+</project>
