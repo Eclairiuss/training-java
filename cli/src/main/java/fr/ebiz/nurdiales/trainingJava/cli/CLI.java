@@ -7,23 +7,57 @@ import fr.ebiz.nurdiales.trainingJava.service.ComputerServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.util.Scanner;
 
+@Component
 public class CLI {
     private static Logger logger = LoggerFactory.getLogger(CLI.class);
-    private static final String EXIT = "exit", ALLCOMPUTERS = "computers", ALLCOMPANIES = "companies",
-            DELETE = "delete", DETAILS = "details", UPDATE = "update", NEW = "new", ID = "id",
-            ID_COMPANY = "company_id", NAME = "name", DATE_OF_DISCONTINUED = "date_of_discontinued",
-            DATE_OF_INTRODUCED = "date_of_introduced", SEPARATOR = " ", DATE_FORMA = "AAAA-MM-JJ", SEPARATOR2 = "=";
-    private static Scanner sc;
-    private static PageCLI p;
-    @Autowired
-    private static ComputerServiceImpl computerServiceImpl;
-    @Autowired
-    private static CompanyServiceImpl companyServiceImpl;
+    private static final String EXIT = "exit",
+            ALLCOMPUTERS = "computers",
+            ALLCOMPANIES = "companies",
+            DELETE = "delete",
+            DETAILS = "details",
+            UPDATE = "update",
+            NEW = "new",
+            ID = "id",
+            ID_COMPANY = "company_id",
+            NAME = "name",
+            DATE_OF_DISCONTINUED = "date_of_discontinued",
+            DATE_OF_INTRODUCED = "date_of_introduced",
+            SEPARATOR = " ",
+            DATE_FORMA = "AAAA-MM-JJ",
+            SEPARATOR2 = "=";
+    private Scanner sc;
 
+    private PageCLI pageCLI;
+    private CompanyCLI companyCLI;
+    private ComputerCLI computerCLI;
+
+    private ComputerServiceImpl computerServiceImpl;
+    private CompanyServiceImpl companyServiceImpl;
+
+    /**
+     * Contructor.
+     * @param companyCLI .
+     * @param computerCLI .
+     * @param computerServiceImpl .
+     * @param companyServiceImpl .
+     */
+    @Autowired
+    public CLI(CompanyCLI companyCLI,
+               ComputerCLI computerCLI,
+               ComputerServiceImpl computerServiceImpl,
+               CompanyServiceImpl companyServiceImpl) {
+        this.companyCLI = companyCLI;
+        this.computerCLI = computerCLI;
+        this.companyServiceImpl = companyServiceImpl;
+        this.computerServiceImpl = computerServiceImpl;
+    }
     /**
      * Main function with main loop for the CLI.
      */
@@ -38,12 +72,12 @@ public class CLI {
                     wantContinue = false;
                     break;
                 case ALLCOMPUTERS:
-                    p = new ComputerCLI();
-                    p.printEntities(sc);
+                    pageCLI = new ComputerCLI();
+                    pageCLI.printEntities(sc);
                     break;
                 case ALLCOMPANIES:
-                    p = new CompanyCLI();
-                    p.printEntities(sc);
+                    pageCLI = new CompanyCLI();
+                    pageCLI.printEntities(sc);
                     break;
                 case DETAILS:
                     switch (l[1].split(SEPARATOR2)[0]) {
@@ -174,7 +208,7 @@ public class CLI {
      * Main menu of the CLI. Read the next line of the user.
      * @return Next line of the user.
      */
-    public static String mainMenu() {
+    public String mainMenu() {
         System.out.println("What do you want doing ?");
         System.out.println();
         System.out.println("List of computers : " + ALLCOMPUTERS);
@@ -192,13 +226,14 @@ public class CLI {
      * main function for run the CLI.
      * @param args Arguments of the program launch.
      */
-    public static void main(String[] args) {
-        //TODO
+    public static void main(String... args) {
+        ApplicationContext context = new ClassPathXmlApplicationContext("cli/src/main/resources/applicationContext-cli.xml");
         if (args.length > 0) {
             if (args[0].equals("-debug")) {
                 System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
             }
         }
-        (new CLI()).mainCLI();
+//        CLI cli = context.getBean(CLI.class);
+//        cli.mainCLI();
     }
 }

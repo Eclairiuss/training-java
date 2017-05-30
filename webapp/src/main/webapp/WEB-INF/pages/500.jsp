@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -8,9 +9,9 @@
 	<title>Computer Database</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Bootstrap -->
-	<link href="css/bootstrap.min.css" rel=    <link href="<c:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
-    <link href="<c:url value="/resources/css/font-awesome.css"/>" rel="stylesheet" media="screen">
-    <link href="<c:url value="/resources/css/main.css"/>" rel="stylesheet" media="screen">
+    <link href="<c:url value="/static/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
+    <link href="<c:url value="/static/css/font-awesome.css"/>" rel="stylesheet" media="screen">
+    <link href="<c:url value="/static/css/main.css"/>" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 </head>

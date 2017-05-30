@@ -184,8 +184,8 @@
                         <id>validate</id>
                         <phase>validate</phase>
                         <configuration>
-                            <configLocation>webapp/src/resources/config/checkstyle/checkstyle.xml</configLocation>
-                            <suppressionsLocation>webapp/src/resources/config/checkstyle/suppressions.xml</suppressionsLocation>
+                            <configLocation>webapp/src/main/resources/config/checkstyle/checkstyle.xml</configLocation>
+                            <suppressionsLocation>webapp/src/main/resources/config/checkstyle/suppressions.xml</suppressionsLocation>
                             <consoleOutput>true</consoleOutput>
                         </configuration>
                         <goals>

@@ -6,9 +6,11 @@ import fr.ebiz.nurdiales.trainingJava.core.Parameters;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
+@Component
 public class ComputerCLI extends PageCLI {
     private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
     ComputerServiceImpl computerServiceImpl;

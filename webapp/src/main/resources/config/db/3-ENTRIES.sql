@@ -1,6 +1,3 @@
-set @@sql_mode='no_engine_substitution';
-use `computer-database-db`;
-
 insert into company (id,name) values (  1,'Apple Inc.');
 insert into company (id,name) values (  2,'Thinking Machines');
 insert into company (id,name) values (  3,'RCA');
@@ -618,3 +615,13 @@ insert into computer (id,name,introduced,discontinued,company_id) values (571,'L
 insert into computer (id,name,introduced,discontinued,company_id) values (572,'Dell Vostro',null,null,null);
 insert into computer (id,name,introduced,discontinued,company_id) values (573,'Gateway LT3103U','2008-01-01',null,null);
 insert into computer (id,name,introduced,discontinued,company_id) values (574,'iPhone 4S','2011-10-14',null,1);
+
+insert into role (id,name) values (1,'ROLE_ADMIN');
+insert into role (id,name) values (2,'ROLE_USER');
+
+insert into user (id,username,password) values (1,'admin','admin');
+insert into user (id,username,password) values (2,'user','user');
+
+insert into user_role (id,role_id,user_id) values (1,1,1);
+insert into user_role (id,role_id,user_id) values (2,2,1);
+insert into user_role (id,role_id,user_id) values (3,2,2);

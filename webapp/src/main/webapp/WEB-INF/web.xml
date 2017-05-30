@@ -3,25 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    <display-name>Computer Database</display-name>
 
     <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
     </listener>
 
-    <!--<error-page>-->
-        <!--<error-code>403</error-code>-->
-        <!--<location>/WEB-INF/pages/403.jsp</location>-->
-    <!--</error-page>-->
-    <!--<error-page>-->
-        <!--<error-code>404</error-code>-->
-        <!--<location>/WEB-INF/pages/404.jsp</location>-->
-    <!--</error-page>-->
-    <!--<error-page>-->
-        <!--<error-code>500</error-code>-->
-        <!--<location>/WEB-INF/pages/500.jsp</location>-->
-    <!--</error-page>-->
-    
+    <!-- Definition of containers shared by all Servlets and Filters -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
@@ -29,12 +18,12 @@
             classpath:/applicationContext-persistence.xml
             classpath:/applicationContext-service.xml
             classpath:/applicationContext-binding.xml
-            <!--/WEB-INF/spring-security.xml-->
         </param-value>
     </context-param>
 
+    <!-- Spring MVC -->
     <servlet>
-        <servlet-name>MyDispatcher</servlet-name>
+        <servlet-name>dispatcher</servlet-name>
         <servlet-class>
             org.springframework.web.servlet.DispatcherServlet
         </servlet-class>
@@ -44,9 +33,13 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
     <servlet-mapping>
-        <servlet-name>MyDispatcher</servlet-name>
+        <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <!-- Errors -->
+    <error-page>
+        <location>/error</location>
+    </error-page>
 </web-app>
