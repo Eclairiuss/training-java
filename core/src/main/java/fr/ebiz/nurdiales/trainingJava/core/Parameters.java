@@ -59,6 +59,9 @@ public class Parameters {
          * @return the builder.
          */
         public Builder page(int page) {
+            if (page < 0) {
+                params.setPage(0);
+            }
             params.setPage(page);
             return this;
         }
@@ -69,7 +72,7 @@ public class Parameters {
          * @return the builder.
          */
         public Builder size(int size) {
-            if (size == 0) {
+            if (size < 1) {
                 params.setSize(10);
             } else {
                 params.setSize(size);
@@ -168,7 +171,7 @@ public class Parameters {
     }
 
     public void setPage(int page) {
-        this.page = page;
+        this.page = (page < 0) ? 0 : page;
     }
 
     public int getSize() {
@@ -176,11 +179,11 @@ public class Parameters {
     }
 
     public void setSize(int size) {
-        this.size = size;
+        this.size = (size < 1) ? 10 : size;
     }
 
     public String getName() {
-        return name;
+        return name == null ? "" : name;
     }
 
     public void setName(String name) {
@@ -188,7 +191,7 @@ public class Parameters {
     }
 
     public String getNameCompany() {
-        return nameCompany;
+        return nameCompany == null ? "" : nameCompany;
     }
 
     public void setNameCompany(String nameCompany) {

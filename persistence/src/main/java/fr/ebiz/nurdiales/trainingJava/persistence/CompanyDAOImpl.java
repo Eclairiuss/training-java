@@ -6,15 +6,17 @@ import fr.ebiz.nurdiales.trainingJava.core.QCompany;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Component
+@Repository("companyDAO")
 public class CompanyDAOImpl implements CompanyDAO {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 
-    private final JPAQueryFactory query;
+    private JPAQueryFactory query;
+
     /**
      * Constructor.
      * @param query .

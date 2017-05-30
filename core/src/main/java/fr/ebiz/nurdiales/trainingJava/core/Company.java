@@ -1,9 +1,10 @@
 package fr.ebiz.nurdiales.trainingJava.core;
 
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
+@Entity(name = "company")
 public class Company {
     @Id
     private int id;

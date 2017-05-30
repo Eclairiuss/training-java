@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-@Entity
+@Entity(name = "computer")
 public class Computer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Computer.class);
     private static final LocalDate NEVER_BEFORE = stringToDate("1970-01-01");

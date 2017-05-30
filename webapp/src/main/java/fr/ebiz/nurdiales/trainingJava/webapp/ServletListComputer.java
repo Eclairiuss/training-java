@@ -1,7 +1,7 @@
-package fr.ebiz.nurdiales.webapp;
+package fr.ebiz.nurdiales.trainingJava.webapp;
 
 import fr.ebiz.nurdiales.trainingJava.service.ComputerService;
-import fr.ebiz.nurdiales.webapp.util.Trad;
+import fr.ebiz.nurdiales.trainingJava.webapp.util.Trad;
 import fr.ebiz.nurdiales.trainingJava.core.Page;
 import fr.ebiz.nurdiales.trainingJava.core.Parameters;
 import org.springframework.beans.factory.annotation.Autowired;

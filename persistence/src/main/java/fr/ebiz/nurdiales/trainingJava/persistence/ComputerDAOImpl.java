@@ -1,8 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.persistence;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.LiteralExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import fr.ebiz.nurdiales.trainingJava.core.Company;
 import fr.ebiz.nurdiales.trainingJava.core.Computer;
 import fr.ebiz.nurdiales.trainingJava.core.QComputer;
@@ -114,6 +114,7 @@ public class ComputerDAOImpl implements ComputerDAO {
         QComputer c = QComputer.computer;
         LiteralExpression<?> byHandled = null;
         switch (params.getTrierPar()) {
+            default:
             case NAME:
                 byHandled = c.name;
                 break;
@@ -126,22 +127,21 @@ public class ComputerDAOImpl implements ComputerDAO {
             case COMPANY:
                 byHandled = c.company.name;
                 break;
-            default:
-                break;
         }
         OrderSpecifier<?> orderHandled = params.isReversed() ? byHandled.desc() : byHandled.asc();
 
         retour.setComputers(query.selectFrom(c)
-                .where(c.name.contains(params.getName())
-                        .or(c.company.name.contains(params.getNameCompany())))
+                .where(c.name.contains(params.getName()).or(c.company.name.contains(params.getNameCompany())))
                 .orderBy(orderHandled)
                 .limit(params.getSize())
                 .offset(params.getSize() * params.getPage())
                 .fetch());
 
         retour.setQuantity(query.selectFrom(c)
-                .where(c.name.contains(params.getName())
-                        .or(c.company.name.contains(params.getNameCompany())))
+                .where((c.name.isNotNull()
+                        .and(c.name.contains(params.getName())))
+                        .or((c.company.isNotNull()
+                                .and(c.name.contains(params.getNameCompany())))))
                 .fetchCount());
 
         return retour;

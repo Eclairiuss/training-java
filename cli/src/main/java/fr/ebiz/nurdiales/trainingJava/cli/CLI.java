@@ -193,6 +193,7 @@ public class CLI {
      * @param args Arguments of the program launch.
      */
     public static void main(String[] args) {
+        //TODO
         if (args.length > 0) {
             if (args[0].equals("-debug")) {
                 System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");

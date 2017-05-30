@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.webapp;
+package fr.ebiz.nurdiales.trainingJava.webapp;
 
 import fr.ebiz.nurdiales.trainingJava.service.CompanyService;
 import fr.ebiz.nurdiales.trainingJava.service.ComputerService;

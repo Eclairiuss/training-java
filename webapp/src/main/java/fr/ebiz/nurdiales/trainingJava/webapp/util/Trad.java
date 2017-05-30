@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.webapp.util;
+package fr.ebiz.nurdiales.trainingJava.webapp.util;
 
 public class Trad {
     /**
