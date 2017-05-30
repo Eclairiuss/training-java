@@ -2,26 +2,31 @@ package fr.ebiz.nurdiales.trainingJava.persistence;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.LiteralExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import fr.ebiz.nurdiales.trainingJava.core.Company;
 import fr.ebiz.nurdiales.trainingJava.core.Computer;
-import fr.ebiz.nurdiales.trainingJava.core.QComputer;
 import fr.ebiz.nurdiales.trainingJava.core.Page;
 import fr.ebiz.nurdiales.trainingJava.core.Parameters;
+import fr.ebiz.nurdiales.trainingJava.core.QComputer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository("computerDAO")
 public class ComputerDAOImpl implements ComputerDAO {
     private final JPAQueryFactory query;
 
+    @PersistenceContext
+    private EntityManager em;
+
     /**
      * Constructor.
      * @param query .
      */
-
     @Autowired
     public ComputerDAOImpl(JPAQueryFactory query) {
         this.query = query;
@@ -29,13 +34,12 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     @Override
     public int create(Computer computer) {
-        QComputer c = QComputer.computer;
-        return (int) query.update(c)
-                .set(c.name, computer.getName())
-                .set(c.introduced, computer.getIntroduced())
-                .set(c.discontinued, computer.getDiscontinued())
-                .set(c.company, computer.getCompany())
-                .execute();
+        return (int) em.createNativeQuery("INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)")
+                .setParameter(1, computer.getName())
+                .setParameter(2, computer.getIntroduced())
+                .setParameter(3, computer.getDiscontinued())
+                .setParameter(4, computer.getCompanyId())
+                .executeUpdate();
     }
 
     @Override
@@ -59,6 +63,7 @@ public class ComputerDAOImpl implements ComputerDAO {
                 query.delete(c)
                         .where(c.id.eq(id))
                         .execute();
+
             }
         }
         return tmp;
@@ -110,40 +115,55 @@ public class ComputerDAOImpl implements ComputerDAO {
     @Override
     public Page listComputers(Parameters params, List<Company> list) {
         Page retour = new Page();
-
         QComputer c = QComputer.computer;
-        LiteralExpression<?> byHandled = null;
-        switch (params.getTrierPar()) {
-            default:
-            case NAME:
-                byHandled = c.name;
-                break;
-            case INTRODUCED:
-                byHandled = c.introduced;
-                break;
-            case DISCONTINUED:
-                byHandled = c.discontinued;
-                break;
-            case COMPANY:
-                byHandled = c.company.name;
-                break;
+
+        JPAQuery<Computer> tmpQuery = query.selectFrom(c);
+        tmpQuery = tmpQuery.where(
+                c.name.contains(
+                        params.getName())
+                        .and(c.company.isNull()));
+        if (params.getNameCompany().trim().isEmpty()) {
+            tmpQuery = tmpQuery.where(c.name.contains(params.getName()));
+        } else {
+            tmpQuery = tmpQuery.where(c.name.contains(params.getName())
+                    .or(c.company.name.contains(params.getNameCompany())));
         }
-        OrderSpecifier<?> orderHandled = params.isReversed() ? byHandled.desc() : byHandled.asc();
 
-        retour.setComputers(query.selectFrom(c)
-                .where(c.name.contains(params.getName()).or(c.company.name.contains(params.getNameCompany())))
-                .orderBy(orderHandled)
-                .limit(params.getSize())
-                .offset(params.getSize() * params.getPage())
-                .fetch());
-
-        retour.setQuantity(query.selectFrom(c)
-                .where((c.name.isNotNull()
-                        .and(c.name.contains(params.getName())))
-                        .or((c.company.isNotNull()
-                                .and(c.name.contains(params.getNameCompany())))))
+        retour.setQuantity(tmpQuery
                 .fetchCount());
 
+        switch (params.getTrierPar()) {
+            case NAME:
+                tmpQuery = tmpQuery.orderBy(isReversed(c.name, params.isReversed()));
+                break;
+            case INTRODUCED:
+                tmpQuery = tmpQuery.orderBy(isReversed(c.introduced, params.isReversed()));
+                break;
+            case DISCONTINUED:
+                tmpQuery = tmpQuery.orderBy(isReversed(c.discontinued, params.isReversed()));
+                break;
+            case COMPANY:
+                tmpQuery = tmpQuery.orderBy(isReversed(c.company.name, params.isReversed()));
+                break;
+            default:
+                break;
+        }
+        retour.setComputers(tmpQuery.limit(params.getSize())
+                .offset(params.getSize() * params.getPage())
+                .fetch());
         return retour;
+    }
+
+    /**
+     * Create the OrderSpecifier from LiteralExpression and boolean for reverse or not.
+     * @param le LiteralExpression.
+     * @param isReversed .
+     * @return orderSpecifier.
+     */
+    private OrderSpecifier isReversed(LiteralExpression le, boolean isReversed) {
+        if (isReversed) {
+            return le.desc();
+        }
+        return le.asc();
     }
 }

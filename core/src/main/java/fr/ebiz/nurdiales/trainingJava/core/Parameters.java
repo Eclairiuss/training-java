@@ -19,8 +19,8 @@ public class Parameters {
     private int idCompany;
     private int page;
     private int size;
-    private String name;
-    private String nameCompany;
+    private String name = "";
+    private String nameCompany = "";
     private ElementTri trierPar;
 
     public static class Builder {
@@ -95,6 +95,16 @@ public class Parameters {
          * @param nameCompany value to set.
          * @return the builder.
          */
+        public Builder nameCompany(String nameCompany) {
+            params.setNameCompany(nameCompany);
+            return this;
+        }
+
+        /**
+         * set the value of nameCompany in params.
+         * @param nameCompany value to set.
+         * @return the builder.
+         */
         public Builder page(String nameCompany) {
             params.setNameCompany(nameCompany);
             return this;
@@ -117,7 +127,6 @@ public class Parameters {
         public Parameters build() {
             return params;
         }
-
     }
 
     /**
@@ -187,7 +196,7 @@ public class Parameters {
     }
 
     public void setName(String name) {
-        this.name = (name == null) ? name : (name.equals("") ? null : name);
+        this.name = (name == null) ? "" : name;
     }
 
     public String getNameCompany() {
@@ -195,7 +204,7 @@ public class Parameters {
     }
 
     public void setNameCompany(String nameCompany) {
-        this.nameCompany = nameCompany;
+        this.nameCompany = nameCompany == null ? "" : nameCompany;
     }
 
     public ElementTri getTrierPar() {

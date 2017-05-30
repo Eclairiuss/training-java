@@ -68,7 +68,7 @@ public class ComputerServiceImpl implements ComputerService {
         Page page = computerDAO.listComputers(params, list);
         for (Company company : list) {
             for (Computer computer : page.getComputers()) {
-                if (company.getId() == computer.getCompanyId()) {
+                if (company != null && computer != null && computer.getCompany() != null && company.getId() == computer.getCompanyId()) {
                     computer.setCompanyName(company.getName());
                 }
             }

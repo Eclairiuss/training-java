@@ -48,6 +48,7 @@ public class ServletListComputer {
                                     .page(Trad.stringToInt(sPage) - 1)
                                     .size(Trad.stringToInt(sSize))
                                     .name(sSearch)
+                                    .nameCompany(sSearch)
                                     .build();
         params.parseTri(sTri);
 

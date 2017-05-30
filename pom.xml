@@ -4,7 +4,7 @@
     <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
     <artifactId>computer-database</artifactId>
     <packaging>pom</packaging>
-    <version>0.8.0</version>
+    <version>0.8.2</version>
     <name>Computer Database</name>
 
     <modules>

@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository("companyDAO")
@@ -16,6 +18,8 @@ public class CompanyDAOImpl implements CompanyDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 
     private JPAQueryFactory query;
+    @PersistenceContext
+    private EntityManager em;
 
     /**
      * Constructor.
@@ -28,10 +32,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 
     @Override
     public int create(Company company) {
-        QCompany c = QCompany.company;
-        return (int) query.update(c)
-                .set(c.name, company.getName())
-                .execute();
+        return (int) em.createNativeQuery("INSERT INTO company (name) VALUES (?)")
+                .setParameter(1, company.getName())
+                .executeUpdate();
     }
 
     @Override
