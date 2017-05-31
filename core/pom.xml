@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
         <artifactId>computer-database</artifactId>
-        <version>0.8.2</version>
+        <version>0.8.3</version>
     </parent>
     <artifactId>core</artifactId>
     <packaging>jar</packaging>
@@ -34,8 +34,8 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>${org.hibernate.javax.persistence.version}</version>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
         </dependency>
 
         <!-- ######## -->
@@ -55,11 +55,11 @@
         <!-- ###### -->
         <!-- Spring -->
         <!-- ###### -->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.security</groupId>-->
-            <!--<artifactId>spring-security-core</artifactId>-->
-            <!--<version>${org.springframework.security.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${org.springframework.security.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

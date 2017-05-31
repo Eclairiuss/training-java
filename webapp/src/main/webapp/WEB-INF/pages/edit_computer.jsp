@@ -62,7 +62,7 @@
                             <form:select path="companyId" class="form-control" id="companyId" name="companyId">
                                 <option value="44" <c:if test="${computer.getCompanyId() == null}">selected</c:if>">--</option>
                                 <c:forEach var="company" items="${companies}">
-                                    <c:if test="${company.getId() != 44">
+                                    <c:if test="${company.getId() != 44}">
                                         <option value="${company.getId()}" <c:if test="${company.getId().equals(computer.getCompanyId())}">selected</c:if> >${company.getName()}</option>
                                     </c:if>
                                 </c:forEach>

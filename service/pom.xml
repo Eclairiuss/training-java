@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
         <artifactId>computer-database</artifactId>
-        <version>0.8.2</version>
+        <version>0.8.3</version>
     </parent>
     <artifactId>service</artifactId>
     <packaging>jar</packaging>
@@ -37,10 +37,10 @@
         <!-- ###### -->
         <!-- Spring -->
         <!-- ###### -->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.security</groupId>-->
-            <!--<artifactId>spring-security-core</artifactId>-->
-            <!--<version>${org.springframework.security.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${org.springframework.security.version}</version>
+        </dependency>
     </dependencies>
 </project>

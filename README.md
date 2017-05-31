@@ -148,8 +148,8 @@
 
 # t8
 <ul>
-	<li>TODO - Maven Multi-modules</li>
-	<li>TODO - Spring Security</li>
-	<li>TODO - Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)</li>
+	<li>DONE - Maven Multi-modules</li>
+	<li>W.I.P. - Spring Security</li>
+	<li>DONE - Hibernate ORM (QueryDSL)</li>
 </ul>
 

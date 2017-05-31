@@ -1,31 +1,33 @@
 package fr.ebiz.nurdiales.trainingJava.webapp;
 
-import fr.ebiz.nurdiales.trainingJava.service.ComputerService;
-import fr.ebiz.nurdiales.trainingJava.webapp.util.Trad;
 import fr.ebiz.nurdiales.trainingJava.core.Page;
 import fr.ebiz.nurdiales.trainingJava.core.Parameters;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerService;
+import fr.ebiz.nurdiales.trainingJava.webapp.util.Trad;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
 @Controller
 public class ServletListComputer {
-    ComputerService computerService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServletListComputer.class);
     private static final String PAGE_NAME = "/dashboard";
-    private static final String ACTION = "ACTION";
-    private static final String DELETE = "delete";
     private static final String SEARCH = "search";
     private static final String ORDER = "order";
-    private static final String NAME = "name";
     private static final String SIZE = "size";
     private static final String PAGE = "page";
     private static final String DELETESELECTED = "selection";
+
+
+    ComputerService computerService;
 
     /**
      * Default constructor.
@@ -37,8 +39,7 @@ public class ServletListComputer {
     }
 
     @RequestMapping(value = {"", "/", PAGE_NAME}, method = RequestMethod.GET)
-    public ModelAndView doGet(@RequestParam Map<String, String> request) {
-        ModelAndView mav = new ModelAndView();
+    protected String doGet(ModelMap model, @RequestParam Map<String, String> request) {
         String sSize = request.get(SIZE);
         String sPage = request.get(PAGE);
         String sSearch = request.get(SEARCH);
@@ -56,28 +57,24 @@ public class ServletListComputer {
 
         page = computerService.getAll(params);
 
-        mav.addObject("numberComputers", page.getQuantity());
-        mav.addObject("computers", page.getComputers());
-        mav.addObject(PAGE, params.getPage() + 1);
-        mav.addObject(SIZE, params.getSize());
-        mav.addObject(SEARCH, sSearch);
-        mav.addObject(ORDER, sTri);
-        mav.setViewName(PAGE_NAME);
-        return mav;
+        model.addAttribute("numberComputers", page.getQuantity());
+        model.addAttribute("computers", page.getComputers());
+        model.addAttribute(PAGE, params.getPage() + 1);
+        model.addAttribute(SIZE, params.getSize());
+        model.addAttribute(SEARCH, sSearch);
+        model.addAttribute(ORDER, sTri);
+        return "." + PAGE_NAME;
     }
 
 
     @RequestMapping(value = {"", "/", PAGE_NAME}, method = RequestMethod.POST)
-    public ModelAndView doPost(@RequestParam Map<String, String> request) {
-        String difference = request.get(ACTION);
-        if (difference.equals(DELETE)) {
-            String[] idsString = request.get(DELETESELECTED).split(",");
-            int[] ids = new int[idsString.length];
-            for (int i = 0; i < idsString.length; ++i) {
-                ids[i] = Integer.parseInt(idsString[i]);
-            }
-            computerService.delete(ids);
-        }
-        return doGet(request);
+    protected String doPost(ModelMap model, @RequestParam Map<String, String> request) {
+//        String[] idsString = request.get(DELETESELECTED).split(",");
+//        int[] ids = new int[idsString.length];
+//        for (int i = 0; i < idsString.length; ++i) {
+//            ids[i] = Integer.parseInt(idsString[i]);
+//        }
+//        computerService.delete(ids);
+        return doGet(model, request);
     }
 }

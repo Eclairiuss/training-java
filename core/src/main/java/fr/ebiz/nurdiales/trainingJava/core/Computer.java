@@ -67,23 +67,15 @@ public class Computer {
     }
 
     /**
-     * TODO.
-     * @param introduced TODO.
+     * Set Introduced.
+     * @param introduced .
      */
     public void setIntroduced(LocalDate introduced) {
-        if (this.introduced != null) {
-            LOGGER.info(this.introduced.toString());
-        }
-
         this.introduced = (introduced != null) ? (introduced.isBefore(NEVER_BEFORE) ? this.introduced : introduced)
                                   : null;
-
-        if (this.introduced != null) {
-            LOGGER.info(this.introduced.toString());
-        }
     }
     /**
-     * Setter for introduced who parse a string.
+     * Set Introduced.
      * @param introduced Date with format "AAAA-MM-JJ"
      */
     public void setIntroduced(String introduced) {

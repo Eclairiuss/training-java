@@ -34,7 +34,6 @@
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
                 <form id="searchForm" action="./dashboard" method="GET" class="form-inline">
-                    <input type="hidden" name="ACTION" value="search">
                     <input type="hidden" name="size" value="${size}">
                     <input type="search" id="searchbox" name="search" class="form-control" placeholder="<spring:message code="dashboard.search" text="default text" />" />
                     <input type="submit" id="searchsubmit" value="<spring:message code="dashboard.filter" text="default text" />"
@@ -48,14 +47,15 @@
         </div>
     </div>
 
-    <form id="deleteForm" action="./dashboard" method="POST">
-        <input type="hidden" name="ACTION" value="delete">
+    <form id="deleteForm" action="./delete_computer" method="POST">
         <input type="hidden" name="size" value="${size}">
         <input type="hidden" name="page" value="${page}">
         <input type="hidden" name="selection" value="">
         <input type="hidden" name="order" value="${order}">
         <input type="hidden" name="search" value="${search}">
-    </form>
+        <input type="hidden"
+            name="${_csrf.parameterName}"
+            value="${_csrf.token}"/>
 
     <div class="container" style="margin-top: 10px;">
         <table class="table table-striped table-bordered">
@@ -122,6 +122,7 @@
             </tbody>
         </table>
     </div>
+    </form>
 </section>
 
 <footer class="navbar-fixed-bottom">

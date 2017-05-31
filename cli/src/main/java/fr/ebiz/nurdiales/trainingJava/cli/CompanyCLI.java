@@ -1,8 +1,8 @@
 package fr.ebiz.nurdiales.trainingJava.cli;
 
-import fr.ebiz.nurdiales.trainingJava.service.CompanyServiceImpl;
 import fr.ebiz.nurdiales.trainingJava.core.Company;
 import fr.ebiz.nurdiales.trainingJava.core.Parameters;
+import fr.ebiz.nurdiales.trainingJava.service.CompanyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,26 +11,20 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Scanner;
 
-@Component
+@Component("companyCLI")
 public class CompanyCLI extends PageCLI {
     private static Logger logger = LoggerFactory.getLogger(CompanyCLI.class);
-    @Autowired
-    private CompanyServiceImpl companyServiceImpl;
-
-    public CompanyServiceImpl getCompanyServiceImpl() {
-        return companyServiceImpl;
-    }
-
-    public void setCompanyServiceImpl(CompanyServiceImpl companyServiceImpl) {
-        this.companyServiceImpl = companyServiceImpl;
-    }
+    private CompanyService companyService;
 
     /**
      * Constructor of CompanyCLI, make a new Page for print companies.
+     * @param companyService .
      */
-    public CompanyCLI() {
+    @Autowired
+    public CompanyCLI(CompanyService companyService) {
         super();
         params  = (new Parameters.Builder()).page(0).size(10).build();
+        this.companyService = companyService;
     }
 
     @Override
@@ -42,9 +36,9 @@ public class CompanyCLI extends PageCLI {
 
             List<Company> cl;
             if (params.getNameCompany() == null) {
-                cl = companyServiceImpl.getAll(params.getPage(), params.getSize());
+                cl = companyService.getAll(params.getPage(), params.getSize());
             } else {
-                cl = companyServiceImpl.getAll(params.getNameCompany(), params.getPage(), params.getSize());
+                cl = companyService.getAll(params.getNameCompany(), params.getPage(), params.getSize());
             }
             for (Company c : cl) {
                 System.out.println(c);
@@ -62,7 +56,7 @@ public class CompanyCLI extends PageCLI {
 
     @Override
     protected void delete(String tmp) {
-        companyServiceImpl.delete(Integer.parseInt(tmp));
+        companyService.delete(Integer.parseInt(tmp));
     }
 
     @Override

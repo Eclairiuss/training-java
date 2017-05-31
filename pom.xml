@@ -4,7 +4,7 @@
     <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
     <artifactId>computer-database</artifactId>
     <packaging>pom</packaging>
-    <version>0.8.2</version>
+    <version>0.8.3</version>
     <name>Computer Database</name>
 
     <modules>
@@ -35,7 +35,7 @@
         <com.querydsl.version>4.1.4</com.querydsl.version>
         <com.mysema.maven.version>1.1.3</com.mysema.maven.version>
         <org.hibernate.version>5.2.10.Final</org.hibernate.version>
-        <org.hibernate.javax.persistence.version>1.0.1.Final</org.hibernate.javax.persistence.version>
+        <org.hibernate.javax.persistence.version>1.0.0.Final</org.hibernate.javax.persistence.version>
         <javax.inject.version>1</javax.inject.version>
         <!-- build -->
         <org.apache.maven.plugins.checkstyle.version>2.17</org.apache.maven.plugins.checkstyle.version>
@@ -161,6 +161,11 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>${javax.inject.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.w3c</groupId>
             <artifactId>dom</artifactId>

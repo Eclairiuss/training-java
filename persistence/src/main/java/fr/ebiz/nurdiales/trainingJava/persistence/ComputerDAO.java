@@ -32,10 +32,10 @@ public interface ComputerDAO {
 
     /**
      * Methode to delete all computers who has i for computerId.
-     * @param i TODO.
+     * @param id .
      * @return long.
      */
-    int deleteByCompany(int i);
+    int deleteByCompany(int id);
 
     /**
      * Method to update a listComputers in the database.

@@ -67,11 +67,8 @@ public class ServletEditComputer {
         ComputerDTO computer = null;
         List<Company> companies = null;
         int id = 0;
-
         String sId = request.get(ID);
-
         companies = companyService.getAll();
-
         model.addAttribute(LIST, companies);
         if (sId != null) {
             try {

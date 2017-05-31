@@ -208,7 +208,7 @@ public class Parameters {
     }
 
     public ElementTri getTrierPar() {
-        return trierPar;
+        return trierPar == null ? ElementTri.ID : trierPar;
     }
 
     public void setTrierPar(ElementTri trierPar) {

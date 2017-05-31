@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
         <artifactId>computer-database</artifactId>
-        <version>0.8.2</version>
+        <version>0.8.3</version>
     </parent>
     <artifactId>persistence</artifactId>
     <packaging>jar</packaging>
@@ -82,6 +82,11 @@
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
             <version>${com.querydsl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.3.8.RELEASE</version>
         </dependency>
     </dependencies>
 </project>

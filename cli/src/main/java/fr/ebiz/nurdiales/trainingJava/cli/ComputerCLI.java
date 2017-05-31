@@ -3,25 +3,28 @@ package fr.ebiz.nurdiales.trainingJava.cli;
 import fr.ebiz.nurdiales.trainingJava.core.Computer;
 import fr.ebiz.nurdiales.trainingJava.core.Page;
 import fr.ebiz.nurdiales.trainingJava.core.Parameters;
-import fr.ebiz.nurdiales.trainingJava.service.ComputerServiceImpl;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
-@Component
+@Component("computerCLI")
 public class ComputerCLI extends PageCLI {
     private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
-    ComputerServiceImpl computerServiceImpl;
+    ComputerService computerService;
 
     /**
      * Constructor of ComputerCLI, make a new Page for print computers.
+     * @param computerService .
      */
-    public ComputerCLI() {
+    @Autowired
+    public ComputerCLI(ComputerService computerService) {
         super();
         params = new Parameters.Builder().page(0).size(10).build();
-        computerServiceImpl = new ComputerServiceImpl();
+        this.computerService = computerService;
     }
 
     @Override
@@ -32,7 +35,7 @@ public class ComputerCLI extends PageCLI {
         while (!exitWanted) {
             System.out.println("Page " + params.getPage() + " : ");
             Page page;
-            page = computerServiceImpl.getAll(params);
+            page = computerService.getAll(params);
             for (Computer c : page.getComputers()) {
                 System.out.println(c.toString());
             }
@@ -48,7 +51,7 @@ public class ComputerCLI extends PageCLI {
 
     @Override
     protected void delete(String tmp) {
-        computerServiceImpl.delete(Integer.parseInt(tmp));
+        computerService.delete(Integer.parseInt(tmp));
     }
 
     @Override

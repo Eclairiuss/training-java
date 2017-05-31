@@ -1,0 +1,35 @@
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http pattern="/static/**" security="none"/>
+
+    <http>
+        <intercept-url pattern="/login*" access="isAnonymous()"/>
+        <intercept-url pattern="/logout*" access="hasRole('USER')"/>
+        <intercept-url pattern="/" access="hasRole('USER')"/>
+        <intercept-url pattern="/dashboard" access="hasRole('USER')"/>
+        <intercept-url pattern="/*_computer" access="hasRole('ADMIN')"/>
+
+        <form-login
+                login-page="/login"
+                default-target-url="/"
+                authentication-failure-url="/login.html?error=true" />
+        <logout
+                logout-success-url="/login"
+                logout-url="/logout"
+                delete-cookies="JSESSIONID"/>
+        <http-basic />
+    </http>
+
+    <authentication-manager>
+        <authentication-provider user-service-ref="userService">
+            <!--<password-encoder hash="sha-256" />-->
+        </authentication-provider>
+    </authentication-manager>
+</b:beans>

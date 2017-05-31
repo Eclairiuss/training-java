@@ -2,8 +2,8 @@ package fr.ebiz.nurdiales.trainingJava.cli;
 
 import fr.ebiz.nurdiales.trainingJava.binding.dto.ComputerDTO;
 import fr.ebiz.nurdiales.trainingJava.core.Computer;
-import fr.ebiz.nurdiales.trainingJava.service.CompanyServiceImpl;
-import fr.ebiz.nurdiales.trainingJava.service.ComputerServiceImpl;
+import fr.ebiz.nurdiales.trainingJava.service.CompanyService;
+import fr.ebiz.nurdiales.trainingJava.service.ComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,21 +14,16 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.util.Scanner;
 
-@Component
+@Component("cli")
 public class CLI {
     private static Logger logger = LoggerFactory.getLogger(CLI.class);
     private static final String EXIT = "exit",
             ALLCOMPUTERS = "computers",
             ALLCOMPANIES = "companies",
-            DELETE = "delete",
             DETAILS = "details",
             UPDATE = "update",
             NEW = "new",
             ID = "id",
-            ID_COMPANY = "company_id",
-            NAME = "name",
-            DATE_OF_DISCONTINUED = "date_of_discontinued",
-            DATE_OF_INTRODUCED = "date_of_introduced",
             SEPARATOR = " ",
             DATE_FORMA = "AAAA-MM-JJ",
             SEPARATOR2 = "=";
@@ -38,25 +33,25 @@ public class CLI {
     private CompanyCLI companyCLI;
     private ComputerCLI computerCLI;
 
-    private ComputerServiceImpl computerServiceImpl;
-    private CompanyServiceImpl companyServiceImpl;
+    private ComputerService computerService;
+    private CompanyService companyService;
 
     /**
      * Contructor.
      * @param companyCLI .
      * @param computerCLI .
-     * @param computerServiceImpl .
-     * @param companyServiceImpl .
+     * @param computerService .
+     * @param companyService .
      */
     @Autowired
     public CLI(CompanyCLI companyCLI,
                ComputerCLI computerCLI,
-               ComputerServiceImpl computerServiceImpl,
-               CompanyServiceImpl companyServiceImpl) {
+               ComputerService computerService,
+               CompanyService companyService) {
         this.companyCLI = companyCLI;
         this.computerCLI = computerCLI;
-        this.companyServiceImpl = companyServiceImpl;
-        this.computerServiceImpl = computerServiceImpl;
+        this.companyService = companyService;
+        this.computerService = computerService;
     }
     /**
      * Main function with main loop for the CLI.
@@ -72,18 +67,18 @@ public class CLI {
                     wantContinue = false;
                     break;
                 case ALLCOMPUTERS:
-                    pageCLI = new ComputerCLI();
+                    pageCLI = computerCLI;
                     pageCLI.printEntities(sc);
                     break;
                 case ALLCOMPANIES:
-                    pageCLI = new CompanyCLI();
+                    pageCLI = companyCLI;
                     pageCLI.printEntities(sc);
                     break;
                 case DETAILS:
                     switch (l[1].split(SEPARATOR2)[0]) {
                         case ID:
                             try {
-                                Computer computer = computerServiceImpl
+                                Computer computer = computerService
                                                             .get(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
                                 System.out.println(computer);
                             } catch (Exception e) {
@@ -115,7 +110,7 @@ public class CLI {
     private void deleteComputer(Scanner sc) {
         System.out.print("ID of listComputers to delete : ");
         String l = sc.nextLine();
-        computerServiceImpl.delete(Integer.parseInt(l));
+        computerService.delete(Integer.parseInt(l));
     }
 
     /**
@@ -153,7 +148,7 @@ public class CLI {
         computer.setCompanyId(Integer.parseInt(sc.nextLine()));
 
         logger.debug(computer.toString());
-        computerServiceImpl.add(computer);
+        computerService.add(computer);
     }
 
     /**
@@ -168,7 +163,7 @@ public class CLI {
             System.out.print("Id : ");
             s = sc.nextLine();
             try {
-                computer = computerServiceImpl.get(Integer.parseInt(s));
+                computer = computerService.get(Integer.parseInt(s));
             } catch (IllegalArgumentException e) {
                 isInteger = false;
             }
@@ -200,7 +195,7 @@ public class CLI {
             } catch (IllegalArgumentException e) {
                 logger.debug("CompanyID is invalid");
             }
-            computerServiceImpl.update(computer);
+            computerService.update(computer);
         }
     }
 
@@ -227,13 +222,8 @@ public class CLI {
      * @param args Arguments of the program launch.
      */
     public static void main(String... args) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("cli/src/main/resources/applicationContext-cli.xml");
-        if (args.length > 0) {
-            if (args[0].equals("-debug")) {
-                System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
-            }
-        }
-//        CLI cli = context.getBean(CLI.class);
-//        cli.mainCLI();
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext-cli.xml");
+        CLI cli = (CLI) context.getBean("cli");
+        cli.mainCLI();
     }
 }
