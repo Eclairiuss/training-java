@@ -52,9 +52,11 @@
                         <div class="form-group">
                             <form:label path="companyId" for="companyId"><spring:message code="computer.company" text="default text" /></form:label>
                             <form:select path="companyId" class="form-control" id="companyId" name="companyId">
-                                <option value="0" selected>--</option>
+                                <option value="44" selected>--</option>
                                 <c:forEach var="company" items="${companies}">
-                                    <option value="${company.getId()}">${company.getName()}</option>
+                                    <c:if test="${company.getId() != 44">
+                                        <option value="${company.getId()}">${company.getName()}</option>
+                                    </c:if>
                                 </c:forEach>
                             </form:select>
                             <form:errors path="companyId" cssClass="text-danger" element="div"/>

@@ -60,9 +60,11 @@
                         <div class="form-group">
                             <form:label path="companyId" for="companyId"><spring:message code="computer.company" text="default text" /></form:label>
                             <form:select path="companyId" class="form-control" id="companyId" name="companyId">
-                                <option value="0" <c:if test="${computer.getCompanyId() == null}">selected</c:if>">--</option>
+                                <option value="44" <c:if test="${computer.getCompanyId() == null}">selected</c:if>">--</option>
                                 <c:forEach var="company" items="${companies}">
-                                    <option value="${company.getId()}" <c:if test="${company.getId().equals(computer.getCompanyId())}">selected</c:if> >${company.getName()}</option>
+                                    <c:if test="${company.getId() != 44">
+                                        <option value="${company.getId()}" <c:if test="${company.getId().equals(computer.getCompanyId())}">selected</c:if> >${company.getName()}</option>
+                                    </c:if>
                                 </c:forEach>
                             </form:select>
                             <form:errors path="companyId" cssClass="text-danger"/>

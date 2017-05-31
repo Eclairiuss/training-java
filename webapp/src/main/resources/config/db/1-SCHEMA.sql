@@ -19,7 +19,7 @@ drop schema if exists `computer-database-db`;
     name                      varchar(255),
     introduced                timestamp NULL,
     discontinued              timestamp NULL,
-    company_id                bigint default NULL,
+    company_id                bigint default 44,
     constraint pk_computer primary key (id))
   ;
 

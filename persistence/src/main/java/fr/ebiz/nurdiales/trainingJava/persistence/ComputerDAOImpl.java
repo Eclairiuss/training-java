@@ -118,18 +118,10 @@ public class ComputerDAOImpl implements ComputerDAO {
         QComputer c = QComputer.computer;
 
         JPAQuery<Computer> tmpQuery = query.selectFrom(c);
-        tmpQuery = tmpQuery.where(
-                c.name.contains(
-                        params.getName())
-                        .and(c.company.isNull()));
-        if (params.getNameCompany().trim().isEmpty()) {
-            tmpQuery = tmpQuery.where(c.name.contains(params.getName()));
-        } else {
-            tmpQuery = tmpQuery.where(c.name.contains(params.getName())
+        tmpQuery = tmpQuery.where(c.name.contains(params.getName())
                     .or(c.company.name.contains(params.getNameCompany())));
-        }
 
-        retour.setQuantity(tmpQuery
+        retour.setQuantity(tmpQuery.clone()
                 .fetchCount());
 
         switch (params.getTrierPar()) {
