@@ -150,6 +150,10 @@
 <ul>
 	<li>DONE - Maven Multi-modules</li>
 	<li>W.I.P. - Spring Security</li>
+	<ul>
+		<li>DONE - CONNECTION</li>
+		<li>TODO - STATELESS</li>
+	</ul>
 	<li>DONE - Hibernate ORM (QueryDSL)</li>
 </ul>
 

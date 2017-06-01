@@ -8,7 +8,7 @@
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="fr.ebiz.nurdiales.trainingJava.persistence"/>
+    <context:component-scan base-package="fr.ebiz.nurdiales.trainingjava.persistence"/>
     <context:property-placeholder location="classpath:db.properties"/>
 
     <!-- Datasource -->
@@ -39,7 +39,7 @@
 
     <!-- EntityManagerFactory -->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="packagesToScan" value="fr.ebiz.nurdiales.trainingJava.core"/>
+        <property name="packagesToScan" value="fr.ebiz.nurdiales.trainingjava.core"/>
         <property name="dataSource" ref="dataSource"/>
         <property name="jpaVendorAdapter" ref="vendorAdapter"/>
     </bean>

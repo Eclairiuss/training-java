@@ -7,6 +7,7 @@
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context.xsd">
-    <context:component-scan base-package="fr.ebiz.nurdiales.trainingJava.binding"/>
+    <context:component-scan base-package="fr.ebiz.nurdiales.trainingjava.validator"/>
+    <context:component-scan base-package="fr.ebiz.nurdiales.trainingjava.dto"/>
     <context:annotation-config />
 </beans>

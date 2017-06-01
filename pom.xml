@@ -157,7 +157,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.8.0-alpha2</version>
+            <version>${org.slf4j.version}</version>
         </dependency>
 
 
@@ -165,11 +165,6 @@
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>${javax.inject.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.w3c</groupId>
-            <artifactId>dom</artifactId>
-            <version>2.3.0-jaxb-1.0.6</version>
         </dependency>
     </dependencies>
 
@@ -189,8 +184,8 @@
                         <id>validate</id>
                         <phase>validate</phase>
                         <configuration>
-                            <configLocation>webapp/src/main/resources/config/checkstyle/checkstyle.xml</configLocation>
-                            <suppressionsLocation>webapp/src/main/resources/config/checkstyle/suppressions.xml</suppressionsLocation>
+                            <configLocation>conf/checkstyle/checkstyle.xml</configLocation>
+                            <suppressionsLocation>conf/checkstyle/suppressions.xml</suppressionsLocation>
                             <consoleOutput>true</consoleOutput>
                         </configuration>
                         <goals>
