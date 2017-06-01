@@ -1,10 +1,10 @@
 package fr.ebiz.nurdiales.trainingjava.service;
 
-import fr.ebiz.nurdiales.trainingjava.dto.ComputerDTO;
 import fr.ebiz.nurdiales.trainingjava.core.Company;
 import fr.ebiz.nurdiales.trainingjava.core.Computer;
 import fr.ebiz.nurdiales.trainingjava.core.Page;
 import fr.ebiz.nurdiales.trainingjava.core.Parameters;
+import fr.ebiz.nurdiales.trainingjava.dto.ComputerDTO;
 import fr.ebiz.nurdiales.trainingjava.persistence.CompanyDAO;
 import fr.ebiz.nurdiales.trainingjava.persistence.ComputerDAO;
 import org.slf4j.Logger;
@@ -57,7 +57,14 @@ public class ComputerServiceImpl implements ComputerService {
 
     @Override
     public Computer get(int id) {
-        return computerDAO.getComputer(id);
+        List<Company> list = companyDAO.listCompanies();
+        Computer computer = computerDAO.getComputer(id);
+        for (Company company : list) {
+            if (company != null && computer != null && computer.getCompany() != null && company.getId() == computer.getCompanyId()) {
+                computer.setCompanyName(company.getName());
+            }
+        }
+        return computer;
     }
 
     @Override

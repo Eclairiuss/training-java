@@ -4,7 +4,6 @@ import fr.ebiz.nurdiales.trainingjava.service.CompanyService;
 import fr.ebiz.nurdiales.trainingjava.service.ComputerService;
 import fr.ebiz.nurdiales.trainingjava.dto.ComputerDTO;
 import fr.ebiz.nurdiales.trainingjava.validator.ComputerDTOValidator;
-import fr.ebiz.nurdiales.trainingjava.core.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -63,35 +60,12 @@ public class EditComputerController {
 
 
     @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.GET)
-    protected String doGet(ModelMap model, @RequestParam Map<String, String> request) {
-        ComputerDTO computer = null;
-        List<Company> companies = null;
-        int id = 0;
-        String sId = request.get(ID);
-        companies = companyService.getAll();
-        model.addAttribute(LIST, companies);
-        if (sId != null) {
-            try {
-                id = Integer.parseInt(sId);
-            } catch (IllegalArgumentException e) {
-                model.addAttribute("message", "Error : Id must be a integer");
-                return "500";
-            }
-            if (id > 0) {
-                computer = new ComputerDTO(computerService.get(id));
-                for (Company company : companies) {
-                    if (company.getId() == computer.getCompanyId()) {
-                        computer.setCompanyName(company.getName());
-                        break;
-                    }
-                }
-                model.addAttribute("computer", computer);
-            } else {
-                return CREATE_COMPUTER;
-            }
-        } else {
+    protected String doGet(@RequestParam(value = ID) int id, ModelMap model) {
+        model.addAttribute(LIST, companyService.getAll());
+        if (id < 1) {
             return CREATE_COMPUTER;
         }
+        ComputerDTO computer = new ComputerDTO(computerService.get(id));
         model.addAttribute(FORM, computer);
         return "." + PAGE_NAME;
     }

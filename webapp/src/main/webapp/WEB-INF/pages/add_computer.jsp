@@ -32,36 +32,7 @@
             <div class="col-xs-8 col-xs-offset-2 box">
                 <h1><spring:message code="add.full" text="default text" /></h1>
                 <form:form action="./add_computer" method="POST" id="addForm" modelAttribute="formComputer">
-                    <form:errors cssClass="text-danger alert alert-danger" element="div"/>
-                    <fieldset>
-                        <div class="form-group">
-                            <form:label path="name" for="name"><spring:message code="computer.name" text="default text" /></form:label>
-                            <form:input path="name" type="text" class="form-control" id="name" name="name" acceptCharset="true" placeholder="${holder_name}"/>
-                            <form:errors path="name" cssClass="text-danger" element="div"/>
-                        </div>
-                        <div class="form-group">
-                            <form:label path="introduced" for="introduced"><spring:message code="computer.introduced" text="default text" /></form:label>
-                            <form:input path="introduced" type="text" class="form-control" id="introduced" name="introduced" acceptCharset="true" placeholder="${holder_intro}"/>
-                            <form:errors path="introduced" cssClass="text-danger" element="div"/>
-                        </div>
-                        <div class="form-group">
-                            <form:label path="discontinued" for="discontinued"><spring:message code="computer.discontinued" text="default text" /></form:label>
-                            <form:input path="discontinued" type="text" class="form-control" id="discontinued" name="discontinued" acceptCharset="true" placeholder="${holder_disco}"/>
-                            <form:errors path="discontinued" cssClass="text-danger" element="div"/>
-                        </div>
-                        <div class="form-group">
-                            <form:label path="companyId" for="companyId"><spring:message code="computer.company" text="default text" /></form:label>
-                            <form:select path="companyId" class="form-control" id="companyId" name="companyId">
-                                <option value="44" selected>--</option>
-                                <c:forEach var="company" items="${companies}">
-                                    <c:if test="${company.getId() != 44}">
-                                        <option value="${company.getId()}">${company.getName()}</option>
-                                    </c:if>
-                                </c:forEach>
-                            </form:select>
-                            <form:errors path="companyId" cssClass="text-danger" element="div"/>
-                        </div>
-                    </fieldset>
+                    <%@ include file="computer_form.jsp" %>
                     <div class="actions pull-right">
                         <input type="submit" id="validate" value="<spring:message code="add.simple" text="default text" />" class="btn btn-primary">
                         <spring:message code="or"/>
@@ -72,6 +43,7 @@
         </div>
     </div>
 </section>
+
 <script src="<c:url value="/static/js/jquery.min.js"/>"></script>
 <script src="<c:url value="/static/js/bootstrap.min.js"/>"></script>
 <script src="<c:url value="/static/js/bootstrap-datepicker.js"/>"></script>

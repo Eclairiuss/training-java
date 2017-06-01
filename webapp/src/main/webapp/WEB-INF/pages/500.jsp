@@ -18,11 +18,11 @@
 
 
 <body>
-<mylib:header redirection="./dashboard" id="0" search="${search}" order="${order}" size="${size}" page="${page}"/>
+<mylib:header redirection="." id="0" search="${search}" order="${order}" size="${size}" page="${page}"/>
 <section id="main">
 	<div class="container">
 		<div class="alert alert-danger">
-			Error 500: An error has occured!
+			Error 500: <spring:message code="error.500" text="default text" />
 			<br/>
 			<c:if test="${not empty message}">${message}</c:if>
 			<!-- stacktrace -->

@@ -1,14 +1,6 @@
 package fr.ebiz.nurdiales.trainingjava.core;
 
 public class Parameters {
-    public enum SortingElement {
-        ID,
-        NAME,
-        INTRODUCED,
-        DISCONTINUED,
-        COMPANY
-    }
-
     /**
      * constructor of paramaters.
      */
@@ -23,121 +15,111 @@ public class Parameters {
     private String nameCompany = "";
     private SortingElement sortBy;
 
-    public static class Builder {
-        private Parameters params;
 
-        /**
-         * default builder for parameters.
-         */
-        public Builder() {
-            params = new Parameters();
-        }
+    /**
+     * default builder for parameters.
+     * @return new parameters.
+     */
+    public static Parameters builder() {
+        return new Parameters();
+    }
 
-        /**
-         * set the value of reversed in params.
-         * @param reversed value to set.
-         * @return the builder.
-         */
-        public Builder reversed(boolean reversed) {
-            params.setReversed(reversed);
-            return this;
-        }
+    /**
+     * set the value of reversed in params.
+     * @param reversed value to set.
+     * @return the builder.
+     */
+    public Parameters reversed(boolean reversed) {
+        this.setReversed(reversed);
+        return this;
+    }
 
-        /**
-         * set the value of idCompany in params.
-         * @param idCompany value to set.
-         * @return the builder.
-         */
-        public Builder idCompany(int idCompany) {
-            params.setIdCompany(idCompany);
-            return this;
-        }
+    /**
+     * set the value of idCompany in params.
+     * @param idCompany value to set.
+     * @return the builder.
+     */
+    public Parameters idCompany(int idCompany) {
+        this.setIdCompany(idCompany);
+        return this;
+    }
 
-        /**
-         * set the value of page in params.
-         * @param page value to set.
-         * @return the builder.
-         */
-        public Builder page(int page) {
-            if (page < 0) {
-                params.setPage(0);
-            }
-            params.setPage(page);
-            return this;
+    /**
+     * set the value of page in params.
+     * @param page value to set.
+     * @return the builder.
+     */
+    public Parameters page(int page) {
+        this.setPage(page);
+        if (page < 0) {
+            this.setPage(0);
         }
+        return this;
+    }
 
-        /**
-         * set the value of size in params.
-         * @param size value to set.
-         * @return the builder.
-         */
-        public Builder size(int size) {
-            if (size < 1) {
-                params.setSize(10);
-            } else {
-                params.setSize(size);
-            }
-            return this;
+    /**
+     * set the value of size in params.
+     * @param size value to set.
+     * @return the builder.
+     */
+    public Parameters size(int size) {
+        if (size < 1) {
+            this.setSize(10);
+        } else {
+            this.setSize(size);
         }
+        return this;
+    }
 
-        /**
-         * set the value of name in params.
-         * @param name value to set.
-         * @return the builder.
-         */
-        public Builder name(String name) {
-            params.setName(name);
-            return this;
-        }
+    /**
+     * set the value of name in params.
+     * @param name value to set.
+     * @return the builder.
+     */
+    public Parameters name(String name) {
+        this.setName(name);
+        return this;
+    }
 
-        /**
-         * set the value of nameCompany in params.
-         * @param nameCompany value to set.
-         * @return the builder.
-         */
-        public Builder nameCompany(String nameCompany) {
-            params.setNameCompany(nameCompany);
-            return this;
-        }
+    /**
+     * set the value of nameCompany in params.
+     * @param nameCompany value to set.
+     * @return the builder.
+     */
+    public Parameters nameCompany(String nameCompany) {
+        this.setNameCompany(nameCompany);
+        return this;
+    }
 
-        /**
-         * set the value of nameCompany in params.
-         * @param nameCompany value to set.
-         * @return the builder.
-         */
-        public Builder page(String nameCompany) {
-            params.setNameCompany(nameCompany);
-            return this;
-        }
+    /**
+     * set the value of nameCompany in params.
+     * @param nameCompany value to set.
+     * @return the builder.
+     */
+    public Parameters page(String nameCompany) {
+        this.setNameCompany(nameCompany);
+        return this;
+    }
 
-        /**
-         * set the value of sortBy in params.
-         * @param trierPar value to set.
-         * @return the builder.
-         */
-        public Builder trierPar(SortingElement trierPar) {
-            params.setSortBy(trierPar);
-            return this;
-        }
-
-        /**
-         *  build parameters.
-         * @return params make by the builder.
-         */
-        public Parameters build() {
-            return params;
-        }
+    /**
+     * set the value of sortBy in params.
+     * @param trierPar value to set.
+     * @return the builder.
+     */
+    public Parameters trierPar(SortingElement trierPar) {
+        this.setSortBy(trierPar);
+        return this;
     }
 
     /**
      * Parse le tri et choisi la valeur a attribuer.
-     * @param sTri string from request.
+     * @param sortingElement string from request.
      */
-    public void parseTri(String sTri) {
-        if (sTri == null || sTri.length() < 2) {
+    public void parseSortingElement(String sortingElement) {
+        if (sortingElement == null || sortingElement.length() < 2) {
             sortBy = SortingElement.ID;
         } else {
-            switch (sTri.charAt(0)) {
+            switch (sortingElement.charAt(0)) {
                 case 'n':
                     sortBy = SortingElement.NAME;
                     break;
@@ -154,7 +136,7 @@ public class Parameters {
                     sortBy = SortingElement.ID;
                     break;
             }
-            reversed = (sTri.charAt(1) == 'u') ? true : false;
+            reversed = (sortingElement.charAt(1) == 'u') ? true : false;
         }
     }
 

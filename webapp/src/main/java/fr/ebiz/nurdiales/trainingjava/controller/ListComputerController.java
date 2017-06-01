@@ -3,7 +3,7 @@ package fr.ebiz.nurdiales.trainingjava.controller;
 import fr.ebiz.nurdiales.trainingjava.core.Page;
 import fr.ebiz.nurdiales.trainingjava.core.Parameters;
 import fr.ebiz.nurdiales.trainingjava.service.ComputerService;
-import fr.ebiz.nurdiales.trainingjava.controller.util.Parse;
+import fr.ebiz.nurdiales.trainingjava.core.util.Parse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,20 +40,15 @@ public class ListComputerController {
 
     @RequestMapping(value = {"", "/", PAGE_NAME}, method = RequestMethod.GET)
     protected String doGet(ModelMap model, @RequestParam Map<String, String> request) {
-        String sSize = request.get(SIZE);
-        String sPage = request.get(PAGE);
-        String sSearch = request.get(SEARCH);
-        String sTri = request.get(ORDER);
-
-        Parameters params = (new Parameters.Builder())
-                                    .page(Parse.stringToInt(sPage) - 1)
-                                    .size(Parse.stringToInt(sSize))
-                                    .name(sSearch)
-                                    .nameCompany(sSearch)
-                                    .build();
-        params.parseTri(sTri);
-
         Page page;
+        String sTri = request.get(ORDER);
+        //Set params for search
+        Parameters params = Parameters.builder()
+                .page(Parse.stringToInt(request.get(PAGE)) - 1) //page start to 1 in the view.
+                .size(Parse.stringToInt(request.get(SIZE)))
+                .name(request.get(SEARCH));
+        params = params.nameCompany(params.getName());
+        params.parseSortingElement(sTri);
 
         page = computerService.getAll(params);
 
@@ -61,20 +56,8 @@ public class ListComputerController {
         model.addAttribute("computers", page.getComputers());
         model.addAttribute(PAGE, params.getPage() + 1);
         model.addAttribute(SIZE, params.getSize());
-        model.addAttribute(SEARCH, sSearch);
+        model.addAttribute(SEARCH, params.getName());
         model.addAttribute(ORDER, sTri);
         return "." + PAGE_NAME;
-    }
-
-
-    @RequestMapping(value = {"", "/", PAGE_NAME}, method = RequestMethod.POST)
-    protected String doPost(ModelMap model, @RequestParam Map<String, String> request) {
-//        String[] idsString = request.get(DELETESELECTED).split(",");
-//        int[] ids = new int[idsString.length];
-//        for (int i = 0; i < idsString.length; ++i) {
-//            ids[i] = Integer.parseInt(idsString[i]);
-//        }
-//        computerService.delete(ids);
-        return doGet(model, request);
     }
 }

@@ -14,15 +14,12 @@
         <intercept-url pattern="/logout*" access="hasRole('USER')"/>
         <intercept-url pattern="/" access="hasRole('USER')"/>
         <intercept-url pattern="/dashboard" access="hasRole('USER')"/>
-        <intercept-url pattern="/*_computer" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/*_computer*" access="hasRole('ADMIN')"/>
 
         <form-login
                 login-page="/login"
                 default-target-url="/"
                 authentication-failure-url="/login.html?error=true" />
-        <logout
-                logout-success-url="/login"
-                logout-url="/logout"/>
         <http-basic />
     </http>
 

@@ -16,11 +16,11 @@
 
 
 <body>
-    <mylib:header redirection="./dashboard" id="0" search="${search}" order="${order}" size="${size}" page="${page}"/>
+    <mylib:header redirection="." id="0" search="${search}" order="${order}" size="${size}" page="${page}"/>
     <section id="main">
         <div class="container">
             <div class="alert alert-danger">
-                Error 404: Page not found. Too bad bitch!
+                Error 404: <spring:message code="error.404" text="default text" />
                 <br/>
                 <c:if test="${not empty message}">${message}</c:if>
                 <!-- stacktrace -->

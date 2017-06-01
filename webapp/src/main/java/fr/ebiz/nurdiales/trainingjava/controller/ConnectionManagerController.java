@@ -11,14 +11,13 @@ import java.util.Map;
 @Controller
 public class ConnectionManagerController {
     private static final String LOGIN = "/login";
-    private static final String LOGOUT = "/logout";
 
-    @RequestMapping(value = {LOGIN, LOGOUT}, method = RequestMethod.GET)
+    @RequestMapping(value = {LOGIN}, method = RequestMethod.GET)
     protected String doGet(ModelMap model, @RequestParam Map<String, String> request) {
         return "." + LOGIN;
     }
 
-    @RequestMapping(value = {LOGIN, LOGOUT}, method = RequestMethod.POST)
+    @RequestMapping(value = {LOGIN}, method = RequestMethod.POST)
     protected String doPost(ModelMap model, @RequestParam Map<String, String> request) {
         return "." + LOGIN;
     }

@@ -114,14 +114,16 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     @Override
     public Page listComputers(Parameters params, List<Company> list) {
-        Page retour = new Page();
+        Page page = new Page();
         QComputer c = QComputer.computer;
 
         JPAQuery<Computer> tmpQuery = query.selectFrom(c);
         tmpQuery = tmpQuery.where(c.name.contains(params.getName())
                     .or(c.company.name.contains(params.getNameCompany())));
-        retour.setQuantity(tmpQuery.clone()
+
+        page.setQuantity(tmpQuery.clone()
                 .fetchCount());
+
         switch (params.getSortBy()) {
             case NAME:
                 tmpQuery = tmpQuery.orderBy(isReversed(c.name, params.isReversed()));
@@ -138,10 +140,12 @@ public class ComputerDAOImpl implements ComputerDAO {
             default:
                 break;
         }
-        retour.setComputers(tmpQuery.limit(params.getSize())
+
+        page.setComputers(tmpQuery.limit(params.getSize())
                 .offset(params.getSize() * params.getPage())
                 .fetch());
-        return retour;
+
+        return page;
     }
 
     /**

@@ -16,6 +16,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
 
+    private List<Company> companies = null;
     private CompanyDAO companyDAO;
     private ComputerDAO computerDAO;
 
@@ -40,7 +41,10 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<Company> getAll() {
-        return companyDAO.listCompanies();
+        if (companies == null) {
+            companies = companyDAO.listCompanies();
+        }
+        return companies;
     }
 
     @Override
@@ -78,5 +82,6 @@ public class CompanyServiceImpl implements CompanyService {
     public void delete(int i) {
         computerDAO.deleteByCompany(i);
         companyDAO.delete(new Integer(i));
+        companies = null;
     }
 }

@@ -17,16 +17,17 @@ import java.util.Scanner;
 @Component("cli")
 public class CLI {
     private static Logger logger = LoggerFactory.getLogger(CLI.class);
+
     private static final String EXIT = "exit",
-            ALLCOMPUTERS = "computers",
-            ALLCOMPANIES = "companies",
-            DETAILS = "details",
-            UPDATE = "update",
-            NEW = "new",
-            ID = "id",
-            SEPARATOR = " ",
-            DATE_FORMA = "AAAA-MM-JJ",
-            SEPARATOR2 = "=";
+                                ALLCOMPUTERS = "computers",
+                                ALLCOMPANIES = "companies",
+                                DETAILS = "details",
+                                UPDATE = "update",
+                                NEW = "new",
+                                ID = "id",
+                                SEPARATOR = " ",
+                                DATE_FORMAT = "AAAA-MM-JJ",
+                                SEPARATOR2 = "=";
     private Scanner sc;
 
     private PageCLI pageCLI;
@@ -53,13 +54,14 @@ public class CLI {
         this.companyService = companyService;
         this.computerService = computerService;
     }
+
     /**
      * Main function with main loop for the CLI.
      */
     public void mainCLI() {
         sc = new Scanner(System.in);
-
         boolean wantContinue = true;
+
         while (wantContinue) {
             String[] l = mainMenu().split(SEPARATOR);
             switch (l[0].toLowerCase()) {
@@ -99,6 +101,7 @@ public class CLI {
                     break;
             }
         }
+
         sc.close();
     }
 
@@ -132,13 +135,13 @@ public class CLI {
             System.out.print("Name : ");
             computer.setName(sc.nextLine());
         }
-        System.out.print("Date of Introduced (" + DATE_FORMA + ") : ");
+        System.out.print("Date of Introduced (" + DATE_FORMAT + ") : ");
         try {
             computer.setIntroduced(sc.nextLine());
         } catch (IllegalArgumentException e) {
             logger.debug("Date of Introduced is invalid");
         }
-        System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
+        System.out.print("Date of Discontinued (" + DATE_FORMAT + ") : ");
         try {
             computer.setDiscontinued(sc.nextLine());
         } catch (IllegalArgumentException e) {
@@ -177,13 +180,13 @@ public class CLI {
             } else {
                 computer.setName(s);
             }
-            System.out.print("Date of Introduced (" + DATE_FORMA + ") : ");
+            System.out.print("Date of Introduced (" + DATE_FORMAT + ") : ");
             try {
                 computer.setIntroduced(sc.nextLine());
             } catch (IllegalArgumentException e) {
                 logger.debug("Date of Introduced is invalid");
             }
-            System.out.print("Date of Discontinued (" + DATE_FORMA + ") : ");
+            System.out.print("Date of Discontinued (" + DATE_FORMAT + ") : ");
             try {
                 computer.setDiscontinued(sc.nextLine());
             } catch (IllegalArgumentException e) {

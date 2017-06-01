@@ -23,7 +23,7 @@ public class CompanyCLI extends PageCLI {
     @Autowired
     public CompanyCLI(CompanyService companyService) {
         super();
-        params  = (new Parameters.Builder()).page(0).size(10).build();
+        params  = Parameters.builder().page(0).size(10);
         this.companyService = companyService;
     }
 

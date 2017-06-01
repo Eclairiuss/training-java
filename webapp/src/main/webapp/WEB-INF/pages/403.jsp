@@ -16,11 +16,11 @@
 
 
 <body>
-	<mylib:header redirection="./dashboard" id="0" search="${search}" order="${order}" size="${size}" page="${page}"/>
+	<mylib:header redirection="." id="0" search="${search}" order="${order}" size="${size}" page="${page}"/>
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
-				Error 403: Access denied!
+				Error 403: <spring:message code="error.403" text="default text" />
 				<br/>
 				<c:if test="${not empty message}">${message}</c:if>
 				<!-- stacktrace -->

@@ -3,7 +3,7 @@ package fr.ebiz.nurdiales.trainingjava.controller;
 import fr.ebiz.nurdiales.trainingjava.core.Page;
 import fr.ebiz.nurdiales.trainingjava.core.Parameters;
 import fr.ebiz.nurdiales.trainingjava.service.ComputerService;
-import fr.ebiz.nurdiales.trainingjava.controller.util.Parse;
+import fr.ebiz.nurdiales.trainingjava.core.util.Parse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -50,13 +50,12 @@ public class DeleteComputerController {
         String sSearch = request.get(SEARCH);
         String sTri = request.get(ORDER);
 
-        Parameters params = (new Parameters.Builder())
+        Parameters params = Parameters.builder()
                 .page(Parse.stringToInt(sPage) - 1)
                 .size(Parse.stringToInt(sSize))
                 .name(sSearch)
-                .nameCompany(sSearch)
-                .build();
-        params.parseTri(sTri);
+                .nameCompany(sSearch);
+        params.parseSortingElement(sTri);
 
         Page page;
 

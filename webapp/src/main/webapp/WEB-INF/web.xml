@@ -53,10 +53,6 @@
 
     <!-- Errors -->
     <error-page>
-        <error-code>400</error-code>
-        <location>/WEB-INF/pages/400.jsp</location>
-    </error-page>
-    <error-page>
         <error-code>403</error-code>
         <location>/WEB-INF/pages/403.jsp</location>
     </error-page>

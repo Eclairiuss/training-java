@@ -1,5 +1,6 @@
 package fr.ebiz.nurdiales.trainingjava.core;
 
+import fr.ebiz.nurdiales.trainingjava.core.util.Parse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,13 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 @Entity(name = "computer")
 public class Computer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Computer.class);
-    private static final LocalDate NEVER_BEFORE = stringToDate("1970-01-01");
+    private static final LocalDate NEVER_BEFORE = Parse.stringToLocalDate("1970-01-01");
 
     @Id
     private int id;
@@ -79,15 +78,8 @@ public class Computer {
      * @param introduced Date with format "AAAA-MM-JJ"
      */
     public void setIntroduced(String introduced) {
-        if (this.introduced != null) {
-            LOGGER.info(this.introduced.toString());
-        }
-        LocalDate intro = stringToDate(introduced);
-        this.introduced = (intro != null)
-                                    ? (intro.isBefore(NEVER_BEFORE) ? this.introduced : intro) : null;
-        if (this.introduced != null) {
-            LOGGER.info(this.introduced.toString());
-        }
+        LocalDate intro = Parse.stringToLocalDate(introduced);
+        setIntroduced(intro);
     }
 
     public LocalDate getDiscontinued() {
@@ -104,9 +96,8 @@ public class Computer {
      * @param discontinued Date with format "AAAA-MM-JJ"
      */
     public void setDiscontinued(String discontinued) {
-        LocalDate discont = stringToDate(discontinued);
-        this.discontinued = (discont != null)
-                                    ? (discont.isBefore(NEVER_BEFORE) ? this.discontinued : discont) : null;
+        LocalDate discont = Parse.stringToLocalDate(discontinued);
+        setDiscontinued(discont);
     }
 
     public Company getCompany() {
@@ -123,40 +114,6 @@ public class Computer {
 
     public void setCompany(Company company) {
         this.company = company;
-    }
-
-    @Override
-    public String toString() {
-        return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-                       + ", company=" + getCompanyName() + "]";
-    }
-
-    /**
-     * Function to transform string to a Date.
-     * @param s Date in string.
-     * @return Date from the param
-     */
-    private static LocalDate stringToDate(String s) {
-        if (s == null || s.equals("")) {
-            return null;
-        }
-        try {
-            return LocalDate.parse(s, DateTimeFormatter.ISO_LOCAL_DATE);
-        } catch (DateTimeParseException e) {
-            LOGGER.info("ERROR StringToDate.");
-            return null;
-        }
-    }
-
-    /**
-     * Method who check if introduced is before discontinued.
-     * @return true if it's ok (introduced is before discontinued) else false.
-     */
-    public boolean checkDates() {
-        if (introduced == null || discontinued == null) {
-            return true;
-        }
-        return introduced.isBefore(discontinued);
     }
 
     /**
@@ -178,5 +135,22 @@ public class Computer {
             company = new Company(0, "");
         }
         company.setId(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
+                       + ", company=" + getCompanyName() + "]";
+    }
+
+    /**
+     * Method who check if introduced is before discontinued.
+     * @return true if it's ok (introduced is before discontinued) else false.
+     */
+    public boolean checkDates() {
+        if (introduced == null || discontinued == null) {
+            return true;
+        }
+        return introduced.isBefore(discontinued);
     }
 }

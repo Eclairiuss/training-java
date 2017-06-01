@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -54,21 +55,14 @@ public class CreateComputerController {
     }
 
     @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
-    protected String doPost(@Validated ComputerDTO form, BindingResult result, ModelMap model) {
-        String error = null;
-        if (form == null) {
-            return "500";
-        }
-        // Insert or Update if there are no id for the computer
+    protected String doPost(@ModelAttribute(FORM) @Validated ComputerDTO form, BindingResult result, ModelMap model) {
         if (!result.hasErrors()) {
-            computerService.add(form);
+            if (form.getId() != null && form.getId() > 0) {
+                computerService.update(form.toComputer());
+            } else {
+                computerService.add(form);
+            }
             return DASHBOARD_REDIRECT;
-        }
-        if (form.getName() == null || form.getName().trim().equals("")) {
-            model.addAttribute("NameError", true);
-        }
-        if (!form.toComputer().checkDates()) {
-            model.addAttribute("DatesError", true);
         }
         model.addAttribute(FORM, form);
         model.addAttribute(LIST, companyService.getAll());

@@ -23,14 +23,14 @@ public class ComputerCLI extends PageCLI {
     @Autowired
     public ComputerCLI(ComputerService computerService) {
         super();
-        params = new Parameters.Builder().page(0).size(10).build();
+        params = Parameters.builder().page(0).size(10);
         this.computerService = computerService;
     }
 
     @Override
     public void printEntities(Scanner sc) {
         LOGGER.debug("start of printComputers");
-        params = new Parameters.Builder().size(10).build();
+        params = Parameters.builder().size(10);
         boolean exitWanted = false;
         while (!exitWanted) {
             System.out.println("Page " + params.getPage() + " : ");
