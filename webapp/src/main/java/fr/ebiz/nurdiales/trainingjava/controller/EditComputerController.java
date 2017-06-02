@@ -1,5 +1,6 @@
 package fr.ebiz.nurdiales.trainingjava.controller;
 
+import fr.ebiz.nurdiales.trainingjava.mapper.ToDTO;
 import fr.ebiz.nurdiales.trainingjava.service.CompanyService;
 import fr.ebiz.nurdiales.trainingjava.service.ComputerService;
 import fr.ebiz.nurdiales.trainingjava.dto.ComputerDTO;
@@ -66,7 +67,7 @@ public class EditComputerController {
         if (id < 1) {
             return CREATE_COMPUTER;
         }
-        model.addAttribute(FORM, new ComputerDTO(computerService.get(id)));
+        model.addAttribute(FORM, ToDTO.toDTO(computerService.get(id)));
         return PAGE_NAME;
     }
 

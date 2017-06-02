@@ -9,15 +9,17 @@ public class CompanyDTO {
     /**
      * Constructor.
      */
-    public CompanyDTO() { }
+    public CompanyDTO() {
+    }
 
     /**
-     * constructor to transform object to DTO.
-     * @param company company to translate.
+     * Full constructor.
+     * @param id .
+     * @param name .
      */
-    public CompanyDTO(Company company) {
-        this.id = company.getId();
-        this.name = company.getName();
+    public CompanyDTO(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     /**

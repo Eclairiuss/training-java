@@ -3,6 +3,8 @@ package fr.ebiz.nurdiales.trainingjava.dto;
 import fr.ebiz.nurdiales.trainingjava.core.Company;
 import fr.ebiz.nurdiales.trainingjava.core.Computer;
 
+import java.time.LocalDate;
+
 public class ComputerDTO {
     private Integer id;
     private Integer companyId;
@@ -12,24 +14,27 @@ public class ComputerDTO {
     private String companyName;
 
     /**
-     * constructor to transform object to DTO.
-     * @param computer listComputers to translate.
-     */
-    public ComputerDTO(Computer computer) {
-        if (computer != null) {
-            this.id = computer.getId();
-            this.name = computer.getName();
-            introduced = computer.getIntroduced() == null ? null : computer.getIntroduced().toString();
-            discontinued = computer.getDiscontinued() == null ? null : computer.getDiscontinued().toString();
-            companyId = computer.getCompany() == null ? null : computer.getCompany().getId();
-            companyName = computer.getCompany() == null ? null : computer.getCompany().getName();
-        }
-    }
-
-    /**
      * default constructor.
      */
     public ComputerDTO() { }
+
+    /**
+     * Full constructor.
+     * @param id .
+     * @param name .
+     * @param introduced .
+     * @param discontinued .
+     * @param companyId .
+     * @param companyName .
+     */
+    public ComputerDTO(int id, String name, LocalDate introduced, LocalDate discontinued, Integer companyId, String companyName) {
+        this.id = id;
+        this.name = name;
+        this.introduced = introduced == null ? null : introduced.toString();
+        this.discontinued = discontinued == null ? null : discontinued.toString();
+        this.companyId = companyId;
+        this.companyName = companyName;
+    }
 
     public Integer getId() {
         return id;

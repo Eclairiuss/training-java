@@ -203,7 +203,7 @@ public class Computer {
         if (company == null) {
             company = new Company(NULL_COMPANY, "");
         }
-        company.setId(id);
+        company.setId(id > 1 ? id : NULL_COMPANY);
     }
 
     @Override

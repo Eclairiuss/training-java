@@ -9,7 +9,7 @@
 
     <modules>
         <module>binding</module>
-        <module>cli</module>
+        <module>console</module>
         <module>core</module>
         <module>persistence</module>
         <module>service</module>
