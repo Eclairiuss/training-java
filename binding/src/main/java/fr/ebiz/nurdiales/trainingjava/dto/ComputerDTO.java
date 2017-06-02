@@ -84,16 +84,10 @@ public class ComputerDTO {
      * @return Computer.
      */
     public Computer toComputer() {
-        Computer c = new Computer();
         if (id != null) {
-            c.setId(id);
+            id = -1;
         }
-        c.setName(name);
-        c.setIntroduced(introduced);
-        c.setDiscontinued(discontinued);
-        if (companyId != null && companyId != 0) {
-            c.setCompany(new Company(companyId, companyName));
-        }
+        Computer c = new Computer().id(id).name(name).introduced(introduced).discontinued(discontinued).company(new Company(companyId, companyName));
         return c;
     }
 

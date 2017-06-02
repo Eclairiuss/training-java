@@ -88,13 +88,13 @@ public abstract class PageCLI {
                 case "d":
                     System.out.print("Id of " + (isPageComputers ? "Computer" : "Company") + " : ");
                     tmp = sc.nextLine();
-                    tmp = tmp.equals("") ? null : tmp;
+                    tmp = tmp.isEmpty() ? null : tmp;
                     delete(tmp);
                     return false;
                 case "name":
                     System.out.print("Name : ");
                     tmp = sc.nextLine();
-                    tmp = tmp.equals("") ? null : tmp;
+                    tmp = tmp.isEmpty() ? null : tmp;
                     setName(tmp);
                     return false;
                 case "companyid":
@@ -102,7 +102,7 @@ public abstract class PageCLI {
                         System.out.print("Company Id : ");
                         tmp = sc.nextLine();
                         try {
-                            int id = tmp.equals("") ? 0 : Integer.parseInt(tmp);
+                            int id = tmp.isEmpty() ? 0 : Integer.parseInt(tmp);
                             params.setIdCompany(id);
                         } catch (IllegalArgumentException e) {
                             System.out.println("Not an Id");

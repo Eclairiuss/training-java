@@ -19,7 +19,8 @@ import java.util.Map;
 public class ListComputerController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ListComputerController.class);
-    private static final String PAGE_NAME = "/dashboard";
+    private static final String PAGE_NAME = "dashboard";
+    private static final String URL = "/" + PAGE_NAME;
     private static final String SEARCH = "search";
     private static final String ORDER = "order";
     private static final String SIZE = "size";
@@ -38,7 +39,7 @@ public class ListComputerController {
         this.computerService = computerService;
     }
 
-    @RequestMapping(value = {"", "/", PAGE_NAME}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/", URL}, method = RequestMethod.GET)
     protected String doGet(ModelMap model, @RequestParam Map<String, String> request) {
         Page page;
         String sTri = request.get(ORDER);
@@ -58,6 +59,6 @@ public class ListComputerController {
         model.addAttribute(SIZE, params.getSize());
         model.addAttribute(SEARCH, params.getName());
         model.addAttribute(ORDER, sTri);
-        return "." + PAGE_NAME;
+        return PAGE_NAME;
     }
 }

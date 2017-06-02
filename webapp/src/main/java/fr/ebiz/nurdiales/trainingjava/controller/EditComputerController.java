@@ -21,7 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class EditComputerController {
-    private static final String PAGE_NAME = "/edit_computer";
+    private static final String PAGE_NAME = "edit_computer";
+    private static final String URL = "/" + PAGE_NAME;
     private static final String DASHBOARD_REDIRECT = "redirect:./dashboard";
     private static final String CREATE_COMPUTER = "redirect:./add_computer";
 
@@ -59,19 +60,18 @@ public class EditComputerController {
 
 
 
-    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.GET)
+    @RequestMapping(value = {URL}, method = RequestMethod.GET)
     protected String doGet(@RequestParam(value = ID) int id, ModelMap model) {
         model.addAttribute(LIST, companyService.getAll());
         if (id < 1) {
             return CREATE_COMPUTER;
         }
-        ComputerDTO computer = new ComputerDTO(computerService.get(id));
-        model.addAttribute(FORM, computer);
-        return "." + PAGE_NAME;
+        model.addAttribute(FORM, new ComputerDTO(computerService.get(id)));
+        return PAGE_NAME;
     }
 
 
-    @RequestMapping(value = {PAGE_NAME}, method = RequestMethod.POST)
+    @RequestMapping(value = {URL}, method = RequestMethod.POST)
     protected String doPost(@ModelAttribute(FORM) @Validated ComputerDTO form, BindingResult result, ModelMap model) {
         if (!result.hasErrors()) {
             if (form.getId() != null && form.getId() > 0) {
@@ -83,6 +83,6 @@ public class EditComputerController {
         }
         model.addAttribute(FORM, form);
         model.addAttribute(LIST, companyService.getAll());
-        return "." + PAGE_NAME;
+        return PAGE_NAME;
     }
 }

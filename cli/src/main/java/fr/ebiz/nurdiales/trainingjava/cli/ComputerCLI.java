@@ -70,7 +70,7 @@ public class ComputerCLI extends PageCLI {
     protected boolean companyName(Scanner sc) {
         System.out.print("Company Name : ");
         String tmp = sc.nextLine();
-        tmp = tmp.equals("") ? null : tmp;
+        tmp = tmp.isEmpty() ? null : tmp;
         params.setNameCompany(tmp);
         return true;
     }
@@ -80,7 +80,7 @@ public class ComputerCLI extends PageCLI {
         System.out.print("Company Id : ");
         String tmp = sc.nextLine();
         try {
-            int id = tmp.equals("") ? 0 : Integer.parseInt(tmp);
+            int id = tmp.isEmpty() ? 0 : Integer.parseInt(tmp);
             params.setIdCompany(id);
         } catch (IllegalArgumentException e) {
             System.out.println("Not an Id");

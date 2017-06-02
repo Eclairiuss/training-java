@@ -34,7 +34,7 @@ public class Parse {
      * @return Date from the param
      */
     public static LocalDate stringToLocalDate(String s) {
-        if (s == null || s.equals("")) {
+        if (s == null || s.isEmpty()) {
             return null;
         }
         try {

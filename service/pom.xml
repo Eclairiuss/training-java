@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
         <artifactId>computer-database</artifactId>
-        <version>0.9.0-RELEASE</version>
+        <version>0.9.0</version>
     </parent>
     <artifactId>service</artifactId>
     <packaging>jar</packaging>

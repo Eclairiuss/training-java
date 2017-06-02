@@ -26,7 +26,7 @@ public class ComputerDTOValidator implements Validator {
 
         ComputerDTO computerDTO = (ComputerDTO) target;
 
-        if (computerDTO.getName() == null || computerDTO.getName().trim().equals("")) {
+        if (computerDTO.getName() == null || computerDTO.getName().trim().isEmpty()) {
             errors.rejectValue(NAME, "form.name.required", "A valid name is required!");
         }
 

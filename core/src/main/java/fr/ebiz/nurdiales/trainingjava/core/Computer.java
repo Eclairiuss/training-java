@@ -14,6 +14,8 @@ public class Computer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Computer.class);
     private static final LocalDate NEVER_BEFORE = Parse.stringToLocalDate("1970-01-01");
 
+    private static final int NULL_COMPANY = 44;
+
     @Id
     private int id;
     private String name;
@@ -42,7 +44,76 @@ public class Computer {
      * Default Constructor for Computer.
      */
     public Computer() {
+    }
 
+    /**
+     * Set the id of the computer.
+     * @param id to set.
+     * @return modified Computer.
+     */
+    public Computer id(int id) {
+        setId(id);
+        return this;
+    }
+
+    /**
+     * Set the name of the computer.
+     * @param name to set.
+     * @return modified Computer.
+     */
+    public Computer name(String name) {
+        setName(name);
+        return this;
+    }
+
+    /**
+     * Set the introduced of the computer.
+     * @param introduced to set.
+     * @return modified Computer.
+     */
+    public Computer introduced(LocalDate introduced) {
+        setIntroduced(introduced);
+        return this;
+    }
+
+    /**
+     * Set the introduced of the computer.
+     * @param introduced to set.
+     * @return modified Computer.
+     */
+    public Computer introduced(String introduced) {
+        setIntroduced(introduced);
+        return this;
+    }
+
+    /**
+     * Set the discontinued of the computer.
+     * @param discontinued to set.
+     * @return modified Computer.
+     */
+    public Computer discontinued(LocalDate discontinued) {
+        setDiscontinued(discontinued);
+        return this;
+    }
+
+    /**
+     * Set the discontinued of the computer.
+     * @param discontinued to set.
+     * @return modified Computer.
+     */
+    public Computer discontinued(String discontinued) {
+        setDiscontinued(discontinued);
+        return this;
+    }
+
+    /**
+     * Set the company of the computer.
+     * @param company to set.
+     * @return modified Computer.
+     */
+    public Computer company(Company company) {
+        setCompany(company);
+        return this;
     }
 
     public int getId() {
@@ -50,7 +121,7 @@ public class Computer {
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.id = id > 1 ? id : NULL_COMPANY;
     }
 
     public String getName() {
@@ -65,13 +136,10 @@ public class Computer {
         return introduced;
     }
 
-    /**
-     * Set Introduced.
-     * @param introduced .
-     */
     public void setIntroduced(LocalDate introduced) {
-        this.introduced = (introduced != null) ? (introduced.isBefore(NEVER_BEFORE) ? this.introduced : introduced)
-                                  : null;
+        this.introduced = (introduced != null) ?
+                (introduced.isBefore(NEVER_BEFORE) ? this.introduced : introduced)
+                : null;
     }
     /**
      * Set Introduced.
@@ -87,8 +155,9 @@ public class Computer {
     }
 
     public void setDiscontinued(LocalDate discontinued) {
-        this.discontinued = (discontinued != null)
-                                    ? (discontinued.isBefore(NEVER_BEFORE) ? this.discontinued : discontinued) : null;
+        this.discontinued = (discontinued != null) ?
+                (discontinued.isBefore(NEVER_BEFORE) ? this.discontinued : discontinued)
+                : null;
     }
 
     /**
@@ -132,7 +201,7 @@ public class Computer {
      */
     public void setCompanyId(int id) {
         if (company == null) {
-            company = new Company(0, "");
+            company = new Company(NULL_COMPANY, "");
         }
         company.setId(id);
     }

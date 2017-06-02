@@ -151,9 +151,19 @@
 	<li>DONE - Maven Multi-modules</li>
 	<li>W.I.P. - Spring Security</li>
 	<ul>
-		<li>DONE - CONNECTION</li>
+		<li>DONE - Connection</li>
+		<li>TODO - Disconnection</li>
 		<li>TODO - STATELESS</li>
 	</ul>
 	<li>DONE - Hibernate ORM (QueryDSL)</li>
 </ul>
 
+# t9
+<ul>
+	<li>TODO - Web Services</li>
+	<ul>
+		<li>TODO - Jackson</li>
+		<li>TODO - Jax RS</li>
+	</ul>
+	<li>TODO - end of java project</li>
+</ul>

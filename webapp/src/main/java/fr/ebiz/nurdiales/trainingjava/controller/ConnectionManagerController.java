@@ -10,15 +10,16 @@ import java.util.Map;
 
 @Controller
 public class ConnectionManagerController {
-    private static final String LOGIN = "/login";
+    private static final String LOGIN = "login";
+    private static final String URL = "/" + LOGIN;
 
-    @RequestMapping(value = {LOGIN}, method = RequestMethod.GET)
+    @RequestMapping(value = {URL}, method = RequestMethod.GET)
     protected String doGet(ModelMap model, @RequestParam Map<String, String> request) {
-        return "." + LOGIN;
+        return LOGIN;
     }
 
-    @RequestMapping(value = {LOGIN}, method = RequestMethod.POST)
+    @RequestMapping(value = {URL}, method = RequestMethod.POST)
     protected String doPost(ModelMap model, @RequestParam Map<String, String> request) {
-        return "." + LOGIN;
+        return LOGIN;
     }
 }

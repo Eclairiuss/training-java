@@ -63,8 +63,8 @@ public class CLI {
         boolean wantContinue = true;
 
         while (wantContinue) {
-            String[] l = mainMenu().split(SEPARATOR);
-            switch (l[0].toLowerCase()) {
+            String[] line = mainMenu().split(SEPARATOR);
+            switch (line[0].toLowerCase()) {
                 case EXIT:
                     wantContinue = false;
                     break;
@@ -77,11 +77,11 @@ public class CLI {
                     pageCLI.printEntities(sc);
                     break;
                 case DETAILS:
-                    switch (l[1].split(SEPARATOR2)[0]) {
+                    switch (line[1].split(SEPARATOR2)[0]) {
                         case ID:
                             try {
                                 Computer computer = computerService
-                                                            .get(Integer.parseInt(l[1].split(SEPARATOR2)[1]));
+                                                            .get(Integer.parseInt(line[1].split(SEPARATOR2)[1]));
                                 System.out.println(computer);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -131,7 +131,7 @@ public class CLI {
      */
     private void newComputer(Scanner sc) {
         ComputerDTO computer = new ComputerDTO();
-        while (computer.getName().equals("")) {
+        while (computer.getName().isEmpty()) {
             System.out.print("Name : ");
             computer.setName(sc.nextLine());
         }
@@ -175,7 +175,7 @@ public class CLI {
         if (isInteger) {
             System.out.print("Name : ");
             s = sc.nextLine();
-            if (s.equals("")) {
+            if (s.isEmpty()) {
                 computer.setName(null);
             } else {
                 computer.setName(s);

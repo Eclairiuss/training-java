@@ -15,14 +15,11 @@ import java.util.Map;
 
 @Controller
 public class DeleteComputerController {
-
-    private static final String PAGE_NAME = "/delete_computer";
+    private static final String URL = "/delete_computer";
     private static final String SEARCH = "search";
     private static final String ORDER = "order";
     private static final String SIZE = "size";
     private static final String PAGE = "page";
-    private static final String DELETESELECTED = "selection";
-
 
     ComputerService computerService;
 
@@ -42,7 +39,7 @@ public class DeleteComputerController {
      * @param selection .
      * @return Redirection.
      */
-    @PostMapping(PAGE_NAME)
+    @PostMapping(URL)
     protected String doPost(ModelMap model, @RequestParam Map<String, String> request, @RequestParam(value = "selection") String selection) {
 
         String sSize = request.get(SIZE);

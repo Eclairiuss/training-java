@@ -92,16 +92,14 @@ public class ComputerDAOImpl implements ComputerDAO {
                         .set(c.discontinued, computer.getDiscontinued())
                         .set(c.company, computer.getCompany())
                         .execute();
-            } else {
-                return (int) query.update(c)
+            }
+            return (int) query.update(c)
                         .where(c.id.eq(computer.getId()))
                         .set(c.name, computer.getName())
                         .set(c.company, computer.getCompany())
                         .execute();
-            }
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     @Override
