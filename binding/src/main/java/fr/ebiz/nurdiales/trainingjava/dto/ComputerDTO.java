@@ -92,8 +92,12 @@ public class ComputerDTO {
         if (id != null) {
             id = -1;
         }
-        Computer c = new Computer().id(id).name(name).introduced(introduced).discontinued(discontinued).company(new Company(companyId, companyName));
-        return c;
+        Computer c = new Computer()
+                .id(id)
+                .name(name)
+                .introduced(introduced)
+                .discontinued(discontinued);
+        return companyId != null ? c.company(new Company(companyId, companyName)) : c;
     }
 
     @Override

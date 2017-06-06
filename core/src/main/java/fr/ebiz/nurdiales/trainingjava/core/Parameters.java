@@ -64,7 +64,7 @@ public class Parameters {
      */
     public Parameters size(int size) {
         if (size < 1) {
-            this.setSize(10);
+            this.setSize(1);
         } else {
             this.setSize(size);
         }

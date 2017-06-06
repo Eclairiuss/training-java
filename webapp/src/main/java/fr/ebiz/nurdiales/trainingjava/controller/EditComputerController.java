@@ -14,10 +14,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 
 @Controller
@@ -72,12 +72,24 @@ public class EditComputerController {
     }
 
 
-    @RequestMapping(value = {URL}, method = RequestMethod.POST)
+    /**
+     * .
+     * @param form .
+     * @param result .
+     * @param model .
+     * @return .
+     */
+    @PostMapping(value = {URL})
     protected String doPost(@ModelAttribute(FORM) @Validated ComputerDTO form, BindingResult result, ModelMap model) {
+        for (int i = 0; i < 50; ++i) {
+            LOGGER.info(form.toString());
+        }
         if (!result.hasErrors()) {
             if (form.getId() != null && form.getId() > 0) {
+                LOGGER.info("update");
                 computerService.update(form.toComputer());
             } else {
+                LOGGER.info("new");
                 computerService.add(form);
             }
             return DASHBOARD_REDIRECT;

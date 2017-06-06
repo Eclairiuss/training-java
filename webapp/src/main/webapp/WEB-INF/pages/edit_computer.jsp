@@ -33,6 +33,7 @@
                 <div class="label label-default pull-right">id:${formComputer.getId()}</div>
                 <h1><spring:message code="edit.full" text="default text" /></h1>
                 <form:form action="./edit_computer" method="POST" id="addForm" modelAttribute="formComputer">
+
                     <%@ include file="computer_form.jsp" %>
                     <div class="actions pull-right">
                         <input type="submit" id="validate" value="<spring:message code="edit.simple" text="default text" />" class="btn btn-primary">

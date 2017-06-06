@@ -51,8 +51,8 @@ public class Computer {
      * @param id to set.
      * @return modified Computer.
      */
-    public Computer id(int id) {
-        setId(id);
+    public Computer id(Integer id) {
+        setId(id == null ? 0 : id);
         return this;
     }
 
