@@ -41,7 +41,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     public Company getCompany(Integer id) {
         QCompany c = QCompany.company;
         return query.selectFrom(c)
-                .where(c.id.eq(id))
+                .where(c.id.eq(id).and(c.id.ne(44)))
                 .fetchOne();
     }
 
@@ -55,7 +55,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     public int delete(Integer id) {
         QCompany c = QCompany.company;
         return (int) query.delete(c)
-                .where(c.id.eq(id))
+                .where(c.id.eq(id).and(c.id.ne(44)))
                 .execute();
     }
 
@@ -63,14 +63,15 @@ public class CompanyDAOImpl implements CompanyDAO {
     public int update(Company company) {
         QCompany c = QCompany.company;
         return (int) query.update(c)
-                .where(c.id.eq(company.getId()))
+                .where(c.id.eq(company.getId()).and(c.id.ne(44)))
                 .set(c.name, company.getName())
                 .execute();
     }
 
     @Override
     public List<Company> listCompanies(Integer page, Integer size) {
-        return query.selectFrom(QCompany.company)
+        QCompany c = QCompany.company;
+        return query.selectFrom(c)
                 .limit(size)
                 .offset(size * page)
                 .fetch();
@@ -80,7 +81,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     public List<Company> listCompanies(String name) {
         QCompany c = QCompany.company;
         return query.selectFrom(c)
-                .where(c.name.contains(name))
+                .where(c.name.contains(name).and(c.id.ne(44)))
                 .fetch();
     }
 
@@ -88,7 +89,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     public List<Company> listCompanies(String name, Integer page, Integer size) {
         QCompany c = QCompany.company;
         return query.selectFrom(c)
-                .where(c.name.contains(name))
+                .where(c.name.contains(name).and(c.id.ne(44)))
                 .limit(size)
                 .offset(size * page)
                 .fetch();

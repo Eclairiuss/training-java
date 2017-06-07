@@ -35,7 +35,7 @@ public class ToDTO {
     public static CompanyDTO toDTO(Company company) {
         CompanyDTO companyDTO = new CompanyDTO(company.getId(),
                 company.getName());
-        return null;
+        return companyDTO;
     }
 
     /**
