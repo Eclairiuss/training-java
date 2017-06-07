@@ -5,6 +5,7 @@ import fr.ebiz.nurdiales.trainingjava.core.Computer;
 import fr.ebiz.nurdiales.trainingjava.core.Page;
 import fr.ebiz.nurdiales.trainingjava.core.Parameters;
 import fr.ebiz.nurdiales.trainingjava.dto.ComputerDTO;
+import fr.ebiz.nurdiales.trainingjava.mapper.ToDTO;
 import fr.ebiz.nurdiales.trainingjava.persistence.CompanyDAO;
 import fr.ebiz.nurdiales.trainingjava.persistence.ComputerDAO;
 import org.slf4j.Logger;
@@ -33,30 +34,30 @@ public class ComputerServiceImpl implements ComputerService {
 
     @Override
     @Transactional
-    public void add(ComputerDTO c) {
-        computerDAO.create(c.toComputer());
+    public int add(ComputerDTO c) {
+        return computerDAO.create(c.toComputer());
     }
 
     @Override
     @Transactional
-    public void delete(int id) {
-        computerDAO.delete(id);
+    public int delete(int id) {
+        return computerDAO.delete(id);
     }
 
     @Override
     @Transactional
-    public void delete(int[] ids) {
-        computerDAO.delete(ids);
+    public int delete(int[] ids) {
+        return computerDAO.delete(ids);
     }
 
     @Override
     @Transactional
-    public void update(Computer c) {
-        computerDAO.update(c);
+    public int update(Computer c) {
+        return computerDAO.update(c);
     }
 
     @Override
-    public Computer get(int id) {
+    public ComputerDTO get(int id) {
         List<Company> list = companyDAO.listCompanies();
         Computer computer = computerDAO.getComputer(id);
         for (Company company : list) {
@@ -64,7 +65,7 @@ public class ComputerServiceImpl implements ComputerService {
                 computer.setCompanyName(company.getName());
             }
         }
-        return computer;
+        return ToDTO.toDTO(computer);
     }
 
     @Override
@@ -79,5 +80,19 @@ public class ComputerServiceImpl implements ComputerService {
             }
         }
         return page;
+    }
+
+    @Override
+    public int update(ComputerDTO computerDTO) {
+       return update(computerDTO.toComputer());
+    }
+
+    @Override
+    public int delete(String id) {
+        try {
+            return delete(Integer.parseInt(id));
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 }

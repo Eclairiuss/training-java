@@ -5,11 +5,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
-@Entity(name = "computer")
+@Entity
+@Table(name = "computer")
 public class Computer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Computer.class);
     private static final LocalDate NEVER_BEFORE = Parse.stringToLocalDate("1970-01-01");
@@ -17,11 +21,12 @@ public class Computer {
     private static final int NULL_COMPANY = 44;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private LocalDate introduced;
     private LocalDate discontinued;
-    @ManyToOne
+    @ManyToOne(targetEntity = Company.class)
     private Company company;
 
     /**

@@ -1,15 +1,25 @@
 package fr.ebiz.nurdiales.trainingjava.core;
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.Set;
 
-@Entity(name = "company")
+@Entity
+@Table(name = "company")
 public class Company {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
 
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "company")
+    private Set<Computer> computers;
     /**
      * Constructor.
      */

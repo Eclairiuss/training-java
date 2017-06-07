@@ -14,6 +14,8 @@
     <!-- MVC -->
     <mvc:annotation-driven/>
     <mvc:resources mapping="/static/**" location="/static/"/>
+    <mvc:default-servlet-handler />
+    <mvc:annotation-driven validator="computerDTOValidator" />
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>

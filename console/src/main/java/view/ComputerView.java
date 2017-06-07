@@ -1,4 +1,4 @@
-package fr.ebiz.nurdiales.trainingjava.cli;
+package view;
 
 import fr.ebiz.nurdiales.trainingjava.core.Computer;
 import fr.ebiz.nurdiales.trainingjava.core.Page;
@@ -12,16 +12,16 @@ import org.springframework.stereotype.Component;
 import java.util.Scanner;
 
 @Component("computerCLI")
-public class ComputerCLI extends PageCLI {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
+public class ComputerView extends PageView {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PageView.class);
     ComputerService computerService;
 
     /**
-     * Constructor of ComputerCLI, make a new Page for print computers.
+     * Constructor of ComputerView, make a new Page for print computers.
      * @param computerService .
      */
     @Autowired
-    public ComputerCLI(ComputerService computerService) {
+    public ComputerView(ComputerService computerService) {
         super();
         params = Parameters.builder().page(0).size(10);
         this.computerService = computerService;

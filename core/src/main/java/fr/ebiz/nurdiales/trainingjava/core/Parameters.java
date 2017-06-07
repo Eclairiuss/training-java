@@ -64,7 +64,7 @@ public class Parameters {
      */
     public Parameters size(int size) {
         if (size < 1) {
-            this.setSize(1);
+            this.setSize(10);
         } else {
             this.setSize(size);
         }
@@ -158,7 +158,7 @@ public class Parameters {
     }
 
     public int getPage() {
-        return page;
+        return (page < 0) ? 0 : page;
     }
 
     public void setPage(int page) {
@@ -166,7 +166,7 @@ public class Parameters {
     }
 
     public int getSize() {
-        return size;
+        return (size < 1) ? 10 : size;
     }
 
     public void setSize(int size) {

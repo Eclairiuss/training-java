@@ -21,6 +21,9 @@ public class ToDTO {
                 computer.getDiscontinued(),
                 computer.getCompanyId(),
                 computer.getCompanyName());
+        if (computer.getCompanyId() == 44) {
+            computerDTO.setCompanyName(null);
+        }
         return computerDTO;
     }
 

@@ -1,6 +1,5 @@
 package fr.ebiz.nurdiales.trainingjava.controller;
 
-import fr.ebiz.nurdiales.trainingjava.mapper.ToDTO;
 import fr.ebiz.nurdiales.trainingjava.service.CompanyService;
 import fr.ebiz.nurdiales.trainingjava.service.ComputerService;
 import fr.ebiz.nurdiales.trainingjava.dto.ComputerDTO;
@@ -14,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +26,7 @@ public class EditComputerController {
     private static final String CREATE_COMPUTER = "redirect:./add_computer";
 
     private static final String ID = "id";
-
+    private static final String COMPUTER = "computer";
     private static final String FORM = "formComputer";
     private static final String LIST = "companies";
 
@@ -67,24 +65,18 @@ public class EditComputerController {
         if (id < 1) {
             return CREATE_COMPUTER;
         }
-        model.addAttribute(FORM, ToDTO.toDTO(computerService.get(id)));
+        ComputerDTO computerDTO =  computerService.get(id);
+        model.addAttribute(COMPUTER, computerDTO);
+        model.addAttribute(FORM, computerDTO);
         return PAGE_NAME;
     }
 
-
-    /**
-     * .
-     * @param form .
-     * @param result .
-     * @param model .
-     * @return .
-     */
-    @PostMapping(value = {URL})
+    @RequestMapping(value = {URL}, method = RequestMethod.POST)
     protected String doPost(@ModelAttribute(FORM) @Validated ComputerDTO form, BindingResult result, ModelMap model) {
-        for (int i = 0; i < 50; ++i) {
-            LOGGER.info(form.toString());
-        }
         if (!result.hasErrors()) {
+            for (int i = 0; i < 10; ++i) {
+                LOGGER.info(form.toString());
+            }
             if (form.getId() != null && form.getId() > 0) {
                 LOGGER.info("update");
                 computerService.update(form.toComputer());
@@ -94,6 +86,7 @@ public class EditComputerController {
             }
             return DASHBOARD_REDIRECT;
         }
+        model.addAttribute(COMPUTER, form);
         model.addAttribute(FORM, form);
         model.addAttribute(LIST, companyService.getAll());
         return PAGE_NAME;

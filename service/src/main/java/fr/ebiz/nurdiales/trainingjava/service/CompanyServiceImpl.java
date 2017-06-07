@@ -1,6 +1,8 @@
 package fr.ebiz.nurdiales.trainingjava.service;
 
 import fr.ebiz.nurdiales.trainingjava.core.Company;
+import fr.ebiz.nurdiales.trainingjava.dto.CompanyDTO;
+import fr.ebiz.nurdiales.trainingjava.mapper.ToDTO;
 import fr.ebiz.nurdiales.trainingjava.persistence.CompanyDAO;
 import fr.ebiz.nurdiales.trainingjava.persistence.ComputerDAO;
 import org.slf4j.Logger;
@@ -40,38 +42,52 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> getAll() {
+    public List<CompanyDTO> getAll() {
         if (companies == null) {
             companies = companyDAO.listCompanies();
         }
-        return companies;
+        return ToDTO.companyListToDTOs(companies);
     }
 
     @Override
-    public List<Company> getAll(int page, int pageSize) {
-        return companyDAO.listCompanies(page, pageSize);
+    public List<CompanyDTO> getAll(int page, int pageSize) {
+        return ToDTO.companyListToDTOs(companyDAO.listCompanies(page, pageSize));
     }
 
     @Override
-    public List<Company> getAll(String name) {
-        return companyDAO.listCompanies(name);
+    public List<CompanyDTO> getAll(String name) {
+        return ToDTO.companyListToDTOs(companyDAO.listCompanies(name));
     }
 
     @Override
-    public List<Company> getAll(String name, int page, int pageSize) {
-        return companyDAO.listCompanies(name, page, pageSize);
+    public List<CompanyDTO> getAll(String name, int page, int pageSize) {
+        return ToDTO.companyListToDTOs(companyDAO.listCompanies(name, page, pageSize));
     }
 
     @Override
-    public Company get(int id) {
-        return companyDAO.getCompany(id);
+    public CompanyDTO get(int id) {
+        if (companies != null) {
+            for (Company company : companies) {
+                if (id == company.getId()) {
+                    return ToDTO.toDTO(company);
+                }
+            }
+        }
+        return ToDTO.toDTO(companyDAO.getCompany(id));
     }
 
     @Override
-    public Company get(String sId) {
+    public CompanyDTO get(String sId) {
         try {
             int id = Integer.parseInt(sId);
-            return companyDAO.getCompany(id);
+            if (companies != null) {
+                for (Company company : companies) {
+                    if (id == company.getId()) {
+                        return ToDTO.toDTO(company);
+                    }
+                }
+            }
+            return ToDTO.toDTO(companyDAO.getCompany(id));
         } catch (NumberFormatException e) {
             return null;
         }
@@ -79,9 +95,19 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
-    public void delete(int i) {
+    public int delete(int i) {
         computerDAO.deleteByCompany(i);
-        companyDAO.delete(new Integer(i));
+        int retour = companyDAO.delete(new Integer(i));
         companies = null;
+        return retour;
+    }
+
+    @Override
+    public int delete(String id) {
+        try {
+            return delete(Integer.parseInt(id));
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 }

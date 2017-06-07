@@ -1,17 +1,13 @@
-package fr.ebiz.nurdiales.trainingjava.cli;
+package view;
 
 import fr.ebiz.nurdiales.trainingjava.core.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Date;
 import java.util.Scanner;
 
-public abstract class PageCLI {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PageCLI.class);
-    protected int idComputer;
-    protected Date introduced;
-    protected Date discontinued;
+public abstract class PageView {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PageView.class);
     protected Parameters params;
 
     /**
@@ -32,14 +28,14 @@ public abstract class PageCLI {
 
     /**
      * Default function for print entities that the page contains.
-     * @param sc Scanner for the CLI output.
+     * @param sc Scanner for the CLIController output.
      */
     public abstract void printEntities(Scanner sc);
 
     /**
      * Default function for get companies who have similar name if it's
      * necessary for a request.
-     * @param sc Scanner for the CLI output.
+     * @param sc Scanner for the CLIController output.
      * @return true if necessary for a request.
      */
     protected abstract boolean companyName(Scanner sc);
@@ -47,7 +43,7 @@ public abstract class PageCLI {
     /**
      * Default function for get companies who have same id if it's necessary for
      * a request.
-     * @param sc Scanner for the CLI output.
+     * @param sc Scanner for the CLIController output.
      * @return true if necessary for a request.
      */
     protected abstract boolean companyId(Scanner sc);
@@ -55,7 +51,7 @@ public abstract class PageCLI {
     /**
      * Default function for print menu (inside page context) and scan user
      * choice.
-     * @param sc Scanner for the CLI output.
+     * @param sc Scanner for the CLIController output.
      * @return the user choice.
      */
     protected abstract String menuPage(Scanner sc);
@@ -68,7 +64,7 @@ public abstract class PageCLI {
 
     /**
      * Fonction for print the menu and analyse the user answer.
-     * @param sc Scanner for the CLI output.
+     * @param sc Scanner for the CLIController output.
      * @param isPageComputers true if need companyid and companyname options.
      * @return true if exit wanted by user, false else when user do good
      *         command.
@@ -126,20 +122,4 @@ public abstract class PageCLI {
      * @param tmp id of entity to delete.
      */
     protected abstract void delete(String tmp);
-
-    public Date getIntroduced() {
-        return introduced;
-    }
-
-    public void setIntroduced(Date introduced) {
-        this.introduced = introduced;
-    }
-
-    public Date getDiscontinued() {
-        return discontinued;
-    }
-
-    public void setDiscontinued(Date discontinued) {
-        this.discontinued = discontinued;
-    }
 }

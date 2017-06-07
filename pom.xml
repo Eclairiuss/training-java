@@ -19,6 +19,7 @@
     <properties>
         <!-- dependencies -->
         <org.slf4j.version>1.7.24</org.slf4j.version>
+        <com.fasterxml.jackson.version>2.8.8</com.fasterxml.jackson.version>
         <selenium.version>3.3.1</selenium.version>
         <ch.qos.logback.version>1.2.1</ch.qos.logback.version>
         <mysql.version>6.0.6</mysql.version>
@@ -29,6 +30,7 @@
         <javax.validation.version>1.1.0.Final</javax.validation.version>
         <taglibs.version>1.1.2</taglibs.version>
         <junit.version>4.12</junit.version>
+        <org.glassfish.jersey.media.version>2.22</org.glassfish.jersey.media.version>
         <org.springframework.version>4.3.8.RELEASE</org.springframework.version>
         <org.springframework.security.version>4.2.2.RELEASE</org.springframework.security.version>
         <org.mockito-core.version>1.10.19</org.mockito-core.version>
@@ -165,6 +167,27 @@
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>${javax.inject.version}</version>
+        </dependency>
+
+        <!-- ####### -->
+        <!-- Jackson -->
+        <!-- ####### -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${com.fasterxml.jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${com.fasterxml.jackson.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${org.glassfish.jersey.media.version}</version>
         </dependency>
     </dependencies>
 

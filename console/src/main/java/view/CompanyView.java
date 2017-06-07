@@ -1,7 +1,7 @@
-package fr.ebiz.nurdiales.trainingjava.cli;
+package view;
 
-import fr.ebiz.nurdiales.trainingjava.core.Company;
 import fr.ebiz.nurdiales.trainingjava.core.Parameters;
+import fr.ebiz.nurdiales.trainingjava.dto.CompanyDTO;
 import fr.ebiz.nurdiales.trainingjava.service.CompanyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,16 +12,16 @@ import java.util.List;
 import java.util.Scanner;
 
 @Component("companyCLI")
-public class CompanyCLI extends PageCLI {
-    private static Logger logger = LoggerFactory.getLogger(CompanyCLI.class);
+public class CompanyView extends PageView {
+    private static Logger logger = LoggerFactory.getLogger(CompanyView.class);
     private CompanyService companyService;
 
     /**
-     * Constructor of CompanyCLI, make a new Page for print companies.
+     * Constructor of CompanyView, make a new Page for print companies.
      * @param companyService .
      */
     @Autowired
-    public CompanyCLI(CompanyService companyService) {
+    public CompanyView(CompanyService companyService) {
         super();
         params  = Parameters.builder().page(0).size(10);
         this.companyService = companyService;
@@ -34,13 +34,13 @@ public class CompanyCLI extends PageCLI {
         while (!exitWanted) {
             System.out.println("Page " + params.getPage() + " : ");
 
-            List<Company> cl;
+            List<CompanyDTO> cl;
             if (params.getNameCompany() == null) {
                 cl = companyService.getAll(params.getPage(), params.getSize());
             } else {
                 cl = companyService.getAll(params.getNameCompany(), params.getPage(), params.getSize());
             }
-            for (Company c : cl) {
+            for (CompanyDTO c : cl) {
                 System.out.println(c);
             }
             exitWanted = printChoicesAndGet(sc, false);
