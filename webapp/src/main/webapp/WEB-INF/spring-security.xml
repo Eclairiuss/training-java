@@ -10,7 +10,7 @@
     <http pattern="/static/**" security="none"/>
 
     <!-- API REST -->
-    <http pattern="/api/**" create-session="stateless">
+    <http pattern="/api/**">
         <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="GET"/>
         <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="DELETE"/>
         <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="POST"/>
