@@ -23,6 +23,16 @@
             <artifactId>service</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
+            <artifactId>binding</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.ebiz.nurdiales.trainingJava</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- ###### -->
         <!-- Spring -->

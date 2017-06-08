@@ -9,12 +9,17 @@
 
     <http pattern="/static/**" security="none"/>
 
-    <http>
+    <!-- API REST -->
+    <http pattern="/api/**" create-session="stateless">
+        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="GET"/>
+        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="DELETE"/>
+        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="POST"/>
+        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="PUT"/>
+        
         <intercept-url pattern="/login*" access="isAnonymous()"/>
         <intercept-url pattern="/logout*" access="hasRole('USER')"/>
         <intercept-url pattern="/" access="hasRole('USER')"/>
         <intercept-url pattern="/dashboard" access="hasRole('USER')"/>
-        <intercept-url pattern="/api/**" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/*_computer*" access="hasRole('ADMIN')"/>
 
         <form-login

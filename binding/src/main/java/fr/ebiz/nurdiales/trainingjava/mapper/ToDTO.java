@@ -2,8 +2,10 @@ package fr.ebiz.nurdiales.trainingjava.mapper;
 
 import fr.ebiz.nurdiales.trainingjava.core.Company;
 import fr.ebiz.nurdiales.trainingjava.core.Computer;
+import fr.ebiz.nurdiales.trainingjava.core.Page;
 import fr.ebiz.nurdiales.trainingjava.dto.CompanyDTO;
 import fr.ebiz.nurdiales.trainingjava.dto.ComputerDTO;
+import fr.ebiz.nurdiales.trainingjava.dto.PageDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,5 +56,14 @@ public class ToDTO {
      */
     public static List<CompanyDTO> companyListToDTOs(List<Company> companies) {
         return companies.stream().map(e -> toDTO(e)).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert a page to pageDTO.
+     * @param page .
+     * @return .
+     */
+    public static PageDTO toDTO(Page page) {
+        return new PageDTO(computerListToDTOs(page.getComputers()), page.getQuantity());
     }
 }

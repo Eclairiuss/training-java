@@ -12,9 +12,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <!-- Bootstrap -->
-    <link href="<c:url value="/static/css/main.css"/>" rel="stylesheet" >
     <link href="<c:url value="/static/css/font-awesome.css"/>" rel="stylesheet" >
     <link href="<c:url value="/static/css/bootstrap.min.css"/>" rel="stylesheet" >
+    <link href="<c:url value="/static/css/main.css"/>" rel="stylesheet" >
 </head>
 
 
@@ -67,6 +67,7 @@
                 <th class="editMode" style="width: 60px; height: 22px; display: none">
                     <input type="checkbox" id="selectall" />
                     <span style="vertical-align: top; ">
+                        -
                         <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();">
                             <i class="fa fa-trash-o fa-lg"></i>
                         </a>

@@ -42,7 +42,7 @@ public class CLIController {
 
     private static final String URI_API_COMPANY = URI_API + "companies";
 
-    private Scanner sc;
+    private Scanner sc = new Scanner(System.in);
 
     private PageView pageView;
     private MainView mainView;
@@ -77,7 +77,6 @@ public class CLIController {
      * Main function with main loop for the CLIController.
      */
     public void mainCLI() {
-        sc = new Scanner(System.in);
         boolean wantContinue = true;
 
         while (wantContinue) {

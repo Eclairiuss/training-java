@@ -23,7 +23,8 @@ footer .btn-group {
 
 input[type='checkbox'] {
     margin: 0px;
-    padding:0px;
+    padding: 0px;
     border-radius: 5px;
     white-space: nowrap;
+    vertical-align: middle;
 }

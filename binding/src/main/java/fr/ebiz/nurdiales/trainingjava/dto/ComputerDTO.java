@@ -27,11 +27,29 @@ public class ComputerDTO {
      * @param companyId .
      * @param companyName .
      */
-    public ComputerDTO(int id, String name, LocalDate introduced, LocalDate discontinued, Integer companyId, String companyName) {
+    public ComputerDTO(Integer id, String name, LocalDate introduced, LocalDate discontinued, Integer companyId, String companyName) {
         this.id = id;
         this.name = name;
         this.introduced = introduced == null ? null : introduced.toString();
         this.discontinued = discontinued == null ? null : discontinued.toString();
+        this.companyId = companyId;
+        this.companyName = companyName;
+    }
+
+    /**
+     * Constructor with dto content.
+     * @param id .
+     * @param name .
+     * @param introduced .
+     * @param discontinued .
+     * @param companyId .
+     * @param companyName .
+     */
+    public ComputerDTO(Integer id, String name, String introduced, String discontinued, Integer companyId, String companyName) {
+        this.id = id;
+        this.name = name;
+        this.introduced = introduced;
+        this.discontinued = discontinued;
         this.companyId = companyId;
         this.companyName = companyName;
     }
