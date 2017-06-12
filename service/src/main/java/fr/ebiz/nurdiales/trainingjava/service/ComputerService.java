@@ -62,4 +62,11 @@ public interface ComputerService {
      * @return .
      */
     int delete(String id);
+
+    /**
+     * return the count of all computers who concords with params.
+     * @param params .
+     * @return the count.
+     */
+    Long getCount(Parameters params);
 }

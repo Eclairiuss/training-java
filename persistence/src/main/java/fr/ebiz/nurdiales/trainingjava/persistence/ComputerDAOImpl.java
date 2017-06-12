@@ -138,12 +138,24 @@ public class ComputerDAOImpl implements ComputerDAO {
             default:
                 break;
         }
-
-        page.setComputers(tmpQuery.limit(params.getSize())
-                .offset(params.getSize() * params.getPage())
-                .fetch());
-
+        if (params.getSize() == 0) {
+            page.setComputers(tmpQuery.fetch());
+        } else {
+            page.setComputers(tmpQuery.limit(params.getSize())
+                    .offset(params.getSize() * params.getPage())
+                    .fetch());
+        }
         return page;
+    }
+
+    @Override
+    public Long count(Parameters params) {
+        QComputer c = QComputer.computer;
+        JPAQuery<Computer> tmpQuery = query.selectFrom(c);
+        return  query.selectFrom(c)
+                .where(c.name.contains(params.getName())
+                .or(c.company.name.contains(params.getNameCompany())))
+                .fetchCount();
     }
 
     /**

@@ -1,6 +1,8 @@
 package fr.ebiz.nurdiales.trainingjava.core;
 
-public class Parameters {
+import java.io.Serializable;
+
+public class Parameters implements Serializable {
     /**
      * constructor of paramaters.
      */
@@ -63,7 +65,7 @@ public class Parameters {
      * @return the builder.
      */
     public Parameters size(int size) {
-        if (size < 1) {
+        if (size < 0) {
             this.setSize(10);
         } else {
             this.setSize(size);
@@ -166,11 +168,11 @@ public class Parameters {
     }
 
     public int getSize() {
-        return (size < 1) ? 10 : size;
+        return (size < 0) ? 10 : size;
     }
 
     public void setSize(int size) {
-        this.size = (size < 1) ? 10 : size;
+        this.size = (size < 0) ? 10 : size;
     }
 
     public String getName() {

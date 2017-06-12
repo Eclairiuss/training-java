@@ -63,7 +63,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     public int update(Company company) {
         QCompany c = QCompany.company;
         return (int) query.update(c)
-                .where(c.id.eq(company.getId()).and(c.id.ne(44)))
+                .where(c.id.eq(company.getId()))
                 .set(c.name, company.getName())
                 .execute();
     }
@@ -81,7 +81,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     public List<Company> listCompanies(String name) {
         QCompany c = QCompany.company;
         return query.selectFrom(c)
-                .where(c.name.contains(name).and(c.id.ne(44)))
+                .where(c.name.contains(name))
                 .fetch();
     }
 
@@ -89,7 +89,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     public List<Company> listCompanies(String name, Integer page, Integer size) {
         QCompany c = QCompany.company;
         return query.selectFrom(c)
-                .where(c.name.contains(name).and(c.id.ne(44)))
+                .where(c.name.contains(name))
                 .limit(size)
                 .offset(size * page)
                 .fetch();

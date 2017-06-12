@@ -1,9 +1,8 @@
 package fr.ebiz.nurdiales.trainingjava.controller;
 
+import fr.ebiz.nurdiales.trainingjava.core.Computer;
 import fr.ebiz.nurdiales.trainingjava.core.Parameters;
 import fr.ebiz.nurdiales.trainingjava.dto.ComputerDTO;
-import fr.ebiz.nurdiales.trainingjava.dto.PageDTO;
-import fr.ebiz.nurdiales.trainingjava.mapper.ToDTO;
 import fr.ebiz.nurdiales.trainingjava.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/computers")
@@ -28,13 +29,24 @@ public class ComputerRestController {
     private static final String SEARCH = "search";
 
     @RequestMapping(method = RequestMethod.GET)
-    public PageDTO getComputers(@RequestParam(value = ORDER, defaultValue = "") String reqOrder,
-                                @RequestParam(value = SIZE, defaultValue = "10") int size,
-                                @RequestParam(value = PAGE, defaultValue = "0") int page,
-                                @RequestParam(value = SEARCH, defaultValue = "") String search) {
+    public List<Computer> getComputers(@RequestParam(value = ORDER, defaultValue = "") String reqOrder,
+                                       @RequestParam(value = SIZE, defaultValue = "0") int size,
+                                       @RequestParam(value = PAGE, defaultValue = "0") int page,
+                                       @RequestParam(value = SEARCH, defaultValue = "") String search) {
         Parameters params = Parameters.builder().size(size).page(page).name(search).nameCompany(search);
         params.parseSortingElement(reqOrder);
-        return ToDTO.toDTO(computerService.getAll(params));
+        return computerService.getAll(params).getComputers();
+    }
+    @RequestMapping(method = RequestMethod.GET, value = "/count")
+    public Long count() {
+        Parameters params = Parameters.builder().name("").nameCompany("");
+        return computerService.getCount(params);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/count/{search}")
+    public Long count(@PathVariable String search) {
+        Parameters params = Parameters.builder().name(search).nameCompany(search);
+        return computerService.getCount(params);
     }
 
     /**

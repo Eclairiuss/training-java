@@ -20,7 +20,7 @@
             classpath:/applicationContext-persistence.xml
             classpath:/applicationContext-service.xml
             classpath:/applicationContext-binding.xml
-            /WEB-INF/spring-security.xml
+            <!--/WEB-INF/spring-security.xml-->
         </param-value>
     </context-param>
 
@@ -42,15 +42,15 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <!-- Spring Security -->
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    <!--&lt;!&ndash; Spring Security &ndash;&gt;-->
+    <!--<filter>-->
+        <!--<filter-name>springSecurityFilterChain</filter-name>-->
+        <!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>springSecurityFilterChain</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
 
     <!-- Errors -->
     <error-page>

@@ -58,4 +58,11 @@ public interface ComputerDAO {
      * @return list of corresponding Computer.
      */
     Page listComputers(Parameters params, List<Company> list);
+
+    /**
+     * return the count of all computers who concords with params.
+     * @param params .
+     * @return the count.
+     */
+    Long count(Parameters params);
 }

@@ -1,8 +1,9 @@
 package fr.ebiz.nurdiales.trainingjava.core;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Page {
+public class Page implements Serializable {
     private List<Computer> computers;
     private long quantity;
 

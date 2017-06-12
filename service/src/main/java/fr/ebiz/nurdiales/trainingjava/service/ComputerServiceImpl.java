@@ -95,4 +95,9 @@ public class ComputerServiceImpl implements ComputerService {
             return -1;
         }
     }
+
+    @Override
+    public Long getCount(Parameters params) {
+        return computerDAO.count(params);
+    }
 }

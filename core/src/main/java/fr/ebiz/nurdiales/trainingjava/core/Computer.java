@@ -10,11 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "computer")
-public class Computer {
+public class Computer implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(Computer.class);
     private static final LocalDate NEVER_BEFORE = Parse.stringToLocalDate("1970-01-01");
 
